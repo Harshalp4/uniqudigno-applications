@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Care tab — 4 identity options</title>
+<style>
+  :root{
+    --blue:#428AC7; --blue-dark:#2F6FA6; --green:#36B665; --green-dark:#2A9C54;
+    --cream:#FAF3EA; --ink:#1F2937; --muted:#6B7280; --orange:#FF8A3D; --line:#E7EBF0; --red:#E4574F;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:#12161C; color:#E5E7EB; padding:34px 22px 60px}
+  h1{font-size:22px; font-weight:700; margin-bottom:6px}
+  .sub{color:#9CA3AF; font-size:13.5px; margin-bottom:30px; max-width:920px; line-height:1.5}
+  .row{display:flex; gap:30px; flex-wrap:wrap; justify-content:center}
+  .opt{width:330px; margin-bottom:8px}
+  .opt h2{font-size:15px; margin:0 0 2px; color:#fff}
+  .opt .tag{font-size:11.5px; color:#93C5FD; margin-bottom:10px}
+  .notes{margin-top:10px; font-size:12px; color:#B7BEC9; line-height:1.5}
+  .notes b{color:#fff}
+  .phone{width:330px; height:700px; background:#000; border-radius:42px; padding:9px;
+         box-shadow:0 22px 55px rgba(0,0,0,.55)}
+  .screen{width:100%; height:100%; border-radius:34px; overflow-y:auto; overflow-x:hidden;
+          position:relative; background:var(--cream); scrollbar-width:none}
+  .screen::-webkit-scrollbar{display:none}
+  .bar{padding:30px 14px 8px; text-align:center; font-size:15.5px; font-weight:800; color:var(--ink)}
+  h3{font-size:13.5px; font-weight:800; color:var(--ink); padding:6px 14px 8px}
+  .rail{display:flex; gap:10px; overflow-x:auto; padding:0 14px 12px; scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  .card{margin:0 14px 12px; background:#fff; border-radius:16px; padding:12px;
+        box-shadow:0 5px 14px rgba(0,0,0,.06)}
+  @keyframes pulse{0%,100%{transform:scale(1)} 50%{transform:scale(1.06)}}
+  @keyframes ring{0%{transform:scale(.9); opacity:.8} 100%{transform:scale(1.3); opacity:0}}
+  @keyframes bob{0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)}}
+  .sheen{position:absolute; top:0; bottom:0; width:46%; transform:skewX(-18deg);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent); animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-60%} 55%{left:120%} 100%{left:120%}}
+  /* A: services hub */
+  .svc{display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 14px 12px}
+  .svc div{background:#fff; border-radius:16px; padding:13px; box-shadow:0 5px 14px rgba(0,0,0,.06)}
+  .svc .ic{font-size:24px; animation:bob 3.4s infinite; display:inline-block}
+  .svc b{display:block; font-size:12.5px; color:var(--ink); margin-top:6px}
+  .svc span{font-size:10px; color:var(--muted)}
+  .rx{margin:0 14px 12px; border-radius:18px; padding:14px; color:#fff; position:relative; overflow:hidden;
+      background:linear-gradient(120deg,#5A55C9,#3F3A9E)}
+  .rx b{font-size:13.5px}
+  .rx p{font-size:11px; opacity:.85; margin-top:4px; width:80%}
+  .rx .up{display:inline-block; margin-top:9px; background:#fff; color:#3F3A9E; border-radius:99px;
+      padding:7px 14px; font-size:11.5px; font-weight:800}
+  .advis{margin:0 14px 12px; border-radius:18px; padding:13px; color:#fff; display:flex; align-items:center; gap:10px;
+      background:linear-gradient(120deg,var(--green),var(--green-dark))}
+  .advis p{flex:1; font-size:12px; font-weight:700; line-height:1.35}
+  .advis .cb{width:40px; height:40px; border-radius:50%; background:#fff; color:var(--green-dark); display:flex;
+      align-items:center; justify-content:center; position:relative; font-size:16px}
+  .advis .cb:before{content:''; position:absolute; inset:-5px; border-radius:50%;
+      border:2px solid rgba(255,255,255,.55); animation:ring 2s infinite}
+  .pk{min-width:180px; background:#fff; border-radius:16px; padding:12px; box-shadow:0 5px 14px rgba(0,0,0,.06)}
+  .pk b{font-size:12.5px; color:var(--ink)}
+  .pk .pr{font-size:14px; font-weight:800; color:var(--blue); margin-top:6px}
+  .pk .pr s{font-size:10px; color:#9CA3AF; margin-left:4px}
+  /* B: my care */
+  .track{margin:0 14px 12px; background:#fff; border-radius:18px; padding:13px; border-left:4px solid var(--blue);
+      box-shadow:0 5px 14px rgba(0,0,0,.06)}
+  .track .st{display:flex; justify-content:space-between; font-size:12.5px; font-weight:800; color:var(--ink)}
+  .track .chip{background:#FFF3E4; color:#B45D12; font-size:9.5px; border-radius:99px; padding:2px 8px; font-weight:800}
+  .steps2{display:flex; align-items:center; gap:4px; margin-top:10px}
+  .steps2 .d{width:18px; height:18px; border-radius:50%; background:#E3E7ED; color:#7B8794; font-size:9px;
+      font-weight:800; display:flex; align-items:center; justify-content:center}
+  .steps2 .d.on{background:var(--blue); color:#fff; animation:pulse 2s infinite}
+  .steps2 .d.done{background:var(--green); color:#fff}
+  .steps2 .l{flex:1; height:2px; background:#E3E7ED}
+  .fam{display:flex; gap:10px; overflow-x:auto; padding:0 14px 12px; scrollbar-width:none}
+  .fam div{min-width:120px; background:#fff; border-radius:16px; padding:12px; text-align:center;
+      box-shadow:0 5px 14px rgba(0,0,0,.06)}
+  .fam .av{width:40px; height:40px; margin:0 auto 6px; border-radius:50%; background:#EAF4FB; display:flex;
+      align-items:center; justify-content:center; font-size:19px}
+  .fam b{font-size:11.5px; color:var(--ink)}
+  .fam span{display:block; font-size:9.5px; color:var(--muted); margin-top:2px}
+  .subrow{display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px dashed #EFE7DA}
+  .subrow:last-child{border-bottom:none}
+  .subrow b{font-size:12px; color:var(--ink)}
+  .subrow span{font-size:10px; color:var(--muted); display:block}
+  .subrow .due{font-size:10.5px; font-weight:800; color:var(--orange)}
+  /* C: concierge */
+  .hero-c{margin:0 14px 12px; border-radius:20px; padding:16px; color:#fff; position:relative; overflow:hidden;
+      background:linear-gradient(135deg,var(--blue),var(--blue-dark))}
+  .hero-c b{font-size:16px}
+  .hero-c p{font-size:11.5px; opacity:.85; margin-top:4px}
+  .quiz{margin:0 14px 12px; background:#fff; border-radius:18px; padding:13px; box-shadow:0 5px 14px rgba(0,0,0,.06)}
+  .quiz b{font-size:13px; color:var(--ink)}
+  .sym{display:flex; flex-wrap:wrap; gap:7px; margin-top:9px}
+  .sym div{border:1.4px dashed #C9BFAD; border-radius:99px; padding:6px 11px; font-size:11px; font-weight:700; color:var(--blue)}
+  .ways{display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 14px 12px}
+  .ways div{border-radius:16px; padding:13px; color:#fff; position:relative; overflow:hidden}
+  .ways b{font-size:12.5px}
+  .ways span{display:block; font-size:9.5px; opacity:.9; margin-top:3px}
+  /* D: utility search */
+  .search{margin:0 14px 10px; background:#fff; border:1px solid var(--line); border-radius:13px; padding:11px 13px;
+      font-size:12.5px; color:#9CA3AF}
+  .chips{display:flex; gap:6px; overflow-x:auto; padding:0 14px 10px; scrollbar-width:none}
+  .chip{white-space:nowrap; border:1px solid var(--line); background:#fff; border-radius:99px; padding:6px 12px;
+      font-size:11px; font-weight:700; color:var(--muted)}
+  .chip.on{background:var(--blue); border-color:var(--blue); color:#fff}
+  .trow{display:flex; align-items:center; background:#fff; margin:0 14px 8px; border-radius:13px; padding:11px 13px}
+  .trow .tn{flex:1}
+  .trow b{font-size:12.5px; color:var(--ink)}
+  .trow span{display:block; font-size:9.5px; color:var(--muted); margin-top:2px}
+  .trow .pr{font-size:12px; font-weight:800; color:var(--ink); margin-right:9px}
+  .trow .add{width:28px; height:28px; border-radius:9px; background:var(--blue); color:#fff; display:flex;
+      align-items:center; justify-content:center; font-weight:800}
+</style>
+</head>
+<body>
+  <h1>Care tab — what should it be? 4 directions</h1>
+  <p class="sub">Today Care = the same "Book a Test" catalogue that home rails and the Blood Tests landing already reach —
+     no identity of its own. Four different answers below (phones scroll). Whichever direction wins, the home
+     <b>BOOK NOW routing gets fixed</b>: add-to-cart → checkout, never a dump onto the catalogue.</p>
+  <div class="row">
+
+    <!-- A -->
+    <div class="opt">
+      <h2>A — Care Hub (all services)</h2>
+      <div class="tag">Care = everything beyond blood tests · one stop for services</div>
+      <div class="phone"><div class="screen">
+        <div class="bar">Care</div>
+        <h3>Our services</h3>
+        <div class="svc">
+          <div><span class="ic">🩸</span><b>Lab Tests at Home</b><span>100+ tests · reports in 6h</span></div>
+          <div><span class="ic">🩻</span><b>X-Rays, Scans &amp; MRI</b><span>Partner centres near you</span></div>
+          <div><span class="ic">👨‍⚕️</span><b>Doctor Consult</b><span>Talk to a physician</span></div>
+          <div><span class="ic">🥗</span><b>Diet Consult</b><span>Nutrition plans</span></div>
+          <div><span class="ic">💉</span><b>Vaccination</b><span>At home or centre</span></div>
+          <div><span class="ic">🏢</span><b>Corporate Checkups</b><span>For your team</span></div>
+        </div>
+        <div class="rx">
+          <b>Have a doctor's prescription?</b>
+          <p>Upload it — we match the tests and book your home collection.</p>
+          <span class="up">📄 Upload prescription</span>
+        </div>
+        <div class="advis">
+          <p>Not sure what you need? Our health advisors can help.</p>
+          <div class="cb">📞</div>
+        </div>
+        <h3>Health packages</h3>
+        <div class="rail">
+          <div class="pk"><b>Full Health Checkup</b><div class="pr">₹1999 <s>₹7110</s></div></div>
+          <div class="pk"><b>Women Profile</b><div class="pr">₹2499 <s>₹6500</s></div></div>
+          <div class="pk"><b>Cardiac Profile</b><div class="pr">₹3200 <s>₹6700</s></div></div>
+        </div>
+      </div></div>
+      <div class="notes"><b>Idea:</b> Care becomes the services directory (tests are just one tile).
+      Prescription upload + advisor get a real home. Booking tests stays with Home/landings — duplication gone.</div>
+    </div>
+
+    <!-- B -->
+    <div class="opt">
+      <h2>B — My Care (continuity)</h2>
+      <div class="tag">Care = everything already in motion · tracking lives here now</div>
+      <div class="phone"><div class="screen">
+        <div class="bar">My Care</div>
+        <h3>Active booking</h3>
+        <div class="track">
+          <div class="st"><span>#B2S6650…7400</span><span class="chip">In Progress</span></div>
+          <div class="steps2">
+            <div class="d done">✓</div><div class="l"></div>
+            <div class="d on">2</div><div class="l"></div>
+            <div class="d">3</div><div class="l"></div>
+            <div class="d">4</div><div class="l"></div>
+            <div class="d">5</div>
+          </div>
+          <span style="font-size:10px; color:var(--muted); display:block; margin-top:7px">Phlebotomist assigned · arrives tomorrow 7–8 AM</span>
+        </div>
+        <h3>Family care</h3>
+        <div class="fam">
+          <div><div class="av">👨</div><b>Harshal</b><span>Checkup due in 12 days</span></div>
+          <div><div class="av">👩</div><b>Mom</b><span>Thyroid test overdue</span></div>
+          <div><div class="av">➕</div><b>Add member</b><span>&nbsp;</span></div>
+        </div>
+        <h3>Recurring plans</h3>
+        <div class="card">
+          <div class="subrow"><div><b>HbA1c — every 3 months</b><span>Last done 12 May</span></div><span class="due">Due 12 Aug</span></div>
+          <div class="subrow"><div><b>Lipid Profile — every 6 months</b><span>Last done 02 Mar</span></div><span class="due">Due 02 Sep</span></div>
+        </div>
+        <h3>Recent reports</h3>
+        <div class="card">
+          <div class="subrow"><div><b>Full Health Checkup</b><span>17 Jul · 89 tests</span></div><span style="color:var(--green-dark); font-weight:800; font-size:10.5px">View ›</span></div>
+        </div>
+      </div></div>
+      <div class="notes"><b>Idea:</b> the Active-Booking tracker we removed from home gets its proper home here,
+      plus family reminders, recurring test plans and report shortcuts. Care = "what's ongoing", booking = Home.</div>
+    </div>
+
+    <!-- C -->
+    <div class="opt">
+      <h2>C — Care Concierge (guidance)</h2>
+      <div class="tag">Care = help me choose · symptom quiz + prescription + advisor</div>
+      <div class="phone"><div class="screen">
+        <div class="bar">Care</div>
+        <div class="hero-c">
+          <b>What brings you here today?</b>
+          <p>Answer 3 quick questions and we'll suggest the right tests.</p>
+          <div class="sheen"></div>
+        </div>
+        <div class="quiz">
+          <b>Common concerns</b>
+          <div class="sym">
+            <div>😴 Always tired</div><div>🌡️ Fever</div><div>⚖️ Weight changes</div>
+            <div>💇 Hair fall</div><div>🦴 Joint pain</div><div>❤️ Heart health</div>
+            <div>🤰 Planning pregnancy</div><div>🩸 Diabetes check</div>
+          </div>
+        </div>
+        <div class="rx" style="margin-top:0">
+          <b>Have a doctor's prescription?</b>
+          <p>Upload it — we do the rest.</p>
+          <span class="up">📄 Upload</span>
+        </div>
+        <h3>Talk to a human</h3>
+        <div class="ways">
+          <div style="background:linear-gradient(120deg,var(--green),var(--green-dark))"><b>📞 Call advisor</b><span>Free · 9 AM–9 PM</span></div>
+          <div style="background:linear-gradient(120deg,#43A5DC,#2E7EB4)"><b>💬 WhatsApp</b><span>Replies in minutes</span></div>
+        </div>
+        <h3>Suggested for "Always tired"</h3>
+        <div class="rail">
+          <div class="pk"><b>CBC + Thyroid + B12 + D3</b><div class="pr">₹2050 <s>₹3050</s></div></div>
+          <div class="pk"><b>Iron Studies</b><div class="pr">₹800</div></div>
+        </div>
+      </div></div>
+      <div class="notes"><b>Idea:</b> Care answers "I don't know what to book." Symptom chips map to concern
+      landings we already have; prescription + advisor + WhatsApp complete the guided path. Very differentiating.</div>
+    </div>
+
+    <!-- D -->
+    <div class="opt">
+      <h2>D — Keep catalogue, make it a real tool</h2>
+      <div class="tag">Care = power search · embrace it, but dedupe the rest</div>
+      <div class="phone"><div class="screen">
+        <div class="bar">Find a Test</div>
+        <div class="search">🔍 Search 100+ tests &amp; packages…</div>
+        <div class="chips">
+          <div class="chip on">All</div><div class="chip">Fever</div><div class="chip">Thyroid</div>
+          <div class="chip">Diabetes</div><div class="chip">Vitamins</div><div class="chip">Women</div>
+        </div>
+        <div class="trow"><div class="tn"><b>C.B.C.</b><span>EDTA · 6h report</span></div><div class="pr">₹300</div><div class="add">+</div></div>
+        <div class="trow"><div class="tn"><b>Blood Sugar F/PP</b><span>Fasting required</span></div><div class="pr">₹100</div><div class="add">+</div></div>
+        <div class="trow"><div class="tn"><b>T3 T4 TSH</b><span>Thyroid profile</span></div><div class="pr">₹500</div><div class="add">+</div></div>
+        <div class="trow"><div class="tn"><b>HbA1c</b><span>3-month sugar average</span></div><div class="pr">₹550</div><div class="add">+</div></div>
+        <div class="trow"><div class="tn"><b>Vitamin D3</b><span>SST · 6h report</span></div><div class="pr">₹1200</div><div class="add">+</div></div>
+        <div class="trow"><div class="tn"><b>Liver Profile (LFT)</b><span>SST · 6h report</span></div><div class="pr">₹1000</div><div class="add">+</div></div>
+      </div></div>
+      <div class="notes"><b>Idea:</b> the least-change option — rename to "Find a Test", strip merchandising
+      (no package rails here), pure fast search + filters + quick add. Home does selling; this does finding.</div>
+    </div>
+
+  </div>
+  <p class="notes" style="max-width:920px; margin:16px auto 0">
+    <b>These combine well:</b> A + B is the strongest pairing (services hub up top, "in motion" section below) —
+    Care becomes both the directory and the continuity centre, C's symptom chips can be one rail inside it,
+    and D's search stays reachable via the search bar. Also fixable regardless of choice: home BOOK NOW →
+    add to cart + open checkout, never the catalogue.</p>
+</body>
+</html>

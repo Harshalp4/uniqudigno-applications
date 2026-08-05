@@ -1,0 +1,25 @@
+# local nested repo history backups (kept out of the monorepo)
+**/.git-local-history/
+
+# .NET
+**/bin/
+**/obj/
+*.user
+
+# Flutter / Dart
+**/.dart_tool/
+**/build/
+**/.flutter-plugins*
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/ephemeral/
+**/*.iml
+**/android/.gradle/
+**/android/local.properties
+
+# Node
+**/node_modules/
+
+# OS / editor
+.DS_Store
+*.log

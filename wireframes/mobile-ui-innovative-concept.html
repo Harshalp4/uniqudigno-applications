@@ -1,0 +1,1340 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VitalScan Innovative Mobile UI Concept</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #00897b;
+      --teal-dark: #00695c;
+      --mint: #e0f2f1;
+      --ink: #151827;
+      --muted: #667085;
+      --soft: #98a2b3;
+      --line: #e7eaee;
+      --surface: #ffffff;
+      --bg: #f6f8fb;
+      --blue: #2563eb;
+      --blue-soft: #eaf1ff;
+      --green: #43a047;
+      --green-soft: #e8f5e9;
+      --amber: #f59e0b;
+      --amber-soft: #fff7e6;
+      --red: #e53935;
+      --red-soft: #ffebee;
+      --violet: #6254d9;
+      --violet-soft: #eeecff;
+      --shadow: 0 12px 32px rgba(21, 24, 39, 0.1);
+      --card-shadow: 0 4px 16px rgba(21, 24, 39, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 5%, rgba(0, 137, 123, 0.2), transparent 28%),
+        radial-gradient(circle at 85% 8%, rgba(37, 99, 235, 0.14), transparent 30%),
+        linear-gradient(180deg, #fbfffe 0%, var(--bg) 52%);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .board {
+      width: min(1480px, 100%);
+      margin: 0 auto;
+      padding: 34px 24px 48px;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .kicker {
+      margin: 0 0 10px;
+      color: var(--teal-dark);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(30px, 4.2vw, 52px);
+      line-height: 1.06;
+      letter-spacing: 0;
+    }
+
+    .intro p {
+      margin: 14px 0 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .idea-panel {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      border: 1px solid rgba(231, 234, 238, 0.9);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .idea {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .idea-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--mint);
+      color: var(--teal-dark);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .idea strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .idea span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(248px, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+
+    .screen {
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+    }
+
+    .caption {
+      width: 100%;
+      max-width: 390px;
+      padding: 0 4px;
+    }
+
+    .caption h2 {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.3;
+    }
+
+    .caption p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .phone {
+      width: min(390px, 100%);
+      height: 812px;
+      position: relative;
+      overflow: hidden;
+      border: 10px solid #111827;
+      border-radius: 34px;
+      background: var(--bg);
+      box-shadow: var(--shadow);
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      left: 50%;
+      width: 126px;
+      height: 26px;
+      transform: translateX(-50%);
+      border-radius: 0 0 18px 18px;
+      background: #111827;
+    }
+
+    .app {
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(224, 242, 241, 0.52), rgba(246, 248, 251, 0) 230px),
+        var(--bg);
+    }
+
+    .scroll {
+      height: calc(100% - 72px);
+      overflow: hidden;
+      padding: 36px 16px 20px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .loc {
+      min-width: 0;
+    }
+
+    .loc small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .loc strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 17px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .round-btn {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.84);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.75);
+      box-shadow: var(--card-shadow);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .glass,
+    .card,
+    .mini-card,
+    .list-card,
+    .sheet,
+    .journey,
+    .report-card {
+      border: 1px solid rgba(231, 234, 238, 0.86);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--card-shadow);
+    }
+
+    .glass {
+      border-radius: 18px;
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-pulse {
+      min-height: 218px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 78% 28%, rgba(0, 137, 123, 0.16), transparent 32%),
+        radial-gradient(circle at 20% 82%, rgba(98, 84, 217, 0.11), transparent 30%),
+        rgba(255, 255, 255, 0.9);
+    }
+
+    .hero-pulse h3,
+    .card h3,
+    .list-card h3,
+    .sheet h3,
+    .report-card h3 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .muted {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .pulse-map {
+      height: 118px;
+      position: relative;
+      margin-top: 12px;
+    }
+
+    .orbit {
+      position: absolute;
+      inset: 7px 44px 0 44px;
+      border: 1px dashed rgba(0, 105, 92, 0.28);
+      border-radius: 999px;
+    }
+
+    .score {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: 86px;
+      height: 86px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, #fff 55%, transparent 57%),
+        conic-gradient(var(--teal) 0 82%, var(--line) 82% 100%);
+      color: var(--ink);
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .node {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      background: #fff;
+      color: var(--teal-dark);
+      box-shadow: 0 8px 18px rgba(21, 24, 39, 0.1);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .node.a {
+      top: 0;
+      left: 24px;
+    }
+
+    .node.b {
+      top: 0;
+      right: 24px;
+      color: var(--blue);
+    }
+
+    .node.c {
+      bottom: 6px;
+      left: 72px;
+      color: var(--amber);
+    }
+
+    .node.d {
+      bottom: 6px;
+      right: 72px;
+      color: var(--green);
+    }
+
+    .prompt {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+      padding: 11px;
+      border-radius: 14px;
+      background: #103b37;
+      color: #fff;
+    }
+
+    .prompt-mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.13);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .prompt strong {
+      display: block;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .prompt span {
+      display: block;
+      margin-top: 2px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .section {
+      margin-top: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+
+    .section-head span {
+      color: var(--teal-dark);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .rail {
+      display: grid;
+      grid-template-columns: repeat(3, 112px);
+      gap: 10px;
+    }
+
+    .mini-card {
+      min-height: 108px;
+      padding: 12px;
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .mini-card i {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      background: var(--mint);
+      color: var(--teal-dark);
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .mini-card strong {
+      display: block;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .mini-card span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .nav {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 72px;
+      padding: 8px 8px 14px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .nav-item {
+      min-width: 56px;
+      display: grid;
+      gap: 5px;
+      justify-items: center;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .nav-item i {
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .nav-item.active {
+      color: var(--teal-dark);
+    }
+
+    .nav-item.active i {
+      background: var(--mint);
+    }
+
+    .appbar {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 22px 16px 0;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+    }
+
+    .back {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .appbar h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .intent-box {
+      padding: 16px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 94% 20%, rgba(37, 99, 235, 0.14), transparent 26%),
+        #fff;
+      box-shadow: var(--card-shadow);
+    }
+
+    .intent-input {
+      display: grid;
+      grid-template-columns: 38px 1fr 38px;
+      align-items: center;
+      gap: 10px;
+      min-height: 58px;
+      margin-top: 14px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--bg);
+    }
+
+    .input-action {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: #fff;
+      color: var(--teal-dark);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .intent-input strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .intent-input span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .chip.active {
+      border-color: var(--teal);
+      background: var(--mint);
+      color: var(--teal-dark);
+    }
+
+    .result-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .list-card {
+      padding: 13px;
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .split {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 7px;
+      background: var(--mint);
+      color: var(--teal-dark);
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .tag.blue {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .tag.amber {
+      background: var(--amber-soft);
+      color: #b45309;
+    }
+
+    .tag.green {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .add {
+      min-width: 72px;
+      min-height: 38px;
+      border: 1.5px solid var(--teal);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--teal-dark);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .builder-top {
+      padding: 16px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #0f766e, #103b37);
+      color: #fff;
+      box-shadow: var(--card-shadow);
+    }
+
+    .coverage {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .coverage div {
+      min-height: 58px;
+      padding: 9px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .coverage strong {
+      display: block;
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .coverage span {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 10px;
+      line-height: 1.25;
+    }
+
+    .bundle-item {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      gap: 11px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--card-shadow);
+    }
+
+    .bundle-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .toggle {
+      width: 46px;
+      height: 28px;
+      padding: 3px;
+      border-radius: 999px;
+      background: var(--teal);
+    }
+
+    .toggle::after {
+      content: "";
+      display: block;
+      width: 22px;
+      height: 22px;
+      margin-left: auto;
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .sticky {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 76px;
+      padding: 12px 16px 18px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 -8px 24px rgba(21, 24, 39, 0.08);
+    }
+
+    .sticky small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .sticky strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 18px;
+    }
+
+    .sticky button {
+      min-height: 46px;
+      border: 0;
+      border-radius: 999px;
+      padding: 0 18px;
+      background: var(--teal);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .journey {
+      padding: 16px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 78% 18%, rgba(0, 137, 123, 0.18), transparent 28%),
+        #fff;
+    }
+
+    .map {
+      height: 168px;
+      position: relative;
+      margin-top: 14px;
+      border-radius: 18px;
+      background:
+        linear-gradient(90deg, rgba(231, 234, 238, 0.8) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(231, 234, 238, 0.8) 1px, transparent 1px),
+        #f9fbfc;
+      background-size: 42px 42px;
+      overflow: hidden;
+    }
+
+    .route {
+      position: absolute;
+      left: 38px;
+      right: 42px;
+      top: 78px;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+      transform: rotate(-13deg);
+      transform-origin: center;
+    }
+
+    .pin {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(21, 24, 39, 0.12);
+      color: var(--teal-dark);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .pin.from {
+      left: 30px;
+      top: 88px;
+    }
+
+    .pin.to {
+      right: 28px;
+      top: 38px;
+      color: var(--blue);
+    }
+
+    .phlebo {
+      position: absolute;
+      left: 152px;
+      top: 66px;
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border: 4px solid #fff;
+      border-radius: 18px;
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(0, 137, 123, 0.3);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .prep-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .prep {
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 11px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--card-shadow);
+    }
+
+    .check {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .story-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .story-tabs span {
+      display: grid;
+      place-items: center;
+      min-height: 36px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      box-shadow: var(--card-shadow);
+    }
+
+    .story-tabs .active {
+      background: #103b37;
+      color: #fff;
+    }
+
+    .report-card {
+      padding: 16px;
+      border-radius: 22px;
+      background: #fff;
+    }
+
+    .delta {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 14px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .delta-ring {
+      display: grid;
+      place-items: center;
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, #fff 55%, transparent 57%),
+        conic-gradient(var(--amber) 0 64%, var(--line) 64% 100%);
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .spark {
+      height: 62px;
+      position: relative;
+      margin-top: 10px;
+      border-radius: 14px;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .spark::before {
+      content: "";
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      top: 34px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--green), var(--green), var(--amber), var(--amber));
+      transform: skewY(-9deg);
+    }
+
+    .ask-row {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .question {
+      padding: 11px;
+      border-radius: 14px;
+      background: var(--blue-soft);
+      color: #1849a9;
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1380px) {
+      .screens {
+        grid-template-columns: repeat(3, minmax(248px, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .intro {
+        grid-template-columns: 1fr;
+      }
+
+      .screens {
+        grid-template-columns: repeat(2, minmax(248px, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .board {
+        padding: 24px 14px 40px;
+      }
+
+      .screens {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <section class="intro">
+      <div>
+        <p class="kicker">Innovative direction</p>
+        <h1>Move from test marketplace to personal health command center</h1>
+        <p>
+          The better UI should not simply sell more packages. It should understand intent, build the right package, guide the pickup journey, and turn lab reports into a readable health story. This concept keeps Healthians-style convenience but makes VitalScan feel smarter and more premium.
+        </p>
+      </div>
+      <aside class="idea-panel">
+        <div class="idea">
+          <div class="idea-mark">01</div>
+          <div><strong>Pulse home instead of promo home</strong><span>The first screen explains what matters today: score, due checks, active pickup, and family alerts.</span></div>
+        </div>
+        <div class="idea">
+          <div class="idea-mark">02</div>
+          <div><strong>Intent booking instead of blank search</strong><span>Users can search, speak, or choose a health goal such as fatigue, fever, diabetes, or annual checkup.</span></div>
+        </div>
+        <div class="idea">
+          <div class="idea-mark">03</div>
+          <div><strong>Smart package builder</strong><span>Show coverage by organ system, remove duplicates, explain why each test is included, and keep pricing transparent.</span></div>
+        </div>
+        <div class="idea">
+          <div class="idea-mark">04</div>
+          <div><strong>Report as a story</strong><span>Lead with changes, risk, and doctor questions before the dense PDF-style report.</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="screens">
+      <article class="screen">
+        <div class="caption">
+          <h2>1. Pulse Home</h2>
+          <p>A daily health command center, not a carousel-heavy shopping page.</p>
+        </div>
+        <div class="phone">
+          <div class="app">
+            <div class="scroll">
+              <div class="topbar">
+                <div class="loc">
+                  <small>Home collection in</small>
+                  <strong>Gurgaon Sector 57</strong>
+                </div>
+                <button class="round-btn">N</button>
+              </div>
+
+              <section class="glass hero-pulse">
+                <div class="split">
+                  <div>
+                    <h3>Today in your health</h3>
+                    <p class="muted">Your next best action is a vitamin follow-up.</p>
+                  </div>
+                  <span class="tag green">82 score</span>
+                </div>
+                <div class="pulse-map">
+                  <div class="orbit"></div>
+                  <div class="score">82</div>
+                  <div class="node a">Lab</div>
+                  <div class="node b">Rx</div>
+                  <div class="node c">Risk</div>
+                  <div class="node d">Plan</div>
+                </div>
+                <div class="prompt">
+                  <div class="prompt-mark">AI</div>
+                  <div><strong>Vitamin D was low last time</strong><span>Book a focused follow-up with B12 and calcium.</span></div>
+                </div>
+              </section>
+
+              <section class="section">
+                <div class="section-head"><h3>One-tap journeys</h3><span>Personalized</span></div>
+                <div class="rail">
+                  <div class="mini-card"><i>FAT</i><strong>Feeling tired</strong><span>Find likely deficiencies</span></div>
+                  <div class="mini-card"><i>ANN</i><strong>Annual check</strong><span>Age and gender tuned</span></div>
+                  <div class="mini-card"><i>FAM</i><strong>Family care</strong><span>Parents and spouse</span></div>
+                </div>
+              </section>
+
+              <section class="section">
+                <div class="section-head"><h3>Active journey</h3><span>Live</span></div>
+                <div class="list-card">
+                  <div class="split">
+                    <div>
+                      <h3>Pickup tomorrow</h3>
+                      <p class="muted">7:00 AM to 8:00 AM at Home</p>
+                    </div>
+                    <span class="tag blue">Track</span>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <nav class="nav">
+              <div class="nav-item active"><i>P</i>Pulse</div>
+              <div class="nav-item"><i>B</i>Book</div>
+              <div class="nav-item"><i>R</i>Reports</div>
+              <div class="nav-item"><i>M</i>Me</div>
+            </nav>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen">
+        <div class="caption">
+          <h2>2. Intent Booking</h2>
+          <p>The user starts with a health goal, symptom, voice note, or exact test.</p>
+        </div>
+        <div class="phone">
+          <div class="app">
+            <div class="appbar">
+              <button class="back">&lt;</button>
+              <div><h2>What do you need?</h2><p class="muted">Search or tell VitalScan in plain words</p></div>
+            </div>
+            <div class="scroll" style="height: calc(100% - 72px); padding-top: 16px;">
+              <section class="intent-box">
+                <h3>Start with intent</h3>
+                <p class="muted">We will suggest tests, remove duplicates, and show why they matter.</p>
+                <div class="intent-input">
+                  <div class="input-action">Q</div>
+                  <div><strong>I feel tired often</strong><span>Try: fever, thyroid, full body, CBC</span></div>
+                  <div class="input-action">MIC</div>
+                </div>
+                <div class="chips">
+                  <span class="chip active">Fatigue</span>
+                  <span class="chip">Fever</span>
+                  <span class="chip">Diabetes</span>
+                  <span class="chip">Women health</span>
+                  <span class="chip">Senior care</span>
+                </div>
+              </section>
+
+              <section class="section">
+                <div class="section-head"><h3>Suggested path</h3><span>Best match</span></div>
+                <div class="result-stack">
+                  <div class="list-card">
+                    <div class="split">
+                      <div>
+                        <h3>Fatigue essentials</h3>
+                        <p class="muted">CBC, thyroid, vitamin D, B12, iron profile</p>
+                      </div>
+                      <span class="tag amber">Explains 5 causes</span>
+                    </div>
+                    <div class="price-row">
+                      <div><span class="price">Rs. 799</span><p class="muted">52 parameters</p></div>
+                      <button class="add">Build</button>
+                    </div>
+                  </div>
+                  <div class="list-card">
+                    <div class="split">
+                      <div>
+                        <h3>Thyroid plus vitamins</h3>
+                        <p class="muted">Focused panel for low energy and sleepiness</p>
+                      </div>
+                      <span class="tag">Focused</span>
+                    </div>
+                    <div class="price-row">
+                      <div><span class="price">Rs. 549</span><p class="muted">8 parameters</p></div>
+                      <button class="add">Add</button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen">
+        <div class="caption">
+          <h2>3. Smart Package Builder</h2>
+          <p>Users see coverage, rationale, duplicate removal, and price confidence.</p>
+        </div>
+        <div class="phone">
+          <div class="app">
+            <div class="appbar">
+              <button class="back">&lt;</button>
+              <div><h2>Build your checkup</h2><p class="muted">Based on fatigue essentials</p></div>
+            </div>
+            <div class="scroll" style="height: calc(100% - 148px); padding-top: 16px;">
+              <section class="builder-top">
+                <div class="split">
+                  <div>
+                    <h3>Coverage map</h3>
+                    <p class="muted" style="color: rgba(255,255,255,0.74);">Balanced screening with no duplicate tests.</p>
+                  </div>
+                  <span class="tag green">Smart</span>
+                </div>
+                <div class="coverage">
+                  <div><strong>92%</strong><span>Fatigue causes covered</span></div>
+                  <div><strong>52</strong><span>Useful parameters</span></div>
+                  <div><strong>0</strong><span>Duplicate tests</span></div>
+                </div>
+              </section>
+
+              <section class="section result-stack">
+                <div class="bundle-item">
+                  <div class="bundle-icon">CBC</div>
+                  <div><h3>Complete blood count</h3><p class="muted">Checks anemia and infection signals</p></div>
+                  <div class="toggle"></div>
+                </div>
+                <div class="bundle-item">
+                  <div class="bundle-icon" style="background:var(--violet-soft); color:var(--violet);">THY</div>
+                  <div><h3>Thyroid profile</h3><p class="muted">Common reason for low energy</p></div>
+                  <div class="toggle"></div>
+                </div>
+                <div class="bundle-item">
+                  <div class="bundle-icon" style="background:var(--amber-soft); color:#b45309;">VIT</div>
+                  <div><h3>Vitamin D and B12</h3><p class="muted">Previously low in your report</p></div>
+                  <div class="toggle"></div>
+                </div>
+                <div class="bundle-item">
+                  <div class="bundle-icon" style="background:var(--green-soft); color:var(--green);">LIV</div>
+                  <div><h3>Liver function</h3><p class="muted">Optional metabolic baseline</p></div>
+                  <button class="add">Add</button>
+                </div>
+              </section>
+            </div>
+            <div class="sticky">
+              <div><small>Personalized package</small><strong>Rs. 799</strong></div>
+              <button>Choose slot</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen">
+        <div class="caption">
+          <h2>4. Live Sample Journey</h2>
+          <p>Pickup is treated like a trusted care visit with prep, ETA, and collector details.</p>
+        </div>
+        <div class="phone">
+          <div class="app">
+            <div class="appbar">
+              <button class="back">&lt;</button>
+              <div><h2>Sample journey</h2><p class="muted">Rajesh is on the way</p></div>
+            </div>
+            <div class="scroll" style="height: calc(100% - 72px); padding-top: 16px;">
+              <section class="journey">
+                <div class="split">
+                  <div>
+                    <h3>Arriving in 12 min</h3>
+                    <p class="muted">ID verified collector with sterile kit.</p>
+                  </div>
+                  <span class="tag green">Verified</span>
+                </div>
+                <div class="map">
+                  <div class="route"></div>
+                  <div class="pin from">Lab</div>
+                  <div class="pin to">Home</div>
+                  <div class="phlebo">R</div>
+                </div>
+              </section>
+
+              <section class="section">
+                <div class="section-head"><h3>Before pickup</h3><span>3 steps</span></div>
+                <div class="prep-list">
+                  <div class="prep"><div class="check">OK</div><div><h3>Fasting confirmed</h3><p class="muted">Last meal: 9:10 PM yesterday</p></div><span class="tag green">Done</span></div>
+                  <div class="prep"><div class="check">ID</div><div><h3>Keep ID ready</h3><p class="muted">For sample handover verification</p></div><span class="tag">Now</span></div>
+                  <div class="prep"><div class="check">W</div><div><h3>Drink water</h3><p class="muted">Helps make sample collection easier</p></div><span class="tag blue">Tip</span></div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen">
+        <div class="caption">
+          <h2>5. Report Story</h2>
+          <p>Reports become understandable: what changed, what matters, and what to ask.</p>
+        </div>
+        <div class="phone">
+          <div class="app">
+            <div class="appbar">
+              <button class="back">&lt;</button>
+              <div><h2>Smart report</h2><p class="muted">Fatigue essentials, 14 Jul</p></div>
+            </div>
+            <div class="scroll" style="height: calc(100% - 72px); padding-top: 16px;">
+              <div class="story-tabs">
+                <span class="active">Story</span>
+                <span>Values</span>
+                <span>Doctor</span>
+              </div>
+
+              <section class="report-card">
+                <div class="split">
+                  <div><h3>What changed</h3><p class="muted">Your vitamin score improved, iron is still borderline.</p></div>
+                  <span class="tag amber">Review</span>
+                </div>
+                <div class="delta">
+                  <div class="delta-ring">64</div>
+                  <div>
+                    <h3>Energy markers</h3>
+                    <p class="muted">B12 is normal now. Ferritin remains below ideal range.</p>
+                    <div class="spark"></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="section">
+                <div class="section-head"><h3>Top findings</h3><span>2 of 52</span></div>
+                <div class="result-stack">
+                  <div class="list-card">
+                    <div class="split"><div><h3>Ferritin</h3><p class="muted">Your value: 18 ng/ml, ideal: 30-150</p></div><span class="tag amber">Low</span></div>
+                  </div>
+                  <div class="list-card">
+                    <div class="split"><div><h3>Vitamin D</h3><p class="muted">Improved from 18 to 31 ng/ml</p></div><span class="tag green">Better</span></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="section">
+                <div class="section-head"><h3>Ask your doctor</h3><span>Prepared</span></div>
+                <div class="ask-row">
+                  <div class="question">Should I evaluate iron deficiency as a cause of tiredness?</div>
+                  <div class="question">How long should I continue vitamin D supplementation?</div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

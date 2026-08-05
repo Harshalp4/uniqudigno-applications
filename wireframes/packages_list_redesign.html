@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Health Packages list — options</title>
+<style>
+  :root{
+    --cream:#FAF3E8; --ink:#1E2A38; --sub:#75808D; --blue:#3E7FBE; --blue-d:#2C5F94;
+    --teal:#CDEAEA; --green:#2A9C54; --green-bg:#E9F8EE; --line:#EDE4D3; --orange:#F58B44;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{background:#232830;display:flex;gap:48px;justify-content:center;align-items:flex-start;padding:44px 20px;flex-wrap:wrap}
+  .stage{text-align:center}
+  .stage h2{color:#fff;font-size:14px;margin-bottom:5px;font-weight:800}
+  .stage p{color:#9aa5b1;font-size:11px;margin-bottom:14px;max-width:360px}
+  .phone{width:360px;height:760px;background:var(--cream);border-radius:42px;border:9px solid #0d0f12;
+    overflow:hidden;position:relative;box-shadow:0 26px 60px rgba(0,0,0,.5);text-align:left}
+  .scroll{height:100%;overflow-y:auto;padding-bottom:30px}
+  .scroll::-webkit-scrollbar{display:none}
+  .top{display:flex;align-items:center;gap:10px;padding:48px 15px 4px}
+  .circ{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:15px;color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.07)}
+  .h1{font-size:20px;font-weight:850;color:var(--ink);padding:6px 15px 0}
+  .sq{display:block;width:110px;height:8px;margin:2px 15px 0}
+  .chips{display:flex;gap:6px;overflow-x:auto;padding:10px 15px}
+  .chip{white-space:nowrap;border-radius:100px;font-size:10.5px;font-weight:800;padding:7px 13px;background:#fff;color:var(--sub);box-shadow:0 3px 8px rgba(0,0,0,.05)}
+  .chip.on{background:linear-gradient(120deg,var(--blue),var(--blue-d));color:#fff;box-shadow:0 4px 12px rgba(62,127,190,.4)}
+  .card{background:#fff;border-radius:18px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden;position:relative}
+  .ribbon{position:absolute;top:12px;right:-30px;transform:rotate(45deg);background:var(--orange);color:#fff;
+    font-size:9px;font-weight:800;padding:3px 0;width:110px;text-align:center}
+  .bookbar{background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;text-align:center;
+    padding:9px 0;font-size:12px;font-weight:800;letter-spacing:.3px}
+  .pill{display:inline-block;border-radius:100px;font-size:9px;font-weight:800;padding:3px 8px}
+</style>
+</head>
+<body>
+
+<!-- A · rich cards + chips -->
+<div class="stage">
+  <h2>A · Rich cards + dashboard chips</h2>
+  <p>Same language as the landing cards: ribbon, emoji identity per package, per-test value line, savings pill, full-width BOOK bar. Category chips filter the list (they already exist in the DB).</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div><b style="font-size:16px;font-weight:850;color:var(--ink)">Health Packages</b>
+      <div class="circ" style="margin-left:auto">🛒</div></div>
+    <div class="chips">
+      <span class="chip on">Popular</span><span class="chip">Full Body</span><span class="chip">Diabetes</span>
+      <span class="chip">Heart</span><span class="chip">Women</span><span class="chip">Senior</span>
+    </div>
+    <div class="card" style="margin:2px 15px 12px">
+      <div class="ribbon">72% OFF</div>
+      <div style="padding:13px 14px 10px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:42px;height:42px;border-radius:13px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:20px">🩺</div>
+          <div>
+            <b style="font-size:15px;color:var(--ink);font-weight:850">Full Health Checkup</b>
+            <div style="font-size:10.5px;color:var(--sub)">89 tests · covers all organs</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:7px;margin-top:10px">
+          <b style="font-size:20px;color:var(--blue);font-weight:850">₹1999</b>
+          <s style="font-size:11px;color:#A7B0BA">₹7110</s>
+          <span class="pill" style="background:var(--green-bg);color:var(--green)">SAVE ₹5111</span>
+          <span style="margin-left:auto;font-size:9.5px;font-weight:800;color:var(--orange)">🔥 ₹22/test</span>
+        </div>
+      </div>
+      <div class="bookbar">BOOK NOW →</div>
+    </div>
+    <div class="card" style="margin:0 15px 12px">
+      <div class="ribbon">36% OFF</div>
+      <div style="padding:13px 14px 10px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:42px;height:42px;border-radius:13px;background:#FDEBD8;display:flex;align-items:center;justify-content:center;font-size:20px">🍬</div>
+          <div>
+            <b style="font-size:15px;color:var(--ink);font-weight:850">Diabetes Profile</b>
+            <div style="font-size:10.5px;color:var(--sub)">35 tests · sugar + kidney + heart risk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:7px;margin-top:10px">
+          <b style="font-size:20px;color:var(--blue);font-weight:850">₹1450</b>
+          <s style="font-size:11px;color:#A7B0BA">₹2250</s>
+          <span class="pill" style="background:var(--green-bg);color:var(--green)">SAVE ₹800</span>
+          <span style="margin-left:auto;font-size:9.5px;font-weight:800;color:var(--sub)">₹41/test</span>
+        </div>
+      </div>
+      <div class="bookbar">BOOK NOW →</div>
+    </div>
+    <div class="card" style="margin:0 15px 12px">
+      <div class="ribbon">52% OFF</div>
+      <div style="padding:13px 14px 10px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:42px;height:42px;border-radius:13px;background:#FBDDDD;display:flex;align-items:center;justify-content:center;font-size:20px">🫀</div>
+          <div>
+            <b style="font-size:15px;color:var(--ink);font-weight:850">Cardiac Profile</b>
+            <div style="font-size:10.5px;color:var(--sub)">35 tests · full heart-risk picture</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:7px;margin-top:10px">
+          <b style="font-size:20px;color:var(--blue);font-weight:850">₹3200</b>
+          <s style="font-size:11px;color:#A7B0BA">₹6700</s>
+          <span class="pill" style="background:var(--green-bg);color:var(--green)">SAVE ₹3500</span>
+        </div>
+      </div>
+      <div class="bookbar">BOOK NOW →</div>
+    </div>
+  </div></div>
+</div>
+
+<!-- B · best-value spotlight + compare rows -->
+<div class="stage">
+  <h2>B · "Best value" spotlight + compare strip</h2>
+  <p>The Full Health Checkup gets a gradient hero (it IS the best deal — ₹22/test). Below, packages become comparable rows: tests-covered bar, per-test price, "most booked" tags. Helps users decide, not just scroll.</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div><b style="font-size:16px;font-weight:850;color:var(--ink)">Health Packages</b>
+      <div class="circ" style="margin-left:auto">🛒</div></div>
+    <div style="margin:8px 15px;background:linear-gradient(130deg,var(--blue),var(--blue-d));border-radius:20px;padding:15px;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-8px;top:-12px;font-size:80px;opacity:.14">🩺</div>
+      <span class="pill" style="background:#fff;color:var(--blue-d)">⭐ BEST VALUE · ₹22/TEST</span>
+      <b style="display:block;color:#fff;font-size:17px;font-weight:850;margin-top:8px">Full Health Checkup</b>
+      <span style="color:#CFE2F3;font-size:11px">89 tests — heart, liver, kidney, thyroid, vitamins & more</span>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px">
+        <b style="color:#fff;font-size:22px;font-weight:850">₹1999</b>
+        <s style="color:#9CC3E8;font-size:12px">₹7110</s>
+        <span class="pill" style="background:rgba(255,255,255,.22);color:#fff">SAVE 72%</span>
+      </div>
+      <div style="background:#fff;color:var(--blue-d);border-radius:100px;text-align:center;padding:10px 0;font-size:12.5px;font-weight:850;margin-top:10px">BOOK NOW →</div>
+    </div>
+    <div style="padding:6px 15px 4px;font-size:12.5px;font-weight:850;color:var(--ink)">Compare packages</div>
+    <div class="card" style="margin:4px 15px 8px;padding:11px 14px">
+      <div style="display:flex;justify-content:space-between">
+        <b style="font-size:13.5px;color:var(--ink)">🍬 Diabetes Profile</b>
+        <span class="pill" style="background:#EDF4FB;color:var(--blue-d)">MOST BOOKED</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:7px">
+        <div style="flex:1;height:7px;background:#F1EBDE;border-radius:4px"><div style="width:39%;height:7px;background:linear-gradient(90deg,var(--blue),var(--blue-d));border-radius:4px"></div></div>
+        <span style="font-size:9.5px;color:var(--sub);font-weight:700">35 tests</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-top:7px">
+        <b style="font-size:16px;color:var(--blue);font-weight:850">₹1450</b><s style="font-size:10px;color:#A7B0BA">₹2250</s>
+        <span style="font-size:9.5px;color:var(--sub);font-weight:700">· ₹41/test</span>
+        <span style="margin-left:auto;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10.5px;font-weight:800;padding:6px 14px">Book</span>
+      </div>
+    </div>
+    <div class="card" style="margin:0 15px 8px;padding:11px 14px">
+      <div style="display:flex;justify-content:space-between"><b style="font-size:13.5px;color:var(--ink)">🫀 Cardiac Profile</b></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:7px">
+        <div style="flex:1;height:7px;background:#F1EBDE;border-radius:4px"><div style="width:39%;height:7px;background:linear-gradient(90deg,var(--blue),var(--blue-d));border-radius:4px"></div></div>
+        <span style="font-size:9.5px;color:var(--sub);font-weight:700">35 tests</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-top:7px">
+        <b style="font-size:16px;color:var(--blue);font-weight:850">₹3200</b><s style="font-size:10px;color:#A7B0BA">₹6700</s>
+        <span style="font-size:9.5px;color:var(--sub);font-weight:700">· ₹91/test</span>
+        <span style="margin-left:auto;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10.5px;font-weight:800;padding:6px 14px">Book</span>
+      </div>
+    </div>
+    <div class="card" style="margin:0 15px 8px;padding:11px 14px">
+      <div style="display:flex;justify-content:space-between"><b style="font-size:13.5px;color:var(--ink)">🦴 Arthritis Profile</b></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:7px">
+        <div style="flex:1;height:7px;background:#F1EBDE;border-radius:4px"><div style="width:36%;height:7px;background:linear-gradient(90deg,var(--blue),var(--blue-d));border-radius:4px"></div></div>
+        <span style="font-size:9.5px;color:var(--sub);font-weight:700">32 tests</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-top:7px">
+        <b style="font-size:16px;color:var(--blue);font-weight:850">₹3000</b><s style="font-size:10px;color:#A7B0BA">₹6400</s>
+        <span style="font-size:9.5px;color:var(--sub);font-weight:700">· ₹94/test</span>
+        <span style="margin-left:auto;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10.5px;font-weight:800;padding:6px 14px">Book</span>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- C · grouped by who it's for -->
+<div class="stage">
+  <h2>C · Grouped by who it's for</h2>
+  <p>Sections answer the real question — "which one is for ME?": For everyone / For her / For him / For parents / By condition. Horizontal mini-cards per group; less scrolling per decision.</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div><b style="font-size:16px;font-weight:850;color:var(--ink)">Health Packages</b>
+      <div class="circ" style="margin-left:auto">🛒</div></div>
+    <div style="padding:6px 15px 2px;font-size:13px;font-weight:850;color:var(--ink)">🌟 For everyone</div>
+    <div style="display:flex;gap:10px;overflow-x:auto;padding:8px 15px">
+      <div class="card" style="min-width:200px">
+        <div class="ribbon">72% OFF</div>
+        <div style="padding:12px">
+          <b style="font-size:13.5px;color:var(--ink)">Full Health Checkup</b>
+          <div style="font-size:10px;color:var(--sub)">89 tests</div>
+          <div style="margin-top:8px"><b style="font-size:17px;color:var(--blue);font-weight:850">₹1999</b>
+            <s style="font-size:10px;color:#A7B0BA">₹7110</s></div>
+        </div>
+        <div class="bookbar">BOOK →</div>
+      </div>
+      <div class="card" style="min-width:200px">
+        <div style="padding:12px">
+          <b style="font-size:13.5px;color:var(--ink)">Basic Health Checkup</b>
+          <div style="font-size:10px;color:var(--sub)">58 tests</div>
+          <div style="margin-top:8px"><b style="font-size:17px;color:var(--blue);font-weight:850">₹999</b></div>
+        </div>
+        <div class="bookbar">BOOK →</div>
+      </div>
+    </div>
+    <div style="padding:8px 15px 2px;font-size:13px;font-weight:850;color:var(--ink)">👩 For her &nbsp;·&nbsp; 👨 For him</div>
+    <div style="display:flex;gap:10px;overflow-x:auto;padding:8px 15px">
+      <div class="card" style="min-width:170px;background:linear-gradient(140deg,#D66BA0,#B4487F)">
+        <div style="padding:12px"><b style="font-size:13px;color:#fff">Women Profile</b>
+          <div style="font-size:10px;color:#F6D9E7">90 tests</div>
+          <b style="display:block;color:#fff;font-size:17px;margin-top:8px;font-weight:850">₹2499</b></div>
+      </div>
+      <div class="card" style="min-width:170px;background:linear-gradient(140deg,#4E8FC7,#2F6FA6)">
+        <div style="padding:12px"><b style="font-size:13px;color:#fff">Men Profile</b>
+          <div style="font-size:10px;color:#CFE2F3">90 tests</div>
+          <b style="display:block;color:#fff;font-size:17px;margin-top:8px;font-weight:850">₹2499</b></div>
+      </div>
+    </div>
+    <div style="padding:8px 15px 2px;font-size:13px;font-weight:850;color:var(--ink)">🩹 By condition</div>
+    <div style="display:flex;gap:10px;overflow-x:auto;padding:8px 15px">
+      <div class="card" style="min-width:150px"><div style="padding:11px">
+        <span style="font-size:17px">🍬</span><b style="display:block;font-size:12px;color:var(--ink);margin-top:3px">Diabetes</b>
+        <b style="display:block;font-size:15px;color:var(--blue);font-weight:850;margin-top:5px">₹1450</b></div></div>
+      <div class="card" style="min-width:150px"><div style="padding:11px">
+        <span style="font-size:17px">🫀</span><b style="display:block;font-size:12px;color:var(--ink);margin-top:3px">Cardiac</b>
+        <b style="display:block;font-size:15px;color:var(--blue);font-weight:850;margin-top:5px">₹3200</b></div></div>
+      <div class="card" style="min-width:150px"><div style="padding:11px">
+        <span style="font-size:17px">🦴</span><b style="display:block;font-size:12px;color:var(--ink);margin-top:3px">Arthritis</b>
+        <b style="display:block;font-size:15px;color:var(--blue);font-weight:850;margin-top:5px">₹3000</b></div></div>
+    </div>
+  </div></div>
+</div>
+
+</body>
+</html>

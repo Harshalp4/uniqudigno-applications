@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VitalScan Mobile UI Wireframe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal-800: #00695c;
+      --teal-700: #00897b;
+      --teal-100: #b2dfdb;
+      --teal-50: #e0f2f1;
+      --blue: #2979ff;
+      --blue-50: #e3f2fd;
+      --green: #43a047;
+      --green-50: #e8f5e9;
+      --orange: #fb8c00;
+      --orange-50: #fff3e0;
+      --red: #e53935;
+      --red-50: #ffebee;
+      --ink: #1a1a2e;
+      --muted: #6b7280;
+      --soft: #9ca3af;
+      --line: #e5e7eb;
+      --bg: #f8fafb;
+      --surface: #ffffff;
+      --raised: #f4f6f8;
+      --shadow: 0 2px 10px rgba(26, 26, 46, 0.08);
+      --shadow-strong: 0 14px 36px rgba(26, 26, 46, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(224, 242, 241, 0.56), rgba(248, 250, 251, 0) 420px),
+        var(--bg);
+    }
+
+    .board {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+    }
+
+    .board-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--teal-800);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 740px;
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .board-copy {
+      margin: 12px 0 0;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .principles {
+      display: grid;
+      gap: 8px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: var(--shadow);
+    }
+
+    .principle {
+      display: grid;
+      grid-template-columns: 8px 1fr;
+      gap: 10px;
+      align-items: start;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .principle::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin-top: 5px;
+      border-radius: 99px;
+      background: var(--teal-700);
+    }
+
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(270px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .screen-wrap {
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+    }
+
+    .screen-title {
+      width: 100%;
+      max-width: 390px;
+      padding: 0 6px;
+    }
+
+    .screen-title h2 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .screen-title p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .phone {
+      width: min(390px, 100%);
+      height: 812px;
+      overflow: hidden;
+      border: 10px solid #111827;
+      border-radius: 34px;
+      background: var(--bg);
+      box-shadow: var(--shadow-strong);
+      position: relative;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      z-index: 4;
+      top: 0;
+      left: 50%;
+      width: 128px;
+      height: 26px;
+      transform: translateX(-50%);
+      border-radius: 0 0 18px 18px;
+      background: #111827;
+    }
+
+    .app {
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      position: relative;
+    }
+
+    .scroll {
+      height: calc(100% - 72px);
+      overflow: hidden;
+      padding-bottom: 24px;
+    }
+
+    .header {
+      padding: 38px 18px 20px;
+      color: white;
+      border-radius: 0 0 24px 24px;
+      background: linear-gradient(135deg, var(--teal-700), var(--teal-800));
+    }
+
+    .topline,
+    .row,
+    .split,
+    .nav,
+    .tabs,
+    .chips,
+    .tracker,
+    .price-line {
+      display: flex;
+      align-items: center;
+    }
+
+    .topline {
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .hello {
+      min-width: 0;
+    }
+
+    .hello small {
+      display: block;
+      margin-bottom: 3px;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 12px;
+    }
+
+    .hello strong {
+      display: block;
+      font-size: 20px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .icon-btn {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      color: inherit;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .location {
+      width: fit-content;
+      max-width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.17);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .search {
+      display: grid;
+      grid-template-columns: 24px 1fr 24px;
+      align-items: center;
+      gap: 10px;
+      height: 52px;
+      margin-top: 16px;
+      padding: 0 14px;
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 8px 20px rgba(0, 105, 92, 0.2);
+      color: var(--soft);
+      font-size: 14px;
+    }
+
+    .content {
+      padding: 16px;
+    }
+
+    .hero-card,
+    .card,
+    .test-card,
+    .report-card,
+    .slot-card {
+      border: 1px solid rgba(229, 231, 235, 0.74);
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      min-height: 136px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1fr 86px;
+      gap: 12px;
+      align-items: center;
+      background:
+        radial-gradient(circle at 86% 24%, rgba(41, 121, 255, 0.18), transparent 34%),
+        linear-gradient(135deg, #f7fffd, #ffffff);
+    }
+
+    .hero-card h3,
+    .card h3,
+    .test-card h3,
+    .report-card h3 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .hero-card p,
+    .card p,
+    .test-card p,
+    .report-card p,
+    .muted {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .hero-visual {
+      display: grid;
+      place-items: center;
+      width: 86px;
+      height: 86px;
+      border-radius: 24px;
+      background: var(--teal-50);
+      color: var(--teal-800);
+      font-size: 36px;
+      font-weight: 800;
+    }
+
+    .cta {
+      width: fit-content;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--teal-700);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .section {
+      margin-top: 20px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .section-head a {
+      color: var(--teal-700);
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .quick {
+      min-width: 0;
+      display: grid;
+      gap: 8px;
+      justify-items: center;
+      text-align: center;
+      color: var(--ink);
+      font-size: 11px;
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .quick i,
+    .mini-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--teal-50);
+      color: var(--teal-700);
+      font-style: normal;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .status-card {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .score-ring {
+      display: grid;
+      place-items: center;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, white 54%, transparent 56%),
+        conic-gradient(var(--green) 0 82%, var(--line) 82% 100%);
+      color: var(--ink);
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .status-card h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .booking-mini {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .package-list,
+    .report-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .test-card {
+      padding: 13px;
+    }
+
+    .split {
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 6px;
+      background: var(--teal-50);
+      color: var(--teal-700);
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .tag.green {
+      background: var(--green-50);
+      color: var(--green);
+    }
+
+    .tag.orange {
+      background: var(--orange-50);
+      color: var(--orange);
+    }
+
+    .tag.red {
+      background: var(--red-50);
+      color: var(--red);
+    }
+
+    .price-line {
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .strike {
+      color: var(--soft);
+      font-size: 12px;
+      text-decoration: line-through;
+    }
+
+    .add {
+      min-width: 70px;
+      min-height: 36px;
+      border: 1.5px solid var(--teal-700);
+      border-radius: 10px;
+      background: white;
+      color: var(--teal-700);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .appbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: 72px;
+      padding: 22px 16px 0;
+      background: white;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .appbar h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .back {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--raised);
+      color: var(--ink);
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .tabs,
+    .chips {
+      gap: 8px;
+      overflow: hidden;
+      padding-bottom: 2px;
+    }
+
+    .tab,
+    .chip {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: white;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .tab.active,
+    .chip.active {
+      border-color: var(--teal-700);
+      background: var(--teal-50);
+      color: var(--teal-800);
+    }
+
+    .cart-bar {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 86px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 56px;
+      padding: 10px 12px 10px 16px;
+      border-radius: 16px;
+      background: #103b37;
+      color: white;
+      box-shadow: 0 14px 28px rgba(16, 59, 55, 0.24);
+    }
+
+    .cart-bar small {
+      display: block;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 11px;
+    }
+
+    .cart-bar strong {
+      font-size: 14px;
+    }
+
+    .cart-bar button {
+      min-height: 38px;
+      border: 0;
+      border-radius: 999px;
+      padding: 0 14px;
+      background: white;
+      color: #103b37;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .address {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 8px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .date-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .date {
+      min-height: 72px;
+      padding: 10px 6px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .date small {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .date.active {
+      border-color: var(--teal-700);
+      background: var(--teal-700);
+      color: white;
+    }
+
+    .date.active small {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .slot-card {
+      padding: 13px;
+    }
+
+    .slot-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .slot {
+      min-height: 52px;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .slot small {
+      color: var(--green);
+      font-size: 10px;
+    }
+
+    .slot.active {
+      border-color: var(--teal-700);
+      background: var(--teal-50);
+      color: var(--teal-800);
+    }
+
+    .summary {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 8px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .summary-line.total {
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .sticky-cta {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 76px;
+      padding: 12px 16px 18px;
+      background: rgba(255, 255, 255, 0.96);
+      border-top: 1px solid var(--line);
+      box-shadow: 0 -8px 24px rgba(26, 26, 46, 0.08);
+    }
+
+    .sticky-cta small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .sticky-cta strong {
+      font-size: 18px;
+    }
+
+    .sticky-cta button {
+      min-height: 46px;
+      border: 0;
+      border-radius: 999px;
+      padding: 0 18px;
+      background: var(--teal-700);
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .tracker {
+      justify-content: space-between;
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 8px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .step {
+      display: grid;
+      gap: 6px;
+      justify-items: center;
+      position: relative;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      text-align: center;
+      flex: 1;
+    }
+
+    .step::before {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: white;
+    }
+
+    .step.done::before {
+      border-color: var(--green);
+      background: var(--green);
+    }
+
+    .step.active {
+      color: var(--teal-800);
+    }
+
+    .step.active::before {
+      border-color: var(--teal-700);
+      background: var(--teal-50);
+    }
+
+    .report-card {
+      padding: 14px;
+    }
+
+    .report-head {
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .tiny-ring {
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, white 54%, transparent 56%),
+        conic-gradient(var(--green) 0 78%, var(--line) 78% 100%);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .parameter {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--raised);
+    }
+
+    .bar {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--green) 0 58%, var(--orange) 58% 74%, var(--red) 74% 100%);
+      position: relative;
+    }
+
+    .bar::after {
+      content: "";
+      position: absolute;
+      top: -4px;
+      left: 63%;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 3px solid white;
+      background: var(--orange);
+      box-shadow: 0 1px 6px rgba(26, 26, 46, 0.22);
+    }
+
+    .insight {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 12px;
+      align-items: start;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--blue-50);
+      color: #1554b7;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .nav {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 72px;
+      justify-content: space-around;
+      padding: 8px 10px 14px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .nav-item {
+      display: grid;
+      gap: 5px;
+      justify-items: center;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      min-width: 56px;
+    }
+
+    .nav-item i {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      color: currentColor;
+      font-style: normal;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .nav-item.active {
+      color: var(--teal-700);
+    }
+
+    .nav-item.active i {
+      background: var(--teal-50);
+    }
+
+    @media (max-width: 1280px) {
+      .screens {
+        grid-template-columns: repeat(2, minmax(270px, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .board {
+        padding: 24px 14px 40px;
+      }
+
+      .board-header {
+        grid-template-columns: 1fr;
+      }
+
+      .screens {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="board-header">
+      <div>
+        <p class="eyebrow">Mobile UI proposal</p>
+        <h1>Healthians-inspired, calmer VitalScan booking experience</h1>
+        <p class="board-copy">
+          The concept borrows the useful patterns: location-first entry, fast test search, at-home sample collection, slot booking, live order status, and smart reports. The upgrade is a quieter clinical hierarchy with fewer competing promos and stronger next-action clarity.
+        </p>
+      </div>
+      <aside class="principles" aria-label="Design principles">
+        <div class="principle">Keep search, location, and cart visible because diagnostics users arrive with intent.</div>
+        <div class="principle">Use teal as the trust signal, not as decoration across every surface.</div>
+        <div class="principle">Make reports feel readable: score, abnormal parameters, recommendation, then full detail.</div>
+        <div class="principle">Design for one-handed booking with sticky CTAs and 48px minimum tap zones.</div>
+      </aside>
+    </header>
+
+    <section class="screens" aria-label="Wireframe screens">
+      <article class="screen-wrap">
+        <div class="screen-title">
+          <h2>1. Home and discovery</h2>
+          <p>Location, search, key services, health score, and popular packages in one calm entry.</p>
+        </div>
+        <div class="phone">
+          <div class="app">
+            <div class="scroll">
+              <header class="header">
+                <div class="topline">
+                  <div class="hello">
+                    <small>Good morning,</small>
+                    <strong>Harshal</strong>
+                  </div>
+                  <button class="icon-btn" aria-label="Notifications">N</button>
+                </div>
+                <div class="location">Loc Home, Gurgaon</div>
+                <div class="search">
+                  <span>Q</span>
+                  <span>Search CBC, thyroid, full body checkup</span>
+                  <span>M</span>
+                </div>
+              </header>
+
+              <div class="content">
+                <div class="hero-card">
+                  <div>
+                    <h3>Book lab tests at home</h3>
+                    <p>Sample collection in 60 minutes with certified phlebotomists.</p>
+                    <button class="cta">Book now</button>
+                  </div>
+                  <div class="hero-visual">VS</div>
+                </div>
+
+                <section class="section">
+                  <div class="quick-grid">
+                    <div class="quick"><i>B</i>Blood tests</div>
+                    <div class="quick"><i>F</i>Full body</div>
+                    <div class="quick"><i>R</i>Reports</div>
+                    <div class="quick"><i>C</i>Care plan</div>
+                  </div>
+                </section>
+
+                <section class="section">
+                  <div class="status-card">
+                    <div class="score-ring">82</div>
+                    <div>
+                      <h3>Your health score is steady</h3>
+                      <p class="muted">2 parameters need attention from your last report.</p>
+                      <div class="booking-mini">Next pickup: Today, 9:30 AM to 10:30 AM</div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="section">
+                  <div class="section-head">
+                    <h3>Popular packages</h3>
+                    <a href="#">View all</a>
+                  </div>
+                  <div class="package-list">
+                    <div class="test-card">
+                      <div class="split">
+                        <div>
+                          <h3>Advanced full body checkup</h3>
+                          <p>92 parameters · Report in 24h</p>
+                        </div>
+                        <span class="tag green">55% off</span>
+                      </div>
+                      <div class="split">
+                        <div class="price-line"><span class="price">Rs. 899</span><span class="strike">Rs. 1999</span></div>
+                        <button class="add">Add</button>
+                      </div>
+                    </div>
+                    <div class="test-card">
+                      <div class="split">
+                        <div>
+                          <h3>Diabetes care package</h3>
+                          <p>HbA1c, fasting sugar · Report in 12h</p>
+                        </div>
+                        <span class="tag">Trending</span>
+                      </div>
+                      <div class="split">
+                        <div class="price-line"><span class="price">Rs. 449</span><span class="strike">Rs. 799</span></div>
+                        <button class="add">Add</button>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <nav class="nav">
+              <div class="nav-item active"><i>H</i>Home</div>
+              <div class="nav-item"><i>T</i>Tests</div>
+              <div class="nav-item"><i>R</i>Reports</div>
+              <div class="nav-item"><i>A</i>Account</div>
+            </nav>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen-wrap">
+        <div class="screen-title">
+          <h2>2. Search and catalogue</h2>
+          <p>Intent-first browsing with sticky cart, transparent pricing, and package/test filters.</p>
+        </div>
+        <div class="phone">
+          <div class="app">
+            <div class="appbar">
+              <button class="back" aria-label="Back">&lt;</button>
+              <div>
+                <h2>Find tests</h2>
+                <p class="muted">Home sample collection available</p>
+              </div>
+            </div>
+
+            <div class="scroll">
+              <div class="content">
+                <div class="search" style="margin-top:0; box-shadow: var(--shadow);">
+                  <span>Q</span>
+                  <span>Search by test, symptom, package</span>
+                  <span>M</span>
+                </div>
+
+                <section class="section">
+                  <div class="tabs">
+                    <div class="tab active">Packages</div>
+                    <div class="tab">Individual tests</div>
+                    <div class="tab">Scans</div>
+                  </div>
+                </section>
+
+                <section class="section">
+                  <div class="chips">
+                    <div class="chip active">Popular</div>
+                    <div class="chip">Fever</div>
+                    <div class="chip">Women</div>
+                    <div class="chip">Vitamins</div>
+                  </div>
+                </section>
+
+                <section class="section package-list">
+                  <div class="test-card">
+                    <div class="split">
+                      <div>
+                        <h3>Complete health screening</h3>
+                        <p>74 parameters · Liver, kidney, thyroid, lipid</p>
+                      </div>
+                      <span class="tag green">Best value</span>
+                    </div>
+                    <div class="price-line"><span class="price">Rs. 699</span><span class="strike">Rs. 1499</span></div>
+                    <div class="split" style="margin-top:12px;">
+                      <span class="tag">Report in 24h</span>
+                      <button class="add">Add</button>
+                    </div>
+                  </div>
+
+                  <div class="test-card">
+                    <div class="split">
+                      <div>
+                        <h3>Thyroid profile total</h3>
+                        <p>T3, T4, TSH · Doctor recommended</p>
+                      </div>
+                      <span class="tag">3 tests</span>
+                    </div>
+                    <div class="price-line"><span class="price">Rs. 299</span><span class="strike">Rs. 599</span></div>
+                    <div class="split" style="margin-top:12px;">
+                      <span class="tag">Report in 12h</span>
+                      <button class="add">Add</button>
+                    </div>
+                  </div>
+
+                  <div class="test-card">
+                    <div class="split">
+                      <div>
+                        <h3>Vitamin D and B12</h3>
+                        <p>Deficiency screening · 2 parameters</p>
+                      </div>
+                      <span class="tag orange">Often low</span>
+                    </div>
+                    <div class="price-line"><span class="price">Rs. 549</span><span class="strike">Rs. 999</span></div>
+                    <div class="split" style="margin-top:12px;">
+                      <span class="tag">Report in 24h</span>
+                      <button class="add">Add</button>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <div class="cart-bar">
+              <div><small>2 items added</small><strong>Rs. 998</strong></div>
+              <button>View cart</button>
+            </div>
+
+            <nav class="nav">
+              <div class="nav-item"><i>H</i>Home</div>
+              <div class="nav-item active"><i>T</i>Tests</div>
+              <div class="nav-item"><i>R</i>Reports</div>
+              <div class="nav-item"><i>A</i>Account</div>
+            </nav>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen-wrap">
+        <div class="screen-title">
+          <h2>3. Slot booking</h2>
+          <p>Address, date, available pickup window, price summary, and one final sticky CTA.</p>
+        </div>
+        <div class="phone">
+          <div class="app">
+            <div class="appbar">
+              <button class="back" aria-label="Back">&lt;</button>
+              <div>
+                <h2>Pickup slot</h2>
+                <p class="muted">Free home sample collection</p>
+              </div>
+            </div>
+
+            <div class="scroll" style="height: calc(100% - 148px);">
+              <div class="content">
+                <section>
+                  <div class="address">
+                    <div class="mini-icon">L</div>
+                    <div>
+                      <h3 style="margin:0; font-size:14px;">Home</h3>
+                      <p class="muted">518, Phase III, Gurgaon</p>
+                    </div>
+                    <span class="tag">Change</span>
+                  </div>
+                </section>
+
+                <section class="section">
+                  <div class="section-head">
+                    <h3>Available dates</h3>
+                  </div>
+                  <div class="date-grid">
+                    <div class="date"><small>Today</small>13 Jul</div>
+                    <div class="date active"><small>Tue</small>14 Jul</div>
+                    <div class="date"><small>Wed</small>15 Jul</div>
+                    <div class="date"><small>Thu</small>16 Jul</div>
+                  </div>
+                </section>
+
+                <section class="section">
+                  <div class="section-head">
+                    <h3>Pickup windows</h3>
+                  </div>
+                  <div class="slot-grid">
+                    <div class="slot active">7:00 - 8:00 AM<small>Fastest</small></div>
+                    <div class="slot">8:00 - 9:00 AM<small>3 left</small></div>
+                    <div class="slot">9:00 - 10:00 AM<small>5 left</small></div>
+                    <div class="slot">6:00 - 7:00 PM<small>2 left</small></div>
+                  </div>
+                </section>
+
+                <section class="section">
+                  <div class="slot-card">
+                    <div class="split">
+                      <div>
+                        <h3 style="margin:0; font-size:14px;">Sample collector</h3>
+                        <p class="muted">Assigned after confirmation</p>
+                      </div>
+                      <span class="tag green">On time</span>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="section">
+                  <div class="summary">
+                    <div class="summary-line"><span>Complete health screening</span><span>Rs. 699</span></div>
+                    <div class="summary-line"><span>Thyroid profile total</span><span>Rs. 299</span></div>
+                    <div class="summary-line"><span>Home collection</span><span>Free</span></div>
+                    <div class="summary-line"><span>Coupon saving</span><span style="color:var(--green);">- Rs. 100</span></div>
+                    <div class="summary-line total"><span>Total</span><span>Rs. 898</span></div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <div class="sticky-cta">
+              <div><small>Payable amount</small><strong>Rs. 898</strong></div>
+              <button>Confirm slot</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen-wrap">
+        <div class="screen-title">
+          <h2>4. Tracking and smart reports</h2>
+          <p>Order progress leads into readable report insights and abnormal parameter focus.</p>
+        </div>
+        <div class="phone">
+          <div class="app">
+            <div class="appbar">
+              <button class="back" aria-label="Back">&lt;</button>
+              <div>
+                <h2>Reports</h2>
+                <p class="muted">Smart insights from your lab data</p>
+              </div>
+            </div>
+
+            <div class="scroll">
+              <div class="content">
+                <div class="hero-card" style="grid-template-columns: 1fr; min-height:auto;">
+                  <div class="split">
+                    <div>
+                      <h3>Pickup in progress</h3>
+                      <p>Rajesh is 12 minutes away from your address.</p>
+                    </div>
+                    <span class="tag">Live</span>
+                  </div>
+                </div>
+
+                <div class="tracker">
+                  <div class="step done">Booked</div>
+                  <div class="step active">Pickup</div>
+                  <div class="step">Lab</div>
+                  <div class="step">Report</div>
+                </div>
+
+                <section class="section">
+                  <div class="section-head">
+                    <h3>Latest smart report</h3>
+                    <a href="#">Full report</a>
+                  </div>
+                  <div class="report-card">
+                    <div class="report-head">
+                      <div class="tiny-ring">78</div>
+                      <div>
+                        <h3>Complete health screening</h3>
+                        <p class="muted">14 Jul 2026 · 2 items need attention</p>
+                      </div>
+                      <span class="tag orange">Review</span>
+                    </div>
+
+                    <div class="parameter">
+                      <div class="split">
+                        <strong style="font-size:13px;">Vitamin D</strong>
+                        <span class="tag orange">Low</span>
+                      </div>
+                      <div class="bar"></div>
+                      <div class="split muted">
+                        <span>Your value: 18 ng/ml</span>
+                        <span>Normal: 30-100</span>
+                      </div>
+                    </div>
+
+                    <div class="insight">
+                      <div class="mini-icon" style="width:38px; height:38px;">AI</div>
+                      <div>
+                        <strong>Recommendation</strong><br>
+                        Consider physician review and repeat vitamin screening after supplementation.
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="section report-list">
+                  <div class="report-card">
+                    <div class="split">
+                      <div>
+                        <h3>Thyroid profile total</h3>
+                        <p class="muted">All parameters in range</p>
+                      </div>
+                      <span class="tag green">Normal</span>
+                    </div>
+                  </div>
+                  <div class="report-card">
+                    <div class="split">
+                      <div>
+                        <h3>Diabetes care package</h3>
+                        <p class="muted">HbA1c slightly elevated</p>
+                      </div>
+                      <span class="tag orange">Borderline</span>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <nav class="nav">
+              <div class="nav-item"><i>H</i>Home</div>
+              <div class="nav-item"><i>T</i>Tests</div>
+              <div class="nav-item active"><i>R</i>Reports</div>
+              <div class="nav-item"><i>A</i>Account</div>
+            </nav>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

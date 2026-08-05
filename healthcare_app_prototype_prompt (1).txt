@@ -1,0 +1,784 @@
+=======================================================
+PREMIUM HEALTHCARE DIAGNOSTICS APP
+CLICKABLE HTML PROTOTYPE — FULL DESIGN PROMPT
+(With Real Images & Animations)
+Version 1.0 | Ready for AI / Developer Use
+=======================================================
+
+ROLE
+====
+
+You are a senior product design team: Principal UX Architect, Healthcare App
+Researcher (benchmarked against Healthians, Apollo 24|7, 1mg, Zocdoc, Ada
+Health, Babylon), UI Systems Engineer, and Frontend Prototype Developer.
+Output must reflect international product-design standards —
+investor-ready, stakeholder-presentable, not a student project.
+
+
+OBJECTIVE
+=========
+
+Produce a single-file, fully clickable HTML prototype of a premium healthcare
+diagnostics mobile app. Inspired by Healthians but elevated to international
+standard. This will be reviewed by business stakeholders and investors before
+Flutter development begins.
+
+Pure HTML5 + CSS3 + Vanilla JS only.
+No backend. No database. No frameworks. Dummy data only.
+
+
+=======================================================
+CRITICAL: REAL IMAGES REQUIRED
+=======================================================
+
+Do NOT use placeholder boxes, grey rectangles, or Lorem Ipsum images.
+Use real, high-quality images sourced directly from free image CDNs.
+
+IMAGE SOURCES TO USE
+--------------------
+
+Unsplash CDN (always works, no API key needed):
+  https://images.unsplash.com/photo-{ID}?w=400&q=80
+
+Pexels (direct image URLs):
+  https://images.pexels.com/photos/{ID}/pexels-photo-{ID}.jpeg
+
+Picsum (fallback):
+  https://picsum.photos/seed/{seed}/400/300
+
+
+SPECIFIC REAL IMAGE URLS TO USE
+--------------------------------
+
+Doctor Photos:
+
+  Dr. Priya Sharma (Cardiologist):
+  https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=200&q=80
+
+  Dr. Arjun Mehta (Endocrinologist):
+  https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200&q=80
+
+  Dr. Sneha Kulkarni (Dermatologist):
+  https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&q=80
+
+  Dr. Rahul Verma (General Physician):
+  https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=200&q=80
+
+Hero Banners:
+
+  Health checkup banner:
+  https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80
+
+  Lab test banner:
+  https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80
+
+  Family health banner:
+  https://images.unsplash.com/photo-1511174511562-5f7f18b874f8?w=800&q=80
+
+Technician / Sample Collection:
+  https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&q=80
+
+Lab / Diagnostic Imagery:
+  https://images.unsplash.com/photo-1579154204601-01588f351e67?w=400&q=80
+  https://images.unsplash.com/photo-1530026405186-ed1f139313f3?w=400&q=80
+
+Onboarding Illustrations:
+
+  Screen 1 - Home collection:
+  https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=600&q=80
+
+  Screen 2 - Digital reports:
+  https://images.unsplash.com/photo-1576671081837-49000212a370?w=600&q=80
+
+  Screen 3 - Family health:
+  https://images.unsplash.com/photo-1511174511562-5f7f18b874f8?w=600&q=80
+
+Family Member Avatars:
+
+  Male avatar 1:
+  https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80
+
+  Female avatar 1:
+  https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80
+
+  Male avatar 2 (senior):
+  https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80
+
+  Female avatar 2 (senior):
+  https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80
+
+IMPORTANT: Add onerror fallback on every image tag:
+  onerror="this.src='https://picsum.photos/seed/health/400/300'"
+
+
+=======================================================
+ANIMATION REQUIREMENTS
+=======================================================
+
+Every screen must have purposeful, premium animations.
+Use CSS keyframes + JS class toggling. No animation libraries needed.
+
+SPLASH SCREEN
+  - Logo scale-in: transform scale(0.5) to scale(1), ease-out, 600ms
+  - Tagline fade-up: translateY(20px) to 0, 400ms delay
+  - Radial pulse ring behind logo: infinite subtle glow
+
+ONBOARDING
+  - Slide transition between panels: translateX with easing
+  - Image float animation: translateY(-8px) to 0, 3s infinite ease-in-out
+  - Progress dots animate width on active state
+
+HOME SCREEN
+  - Banner carousel: CSS translateX auto-scroll every 4s
+  - Health score ring: SVG stroke-dashoffset animate on screen enter, 1.2s ease-out
+  - Quick action grid: stagger fade-in, each icon 60ms delay apart
+  - Package cards: slide-in from right on first render
+
+BOOKING FLOW
+  - Step progress bar: animate width fill on each step advance
+  - Confirmation: checkmark draws itself (SVG stroke animation), then bounces
+  - Slot pills: pop-in scale animation when slots load
+
+AI COPILOT
+  - Typing indicator: three dots bounce sequentially (CSS keyframes)
+  - Message bubbles: slide-up + fade-in as each message appears
+  - Pre-prompt chips: stagger reveal on screen enter
+
+REPORT DETAIL
+  - Parameter rows: stagger slide-in from left, 40ms apart
+  - Abnormal values: pulse red glow animation (subtle)
+  - Trend sparkline: draw left-to-right on enter
+
+HEALTH SCORE
+  - Circular gauge: animate stroke from 0 to score, 1.5s ease-out
+  - Sub-score bars: animate width fill with 100ms stagger
+  - Score number: count-up animation from 0 to actual score
+
+GENERAL (apply to all screens)
+  - Screen enter: opacity 0 to 1 + translateY(10px) to 0, 250ms
+  - Screen exit: opacity 1 to 0, 150ms
+  - Cards on scroll: intersection observer fade-up reveal
+  - All buttons: transform scale(0.97) on active press
+  - Bottom nav icon: scale bounce on tap
+
+
+=======================================================
+DESIGN SYSTEM
+=======================================================
+
+Token              Value
+-----------------------------------------
+Primary            #00897B  (Teal)
+Primary Dark       #00695C
+Primary Light      #E0F2F1
+Accent Blue        #2979FF
+Success            #43A047
+Warning            #FB8C00
+Critical           #E53935
+Background         #F8FAFB
+Surface            #FFFFFF
+Text Primary       #1A1A2E
+Text Secondary     #6B7280
+Border             #E5E7EB
+Card Radius        16px
+Input Radius       12px
+Tag Radius         8px
+Card Shadow        0 2px 16px rgba(0,0,0,0.08)
+Font               Inter, system-ui, sans-serif
+
+Load Inter from Google Fonts:
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+PHONE FRAME CSS
+---------------
+
+.phone-frame {
+  width: 390px;
+  height: 844px;
+  background: #fff;
+  border-radius: 54px;
+  border: 12px solid #1A1A2E;
+  box-shadow:
+    0 0 0 2px #333,
+    0 40px 80px rgba(0,0,0,0.4),
+    inset 0 0 0 2px #555;
+  overflow: hidden;
+  position: relative;
+}
+
+Include realistic status bar at top (9:41 AM, signal bars, battery — pure CSS/HTML).
+On desktop: frame centred, background #F0F4F8 with teal diagonal pattern.
+On mobile viewport (<430px): frame goes full bleed.
+
+
+=======================================================
+ALL 22 SCREENS — DETAILED REQUIREMENTS
+=======================================================
+
+SCREEN 1: SPLASH SCREEN
+------------------------
+- Animated teal-to-white radial gradient background
+- Logo: app name "VitalScan" in bold Inter 800, teal, with DNA/pulse SVG icon
+- Tagline: "Your health, intelligently managed"
+- Pulse ring animation behind logo
+- Auto-advance to onboarding after 2.5s
+- Version number bottom-right: v1.0.0
+
+
+SCREEN 2: ONBOARDING (3 slides)
+--------------------------------
+- Full-height image with teal gradient overlay bottom 40%
+- Large white heading over image
+- Subtext below
+- "Next" pill button + "Skip" text top-right
+- Bottom dot indicators (active dot = wide pill, teal)
+- Swipe simulation via JS touch/click drag
+
+Slide 1: "Book lab tests from your doorstep"
+Slide 2: "Understand your health with AI-powered insights"
+Slide 3: "Manage your entire family's health in one place"
+
+
+SCREEN 3: LOGIN SCREEN
+-----------------------
+- Clean white card centred
+- App logo top
+- "Enter your mobile number" heading
+- Phone input: flag + +91 prefix + number field
+- OTP sub-state: 6 digit boxes, auto-advance, resend 30s countdown
+- "Continue with Google" — white button with Google SVG logo
+- "Browse as Guest" text link
+- Trust badges: Lock Encrypted | HIPAA Safe | 4.8 Rated
+
+
+SCREEN 4: HOME SCREEN (Flagship)
+---------------------------------
+Scrollable content inside fixed header + bottom nav.
+
+Header:
+  - "Good morning, Harshal" greeting
+  - Location pill: "Vashi, Navi Mumbai"
+  - Notification bell with red badge
+
+Search Bar:
+  - White card, rounded
+  - "Search tests, packages, symptoms..."
+  - Voice icon on right
+
+Banner Carousel:
+  - 3 slides with real Unsplash images
+  - Teal overlays, offer text, CTA button
+  - Auto-scrolling every 4 seconds
+
+Quick Actions Grid (2x4):
+  - Blood Tests
+  - Full Body Packages
+  - MRI & Scans
+  - Doctor Consult
+  - Diet Consult
+  - Vaccination
+  - Reports
+  - Corporate Wellness
+
+Last Booking Card:
+  - "CBC + Lipid Profile — In Progress"
+  - Mini stepper inline
+
+Health Score Widget:
+  - Circular SVG ring, score 72
+  - "View full report" link
+
+Popular Packages (horizontal scroll):
+  - Full Body Basic Rs.599
+  - Diabetes Care Rs.799
+  - Heart Risk Rs.1199
+  - Women's Wellness Rs.899
+
+Recommended for You:
+  - 3 test cards based on dummy profile
+
+Family Health Section:
+  - 4 avatar bubbles with score badges
+
+Offers Section:
+  - Coupon code strip
+
+Floating FAB:
+  - "Call to Book" — teal rounded pill, bottom-right
+  - Subtle shadow pulse animation
+
+
+SCREEN 5: SEARCH SCREEN
+------------------------
+- Auto-focused input with back arrow
+- Recent searches: pill chips (CBC, Thyroid, Vitamin D) with X to clear
+- Trending tests: icon + name + report time list
+- Symptom shortcuts: "Feeling tired?", "Hair fall?", "Digestion issues?"
+- Live JS filter on type — match against dummy test array
+
+
+SCREEN 6: BLOOD TESTS LISTING
+------------------------------
+Filter tabs: All | Vitamins | Hormones | Diabetes | Liver | Kidney
+
+Sort dropdown available.
+
+10 test cards with real data:
+  - CBC (Complete Blood Count)
+  - Thyroid TSH
+  - HbA1c
+  - Vitamin D (25-OH)
+  - Vitamin B12
+  - Lipid Profile
+  - LFT (Liver Function Test)
+  - KFT (Kidney Function Test)
+  - Iron Studies
+  - CRP (C-Reactive Protein)
+
+Each card includes:
+  - Test name
+  - Parameters count
+  - Report time pill
+  - MRP strikethrough price
+  - Discounted price
+  - Discount % badge
+  - "+ Add" teal button
+
+
+SCREEN 7: HEALTH PACKAGES LISTING
+-----------------------------------
+- Top featured banner (real image)
+- Package cards: name, icon, test count, key inclusion tags, price
+- "Most Popular" badge where applicable
+- Dual CTA: "View Details" + "Book Now"
+- Compare: checkbox on each card
+- Sticky "Compare 2 Packages" bar appears when 2 selected
+
+
+SCREEN 8: TEST / PACKAGE DETAIL
+---------------------------------
+- Sticky header: back + share + cart icon
+- Hero image (lab photo)
+- Package name, price, discount badge, "You save Rs.X" green tag
+- Tabs: Overview | Parameters | Prep | FAQs | Reviews
+
+Parameters tab:
+  - Expandable accordion rows with normal range shown
+
+Preparation tab:
+  - Fasting instruction card with clock icon
+
+Reviews tab:
+  - 3 cards with real names, star ratings, verified badge
+
+Sample Report:
+  - Blurred card with "View Sample Report" overlay button
+
+Sticky bottom bar:
+  - Price + "Add to Cart" full-width teal button
+
+
+SCREEN 9: CART
+--------------
+- Line items: test name, member assigned, price, remove icon
+- "+ Add more tests" link row
+- Family member assignment: avatar chips per line item
+- Coupon input with Apply button
+- Success state: "HEALTH20 applied — You save Rs.150!"
+- Price breakup: MRP, Discount, Home Collection Fee, Total
+- "Proceed to Book" full-width teal button
+
+
+SCREEN 10: BOOKING FLOW (5 Steps)
+-----------------------------------
+Progress bar animates across all steps.
+
+Step 1 — Who is this for?
+  - Self card (selected by default)
+  - Family member cards with radio selection
+  - "+ Add New Member" card
+
+Step 2 — Confirm Address
+  - Saved address card with map pin icon
+  - "Use this address" CTA
+  - "Add New Address" expandable form
+
+Step 3 — Select Date
+  - Horizontal date scroller — 7 days
+  - Today highlighted teal, past dates greyed
+
+Step 4 — Select Time Slot
+  - Morning / Afternoon / Evening tabs
+  - Slot pills: available (white), selected (teal), unavailable (grey)
+
+Step 5 — Payment & Confirm
+  - Order summary card
+  - Payment methods: UPI, Credit/Debit Card, Netbanking, Cash
+  - "Confirm & Pay Rs.X" button
+
+
+SCREEN 11: BOOKING CONFIRMATION
+---------------------------------
+- Animated SVG checkmark draw + bounce
+- "Booking Confirmed!" heading
+- Booking ID, technician name + photo, ETA
+- 6-stage stepper timeline with current stage highlighted:
+    Confirmed → Assigned → On the Way → Sample Collected → Processing → Report Ready
+- "Track Technician" teal button
+- "Add to Calendar" secondary button
+
+
+SCREEN 12: TECHNICIAN TRACKING
+--------------------------------
+- Map placeholder: teal-tinted div with animated moving pin
+- Progress timeline vertical stepper
+- Technician card: real photo, name, 4.8 rating, Call button
+- ETA countdown
+
+
+SCREEN 13: REPORTS SCREEN
+---------------------------
+- Tab bar: My Reports | Family
+- Filter chips: All | Blood | Scans | Packages
+- Report cards:
+    - Colour-coded left border: green=normal, orange=borderline, red=abnormal
+    - Test name, date, member name, status badge
+    - Actions: Download | Share | View
+- Empty state: illustration + "No reports yet. Book your first test."
+
+
+SCREEN 14: REPORT DETAIL
+--------------------------
+- Sticky header: back + download + share
+- Report meta: test name, date, lab name, NABL gold badge
+- Parameter table with status colour coding:
+    - Green checkmark = Normal
+    - Orange warning = Borderline
+    - Red alert = High / Low
+- Parameter values animate in on load (stagger reveal)
+- Trend sparkline: SVG polyline draws on screen enter
+- "Ask AI to explain this report" — teal banner CTA
+
+Sample CBC Report Data:
+  - Haemoglobin: 11.2 g/dL (Low — Red)
+  - WBC: 7800 /uL (Normal — Green)
+  - Platelets: 2.1 Lakhs /uL (Normal — Green)
+  - MCV: 72 fL (Low — Orange)
+  - RBC: 4.1 million/uL (Normal — Green)
+
+
+SCREEN 15: HEALTH SCORE
+-------------------------
+- Large animated SVG circular gauge: 72/100
+- Draws on enter, 1.5s ease-out
+- Score label: "Good" in green text
+
+6 sub-score cards in 2x3 grid:
+  - Nutrition: 68
+  - Fitness: 74
+  - Sleep: 61
+  - Lifestyle: 70
+  - Metabolic: 79
+  - Risk: 65
+
+Each card:
+  - Icon, label, score bar (animates fill on enter)
+  - Status badge
+
+"What's pulling your score down?" expandable insight cards
+"Improve Score" recommended test CTA card at bottom
+
+
+SCREEN 16: AI HEALTH COPILOT
+------------------------------
+Header: "AI Health Copilot" with subtle teal gradient bar
+
+Welcome message bubble: "Hi Harshal, I've analysed your latest reports. Ask me anything."
+
+Quick prompt chips (4):
+  - "Explain my Vitamin D result"
+  - "Am I at risk for diabetes?"
+  - "What should I eat this week?"
+  - "Which tests are due?"
+
+Pre-populated 3-exchange conversation (user right teal, AI left white card)
+
+AI response cards contain:
+  - Summary text
+  - Risk pill badge
+  - Recommended action
+  - "Book Suggested Test" inline CTA
+
+Typing animation (3 bouncing dots) before AI reply, 800ms delay
+
+Input bar at bottom with send button
+
+
+SCREEN 17: DOCTOR CONSULTATION
+--------------------------------
+- Specialty filter chips (horizontal scroll):
+    General | Cardiology | Endocrinology | Dermatology | Nutrition
+- Doctor cards with real Unsplash photos
+- Each card: name, specialty, experience years, rating, languages, next slot
+- Consultation modes per card:
+    Video Rs.499 | Audio Rs.299 | Chat Rs.199
+
+
+SCREEN 18: MRI & SCANS
+------------------------
+- Scan type tabs: MRI | CT Scan | X-Ray | Ultrasound | PET Scan
+- Body part selector: SVG outline body (front view), tappable regions highlight teal
+- Diagnostic centre cards:
+    - Centre name
+    - Distance
+    - NABL badge
+    - Price range
+    - Available slots pill
+    - "Book Slot" button
+
+
+SCREEN 19: FAMILY HEALTH VAULT
+--------------------------------
+- Member switcher: avatar row at top, active member = teal ring
+- Collapsible accordion sections:
+    - Reports (3 items)
+    - Prescriptions (2 items)
+    - Vaccinations (3 items)
+    - Medical History
+    - Emergency Contacts
+- Each row: icon, label, date, action buttons
+- "Upload Document" FAB
+
+
+SCREEN 20: REWARDS & MEMBERSHIP
+---------------------------------
+- Wallet card: gradient teal, balance 1240 pts = Rs.124, shimmer animation
+- Membership tier badge: Gold with progress ring to Platinum
+- Benefits checklist per tier (Silver / Gold / Platinum columns)
+- Referral section:
+    - Unique code pill "HARSHAL50"
+    - Share button
+    - "Friends joined: 3" stat
+- Transaction history list (points earned / used)
+
+
+SCREEN 21: PROFILE
+-------------------
+- Top: large avatar circle (real photo), name, age, gender, blood group badge
+- "Edit Profile" button
+- Menu sections with chevrons:
+    - Personal Details
+    - Family Members
+    - Saved Addresses
+    - My Orders
+    - Reports
+    - Wallet & Rewards
+    - Help & Support
+    - Privacy Policy
+    - App Settings
+    - Logout (red text)
+- Logout tap opens modal: "Cancel" / "Yes, Logout" confirmation
+
+
+SCREEN 22: ADMIN PORTAL PREVIEW (Desktop Panel)
+-------------------------------------------------
+Wide desktop-style panel, min-width 900px, rendered below phone frame.
+
+Left sidebar:
+  - Logo + nav items with icons
+  - Dashboard, Users, Bookings, Tests, Packages, Doctors,
+    Technicians, Reports, Coupons, Banners, Analytics
+
+Main dashboard panel:
+  - KPI cards:
+      Today's Bookings: 142
+      Revenue: Rs.84,200
+      Active Technicians: 23
+      Reports Pending: 17
+  - Bookings table: ID, Patient, Test, Status badge, Technician, Time, Actions
+  - Bar chart placeholder (CSS bars, animated height on load)
+
+Style: white background, grey sidebar, teal accents — enterprise/clean look.
+
+
+=======================================================
+CLICKABLE NAVIGATION MAP
+=======================================================
+
+Wire ALL these paths without dead links:
+
+Splash (2.5s auto) → Onboarding → Login → OTP → Home
+
+Home → Search → Test Listing → Test Detail → Cart
+     → Booking Step 1 → 2 → 3 → 4 → 5 → Confirmation → Tracking
+
+Home → Health Score → AI Copilot
+
+Home → Reports → Report Detail → AI Copilot
+
+Home → Doctor Consultation → Doctor Detail → Book Consultation
+
+Home → MRI & Scans → Scan Detail → Book Slot
+
+Home → Family Vault
+
+Home → Rewards
+
+Home → Profile
+
+Banner tap → Package Detail
+Quick action grid → respective screens
+Bottom Nav: Home | Care | Reports | Health Score | Profile
+Last booking card → Tracking screen
+Family member avatars → Family Vault
+
+
+=======================================================
+JAVASCRIPT ARCHITECTURE
+=======================================================
+
+// Screen management
+const screens = {};
+let screenHistory = [];
+
+function showScreen(id, direction = 'forward') {
+  // fade/slide transition
+  // push to history stack
+}
+
+function goBack() {
+  // pop history, reverse transition
+}
+
+// All dummy data centralised
+const DATA = {
+  user: {
+    name: 'Harshal',
+    age: 34,
+    gender: 'M',
+    blood: 'O+',
+    city: 'Navi Mumbai'
+  },
+  family: [
+    { name: 'Priya', relation: 'Wife', age: 31, score: 78 },
+    { name: 'Ramesh', relation: 'Father', age: 62, score: 65 },
+    { name: 'Sunita', relation: 'Mother', age: 58, score: 70 }
+  ],
+  tests: [ ...10 test objects with name, price, mrp, params, reportTime... ],
+  packages: [ ...5 package objects... ],
+  doctors: [ ...4 doctor objects with photo URLs... ],
+  reports: [ ...2 complete reports with parameters... ],
+  healthScore: {
+    overall: 72,
+    nutrition: 68,
+    fitness: 74,
+    sleep: 61,
+    lifestyle: 70,
+    metabolic: 79,
+    risk: 65
+  },
+  aiChat: [ ...3 pre-populated exchanges... ]
+};
+
+// Required JS modules:
+// - Carousel auto-scroll
+// - OTP input auto-focus per digit
+// - Score count-up animation
+// - Parameter stagger reveal
+// - Booking step manager
+// - Live search filter
+// - Intersection Observer for scroll animations
+// - Typing indicator for AI chat
+// - Slot picker state manager
+// - Family member switcher
+
+
+=======================================================
+OUTPUT REQUIREMENTS
+=======================================================
+
+1. Deliver ONE complete index.html file — all CSS and JS embedded
+2. Opens directly in Chrome by double-clicking — zero setup required
+3. Google Fonts loaded via CDN link only (Inter)
+4. All images from real Unsplash/Pexels URLs with onerror fallback
+5. Must work offline after first load (except images)
+6. NO placeholder grey boxes anywhere in the prototype
+7. NO Lorem Ipsum — all text must be real healthcare content
+8. Every button, card, nav item must be clickable with transition
+
+
+AFTER THE CODE, PROVIDE:
+- Checklist: Screen inventory (Built / Partial / Skipped)
+- 3 key design decisions with rationale
+- Recommended Flutter development phase order
+
+
+=======================================================
+DUMMY DATA — HEALTHCARE CONTENT REFERENCE
+=======================================================
+
+USER PROFILE:
+  Name: Harshal Patil
+  Age: 34 | Gender: Male | Blood Group: O+
+  City: Vashi, Navi Mumbai
+  Health Score: 72/100
+
+BLOOD TEST DATA (use realistic values):
+  CBC — 18 parameters, Rs.299 (MRP Rs.599), Report in 6h
+  Thyroid Profile Total — 3 parameters, Rs.349 (MRP Rs.699), Report in 12h
+  HbA1c — 1 parameter, Rs.249 (MRP Rs.499), Report in 6h
+  Vitamin D (25-OH) — 1 parameter, Rs.799 (MRP Rs.1599), Report in 24h
+  Vitamin B12 — 1 parameter, Rs.299 (MRP Rs.599), Report in 12h
+  Lipid Profile — 8 parameters, Rs.349 (MRP Rs.699), Report in 6h
+  LFT — 12 parameters, Rs.399 (MRP Rs.799), Report in 12h
+  KFT — 9 parameters, Rs.349 (MRP Rs.699), Report in 12h
+  Iron Studies — 4 parameters, Rs.499 (MRP Rs.999), Report in 24h
+  CRP — 1 parameter, Rs.399 (MRP Rs.799), Report in 12h
+
+PACKAGE DATA:
+  Full Body Basic — 58 tests, Rs.599 (MRP Rs.2499)
+  Diabetes Care Package — 22 tests, Rs.799 (MRP Rs.2999)
+  Heart Risk Profile — 34 tests, Rs.1199 (MRP Rs.3999)
+  Women's Wellness — 47 tests, Rs.899 (MRP Rs.3499)
+  Senior Citizen Package — 72 tests, Rs.1499 (MRP Rs.5999)
+
+DIAGNOSTIC CENTRES (MRI & Scans):
+  Metropolis Diagnostics, Vashi — 1.2 km, NABL certified, MRI from Rs.3500
+  SRL Diagnostics, Kharghar — 4.5 km, NABL certified, MRI from Rs.3200
+  Dr. Lal PathLabs, Nerul — 2.8 km, NABL certified, MRI from Rs.3800
+
+REPORT SAMPLE (CBC — completed):
+  Haemoglobin: 11.2 g/dL | Ref: 13.0-17.0 | LOW
+  WBC: 7800 /uL | Ref: 4000-11000 | NORMAL
+  Platelets: 2.1 L/uL | Ref: 1.5-4.5 | NORMAL
+  MCV: 72 fL | Ref: 80-100 | LOW
+  RBC: 4.1 M/uL | Ref: 4.5-5.5 | LOW
+
+AI CHAT EXCHANGE:
+  User: "Why is my Haemoglobin low?"
+  AI: "Your haemoglobin is 11.2 g/dL, which is below the normal range of
+       13.0-17.0 g/dL for males. This may indicate mild anaemia, possibly
+       iron-deficiency related given your low MCV and RBC. Recommended:
+       Iron Studies test + dietary iron increase (spinach, lentils, red meat).
+       Consider consulting a General Physician."
+       [Risk: Moderate] [Action: Book Iron Studies]
+
+  User: "What should I eat this week?"
+  AI: "Based on your reports, prioritise iron-rich foods: leafy greens,
+       lentils, fortified cereals, and lean meats. Pair with Vitamin C sources
+       to improve iron absorption. Avoid tea/coffee with meals as they inhibit
+       iron uptake. Your Vitamin D is also borderline — get 20 min of morning
+       sunlight daily."
+       [Risk: Low] [Action: Book Nutrition Consultation]
+
+
+=======================================================
+END OF PROMPT
+=======================================================
+App Name Suggestion: VitalScan
+Tagline: "Your health, intelligently managed"
+Primary Color: #00897B (Teal)
+Target Users: Indian urban families, 25-65 age group
+Competitor Benchmark: Healthians, Apollo 24|7, 1mg, Zocdoc
+=======================================================

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Home — lifecycle-aware, intent-first</title>
+<style>
+  :root{
+    --cream:#FAF3E8; --ink:#1E2A38; --sub:#75808D; --blue:#3E7FBE; --blue-d:#2C5F94;
+    --teal:#CDEAEA; --green:#2A9C54; --green-bg:#E9F8EE; --line:#EDE4D3; --orange:#F58B44; --amber:#FDF3E7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{background:#232830;display:flex;gap:44px;justify-content:center;align-items:flex-start;padding:44px 20px;flex-wrap:wrap}
+  .stage{text-align:center}
+  .stage h2{color:#fff;font-size:14px;margin-bottom:5px;font-weight:800}
+  .stage p{color:#9aa5b1;font-size:11px;margin-bottom:14px;max-width:375px;text-align:left}
+  .phone{width:375px;height:812px;background:var(--cream);border-radius:44px;border:9px solid #0d0f12;
+    overflow:hidden;position:relative;box-shadow:0 26px 60px rgba(0,0,0,.5);text-align:left}
+  .scroll{height:100%;overflow-y:auto;padding-bottom:78px}
+  .scroll::-webkit-scrollbar{display:none}
+  .card{background:#fff;border-radius:16px;box-shadow:0 5px 16px rgba(0,0,0,.05)}
+  .pill{display:inline-block;border-radius:100px;font-size:9px;font-weight:800;padding:3px 8px}
+  .dock{position:absolute;left:14px;right:14px;bottom:12px;height:50px;background:#fff;border-radius:100px;
+    box-shadow:0 8px 24px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:space-around;font-size:10px;color:var(--sub)}
+  .dock b{color:var(--blue);font-weight:800}
+  .cta{position:relative;overflow:hidden}
+  .cta:after{content:'';position:absolute;top:0;bottom:0;width:44%;left:-50%;transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-50%}55%{left:130%}100%{left:130%}}
+  /* shared header */
+  .hd{padding:52px 16px 0;display:flex;align-items:center;gap:10px}
+  .hd .av{width:40px;height:40px;border-radius:50%;background:linear-gradient(130deg,var(--blue),var(--blue-d));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:850;font-size:16px}
+  .hd .ic{width:35px;height:35px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.06);font-size:14px}
+  .search{margin:11px 16px 0;background:#fff;border-radius:100px;box-shadow:0 4px 14px rgba(0,0,0,.06);
+    padding:11px 15px;display:flex;gap:8px;align-items:center;font-size:12px;color:#B9C6D2}
+  /* intent switcher */
+  .intents{display:flex;gap:8px;margin:12px 16px 0}
+  .intent{flex:1;background:#fff;border-radius:16px;padding:12px 8px;text-align:center;box-shadow:0 5px 16px rgba(0,0,0,.06)}
+  .intent b{display:block;font-size:10.5px;color:var(--ink);margin-top:4px;line-height:1.25}
+  .intent.hot{background:linear-gradient(130deg,var(--blue),var(--blue-d))}
+  .intent.hot b{color:#fff}
+  .intent.hot small{color:#CFE2F3}
+  .trust{margin:10px 16px 0;display:flex;justify-content:space-between;padding:0 4px}
+  .trust span{font-size:8.5px;color:var(--sub);font-weight:700;letter-spacing:.2px}
+  .sect{display:flex;align-items:baseline;margin:15px 16px 7px}
+  .sect b{font-size:14.5px;color:var(--ink);font-weight:850}
+  .sect a{margin-left:auto;font-size:11px;font-weight:800;color:var(--blue)}
+</style>
+</head>
+<body>
+
+<!-- STATE 1: chronic / returning user -->
+<div class="stage">
+  <h2>State 1 · Returning chronic user — "your care, continued"</h2>
+  <p><b>Top card = care recall</b>: her HbA1c is due (computed from last report date + test recurrence). One tap re-books the exact same test, same address, same slot pattern. Below it: the family circle with each member's due status — the caretaker books for Papa in two taps. Commerce comes AFTER care.</p>
+  <div class="phone"><div class="scroll">
+    <div class="hd">
+      <div class="av">H</div>
+      <div style="flex:1">
+        <b style="font-size:15px;color:var(--ink);font-weight:850">Hi, Harshal</b>
+        <div style="font-size:10px;color:var(--sub)">📍 Mumbai · <u>change</u></div>
+      </div>
+      <div class="ic">🌐</div><div class="ic">🔔</div><div class="ic">🛒</div>
+    </div>
+    <div class="search">🔍 Search a test, package or symptom…</div>
+
+    <!-- CARE RECALL — the retention engine -->
+    <div style="margin:12px 16px 0;background:#fff;border-radius:18px;border:1.6px solid #F0C987;box-shadow:0 8px 22px rgba(245,139,68,.14);padding:13px 14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:40px;height:40px;border-radius:13px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:19px">⏰</div>
+        <div style="flex:1">
+          <b style="font-size:13px;color:var(--ink)">Your HbA1c is due</b>
+          <div style="font-size:10.5px;color:var(--sub)">Last tested 92 days ago · doctors advise every 3 months</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:11px">
+        <span class="cta" style="flex:1.4;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;text-align:center;padding:10px 0;font-size:12px;font-weight:850">Repeat test · ₹550 →</span>
+        <span style="flex:1;border:1.5px solid var(--line);color:var(--sub);border-radius:100px;text-align:center;padding:10px 0;font-size:11.5px;font-weight:700">Remind later</span>
+      </div>
+      <div style="font-size:9.5px;color:var(--sub);margin-top:7px;text-align:center">Same as last time: 🏠 Home · morning slot · fasting</div>
+    </div>
+
+    <!-- FAMILY CIRCLE -->
+    <div class="sect"><b>Your family's health</b><a>Manage ›</a></div>
+    <div style="display:flex;gap:10px;overflow-x:auto;padding:0 16px">
+      <div class="card" style="min-width:120px;padding:11px;text-align:center">
+        <div style="font-size:24px">👤</div><b style="display:block;font-size:11px;color:var(--ink);margin-top:3px">You</b>
+        <span class="pill" style="background:var(--amber);color:#C97716;margin-top:4px">HbA1c DUE</span>
+      </div>
+      <div class="card" style="min-width:120px;padding:11px;text-align:center">
+        <div style="font-size:24px">👴</div><b style="display:block;font-size:11px;color:var(--ink);margin-top:3px">Papa</b>
+        <span class="pill" style="background:#FDECEA;color:#D64541;margin-top:4px">NO CHECKUP 1YR</span>
+      </div>
+      <div class="card" style="min-width:120px;padding:11px;text-align:center">
+        <div style="font-size:24px">👩</div><b style="display:block;font-size:11px;color:var(--ink);margin-top:3px">Priya</b>
+        <span class="pill" style="background:var(--green-bg);color:var(--green);margin-top:4px">ALL GOOD ✓</span>
+      </div>
+      <div class="card" style="min-width:80px;padding:11px;text-align:center;border:1.6px dashed #C9BFA9;box-shadow:none;background:transparent">
+        <div style="font-size:22px;color:var(--blue)">＋</div><b style="display:block;font-size:10px;color:var(--blue);margin-top:3px">Add</b>
+      </div>
+    </div>
+
+    <!-- intent row (compact for returning users) -->
+    <div class="intents">
+      <div class="intent"><span style="font-size:19px">📄</span><b>Upload prescription</b></div>
+      <div class="intent"><span style="font-size:19px">🧪</span><b>Book a test</b></div>
+      <div class="intent"><span style="font-size:19px">📦</span><b>Checkup packages</b></div>
+    </div>
+
+    <!-- commerce -->
+    <div class="sect"><b>Recommended for you</b><a>See all ›</a></div>
+    <div style="display:flex;gap:10px;overflow-x:auto;padding:0 16px">
+      <div class="card" style="min-width:200px;padding:12px;border-top:3px solid var(--blue)">
+        <span class="pill" style="background:#EDF4FB;color:var(--blue-d)">BECAUSE YOU TRACK SUGAR</span>
+        <b style="display:block;font-size:13px;color:var(--ink);font-weight:850;margin-top:5px">🍬 Diabetes Profile</b>
+        <div style="font-size:9.5px;color:var(--sub)">HbA1c + kidney + lipids · 35 tests</div>
+        <div style="margin-top:6px"><b style="font-size:16px;color:var(--blue);font-weight:850">₹1450</b>
+          <s style="font-size:9.5px;color:#A7B0BA">₹2250</s></div>
+      </div>
+      <div class="card" style="min-width:200px;padding:12px">
+        <span class="pill" style="background:var(--green-bg);color:var(--green)">FOR PAPA · SENIOR</span>
+        <b style="display:block;font-size:13px;color:var(--ink);font-weight:850;margin-top:5px">🧓 Senior Citizen Profile</b>
+        <div style="font-size:9.5px;color:var(--sub)">Complete checkup · 90 tests</div>
+        <div style="margin-top:6px"><b style="font-size:16px;color:var(--blue);font-weight:850">₹2499</b></div>
+      </div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="dock"><b>⌂ Home</b><span>♡ Care</span><span>📈 Vitals</span><span>👤 Profile</span></div>
+  </div></div>
+</div>
+
+<!-- STATE 2: new user -->
+<div class="stage">
+  <h2>State 2 · First-time user — intent + trust, nothing else</h2>
+  <p>No history → no recall card. Instead: <b>the three intents as the hero</b> — Upload prescription is FIRST (how most Indians actually arrive), with live price promise. Trust band sits directly under the decision point. One package spotlight, symptom chips for the "something feels off" visitor, and that's the whole screen.</p>
+  <div class="phone"><div class="scroll">
+    <div class="hd">
+      <div class="av">N</div>
+      <div style="flex:1">
+        <b style="font-size:15px;color:var(--ink);font-weight:850">Namaste 🙏</b>
+        <div style="font-size:10px;color:var(--sub)">📍 Set your location</div>
+      </div>
+      <div class="ic">🌐</div><div class="ic">🔔</div>
+    </div>
+    <div class="search">🔍 Search a test, package or symptom…</div>
+
+    <!-- intents as hero -->
+    <div style="margin:12px 16px 0;background:linear-gradient(130deg,var(--blue),var(--blue-d));border-radius:20px;padding:14px">
+      <b style="color:#fff;font-size:14.5px;font-weight:850">How would you like to start?</b>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:11px">
+        <div class="cta" style="background:#fff;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:11px">
+          <span style="font-size:22px">📄</span>
+          <div style="flex:1"><b style="font-size:13px;color:var(--ink)">I have a doctor's prescription</b>
+            <div style="font-size:10px;color:var(--sub)">Photo it — get an exact price in 2 minutes</div></div>
+          <span style="color:var(--blue);font-weight:800">›</span>
+        </div>
+        <div style="background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:11px">
+          <span style="font-size:22px">🧪</span>
+          <div style="flex:1"><b style="font-size:13px;color:#fff">I know my test</b>
+            <div style="font-size:10px;color:#CFE2F3">CBC ₹300 · Thyroid ₹350 · HbA1c ₹550…</div></div>
+          <span style="color:#fff;font-weight:800">›</span>
+        </div>
+        <div style="background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:11px">
+          <span style="font-size:22px">🩺</span>
+          <div style="flex:1"><b style="font-size:13px;color:#fff">Full body checkup</b>
+            <div style="font-size:10px;color:#CFE2F3">89 tests from ₹1999 — 72% off</div></div>
+          <span style="color:#fff;font-weight:800">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- trust band right under the decision -->
+    <div class="trust">
+      <span>🏅 NABL CERTIFIED</span><span>💉 VERIFIED PHLEBOS</span><span>⏱ 6-HR REPORTS</span><span>₹ NO HIDDEN FEES</span>
+    </div>
+
+    <!-- symptom entry -->
+    <div class="sect"><b>Not sure? Start from how you feel</b></div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding:0 16px">
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 14px;box-shadow:0 3px 10px rgba(0,0,0,.05)">😴 Always tired</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 14px;box-shadow:0 3px 10px rgba(0,0,0,.05)">💇 Hair fall</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 14px;box-shadow:0 3px 10px rgba(0,0,0,.05)">⚖️ Weight gain</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 14px;box-shadow:0 3px 10px rgba(0,0,0,.05)">🦴 Joint pain</span>
+    </div>
+
+    <!-- one spotlight only -->
+    <div class="sect"><b>Most families choose</b><a>All packages ›</a></div>
+    <div style="margin:0 16px;background:#fff;border-radius:18px;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:13px 14px;display:flex;align-items:center;gap:11px">
+      <div style="width:44px;height:44px;border-radius:14px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:21px">🩺</div>
+      <div style="flex:1">
+        <b style="font-size:13.5px;color:var(--ink);font-weight:850">Full Health Checkup</b>
+        <div style="font-size:10px;color:var(--sub)">89 tests · ⭐ 4.8 (2,100 bookings)</div>
+        <div style="margin-top:3px"><b style="font-size:15px;color:var(--blue);font-weight:850">₹1999</b>
+          <s style="font-size:9.5px;color:#A7B0BA">₹7110</s>
+          <span class="pill" style="background:var(--green-bg);color:var(--green)">72% OFF</span></div>
+      </div>
+      <span style="background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:11px;font-weight:850;padding:8px 15px">Book</span>
+    </div>
+
+    <div style="margin:12px 16px 0;text-align:center;font-size:10px;color:var(--sub)">
+      🗣 <u>हिंदी में देखें</u> · <u>मराठी</u>
+    </div>
+    <div style="height:16px"></div>
+    <div class="dock"><b>⌂ Home</b><span>♡ Care</span><span>📈 Vitals</span><span>👤 Profile</span></div>
+  </div></div>
+</div>
+
+<!-- STATE 3: active booking -->
+<div class="stage">
+  <h2>State 3 · Collection day — the home becomes a tracker</h2>
+  <p>On the day of collection the top of home IS the booking: live phlebo status with name/photo/OTP, prep checklist with checkable items, and support one tap away. Selling is pushed below the fold — a health company that sells to you while you're fasting feels tone-deaf.</p>
+  <div class="phone"><div class="scroll">
+    <div class="hd">
+      <div class="av">H</div>
+      <div style="flex:1">
+        <b style="font-size:15px;color:var(--ink);font-weight:850">Today's collection</b>
+        <div style="font-size:10px;color:var(--sub)">Sat 2 Aug · 07:00–08:00</div>
+      </div>
+      <div class="ic">🔔</div><div class="ic">🛒</div>
+    </div>
+
+    <!-- live tracker card -->
+    <div style="margin:12px 16px 0;background:#fff;border-radius:20px;box-shadow:0 10px 26px rgba(0,0,0,.09);overflow:hidden">
+      <div style="background:linear-gradient(100deg,var(--green),#1F7A42);padding:11px 14px;display:flex;align-items:center;gap:10px">
+        <span style="width:9px;height:9px;border-radius:50%;background:#fff;display:inline-block;animation:blink 1.2s infinite"></span>
+        <b style="color:#fff;font-size:12.5px;flex:1">Ravi is on the way — arriving ~06:52</b>
+        <span style="background:rgba(255,255,255,.25);color:#fff;border-radius:100px;font-size:10px;font-weight:800;padding:4px 10px">LIVE</span>
+      </div>
+      <style>@keyframes blink{50%{opacity:.3}}</style>
+      <div style="padding:12px 14px">
+        <div style="display:flex;align-items:center;gap:11px">
+          <div style="width:44px;height:44px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:20px">👨‍⚕️</div>
+          <div style="flex:1">
+            <b style="font-size:13px;color:var(--ink)">Ravi Kumar</b>
+            <div style="font-size:10px;color:var(--sub)">Certified phlebotomist · ⭐ 4.9 · vaccinated ✓</div>
+          </div>
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center">📞</div>
+        </div>
+        <div style="margin-top:10px;background:#F7F1E6;border-radius:12px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:10.5px;color:var(--sub);font-weight:700">Share OTP only at your door</span>
+          <b style="font-size:16px;color:var(--ink);letter-spacing:4px">4 8 2 1</b>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;margin-top:12px">
+          <div style="width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center">✓</div>
+          <div style="flex:1;height:2.5px;background:var(--green)"></div>
+          <div style="width:20px;height:20px;border-radius:50%;background:#EDF4FB;border:2px solid var(--blue);font-size:9px;display:flex;align-items:center;justify-content:center">🚗</div>
+          <div style="flex:1;height:2.5px;background:#E7DFD2"></div>
+          <div style="width:20px;height:20px;border-radius:50%;background:#F1EBDE;font-size:9px;display:flex;align-items:center;justify-content:center">💉</div>
+          <div style="flex:1;height:2.5px;background:#E7DFD2"></div>
+          <div style="width:20px;height:20px;border-radius:50%;background:#F1EBDE;font-size:9px;display:flex;align-items:center;justify-content:center">📄</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- prep checklist -->
+    <div class="sect"><b>Before Ravi arrives</b></div>
+    <div class="card" style="margin:0 16px;padding:4px 14px">
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1.5px dashed var(--line)">
+        <div style="width:20px;height:20px;border-radius:7px;background:var(--green);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">✓</div>
+        <span style="font-size:12px;color:var(--sub);text-decoration:line-through">Fast for 12 hours</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1.5px dashed var(--line)">
+        <div style="width:20px;height:20px;border-radius:7px;border:2px solid #C9D4DE"></div>
+        <span style="font-size:12px;color:var(--ink);font-weight:600">Drink a glass of water</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 0">
+        <div style="width:20px;height:20px;border-radius:7px;border:2px solid #C9D4DE"></div>
+        <span style="font-size:12px;color:var(--ink);font-weight:600">Keep ID ready</span>
+      </div>
+    </div>
+
+    <!-- what happens after -->
+    <div style="margin:12px 16px 0;background:var(--green-bg);border:1.4px solid #BFE8CC;border-radius:12px;padding:9px;text-align:center;font-size:11px;font-weight:750;color:#1F7A42">
+      📄 Report by ~2 PM today · we'll notify you the moment it's ready
+    </div>
+
+    <!-- muted secondary -->
+    <div class="sect" style="margin-top:18px"><b style="color:var(--sub);font-weight:750;font-size:12.5px">While you wait</b></div>
+    <div style="display:flex;gap:8px;margin:0 16px">
+      <div class="card" style="flex:1;padding:10px;text-align:center;font-size:10.5px;font-weight:750;color:#3B5A77">📖 What HbA1c means</div>
+      <div class="card" style="flex:1;padding:10px;text-align:center;font-size:10.5px;font-weight:750;color:#3B5A77">🎁 Refer & earn ₹200</div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="dock"><b>⌂ Home</b><span>♡ Care</span><span>📈 Vitals</span><span>👤 Profile</span></div>
+  </div></div>
+</div>
+
+</body>
+</html>

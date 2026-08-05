@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Bit2sky.Application\Bit2sky.Application.csproj" />
+    <ProjectReference Include="..\..\src\Bit2sky.Domain\Bit2sky.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Bit2sky.Shared\Bit2sky.Shared.csproj" />
+    <ProjectReference Include="..\..\src\Bit2sky.Infrastructure\Bit2sky.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

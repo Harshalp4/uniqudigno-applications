@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Book Collection — one screen</title>
+<style>
+  :root{
+    --cream:#FAF3E8; --card:#FFF; --ink:#1E2A38; --sub:#75808D;
+    --blue:#3E7FBE; --blue-d:#2C5F94; --teal:#CDEAEA; --green:#2A9C54;
+    --green-bg:#E9F8EE; --line:#EDE4D3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{background:#232830;display:flex;gap:56px;justify-content:center;align-items:flex-start;padding:44px 20px;flex-wrap:wrap}
+  .stage{text-align:center}
+  .stage h2{color:#fff;font-size:15px;margin-bottom:6px;font-weight:800}
+  .stage p{color:#9aa5b1;font-size:11.5px;margin-bottom:16px;max-width:390px}
+  .phone{width:390px;height:820px;background:var(--cream);border-radius:46px;border:10px solid #0d0f12;
+    overflow:hidden;position:relative;box-shadow:0 30px 70px rgba(0,0,0,.5);text-align:left}
+  .scroll{height:100%;overflow-y:auto;padding-bottom:120px}
+  .scroll::-webkit-scrollbar{display:none}
+  .top{display:flex;align-items:center;gap:12px;padding:54px 16px 8px}
+  .circ{width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:16px;color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.07)}
+  .top b{font-size:17px;font-weight:850;color:var(--ink)}
+
+  .sect{margin:16px 16px 8px;font-size:15px;font-weight:850;color:var(--ink)}
+  .sq{display:block;width:110px;height:8px;margin-top:2px}
+  .card{background:#fff;border-radius:16px;margin:0 16px;padding:12px 14px;box-shadow:0 5px 16px rgba(0,0,0,.05)}
+
+  /* members strip */
+  .mem-strip{display:flex;gap:8px;overflow-x:auto;padding:2px 16px}
+  .mem-chip{background:#fff;border-radius:100px;padding:7px 12px 7px 8px;display:flex;align-items:center;gap:7px;
+    font-size:12px;font-weight:750;color:var(--ink);box-shadow:0 4px 12px rgba(0,0,0,.05);white-space:nowrap}
+  .mem-chip .av{width:24px;height:24px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:12px}
+
+  /* address rows */
+  .addr{display:flex;align-items:center;gap:11px;padding:10px 2px}
+  .addr + .addr{border-top:1.5px dashed var(--line)}
+  .addr .pin{width:34px;height:34px;border-radius:11px;background:#EDF4FB;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .addr b{font-size:13.5px;color:var(--ink);display:block}
+  .addr small{font-size:11px;color:var(--sub)}
+  .radio{margin-left:auto;width:20px;height:20px;border-radius:50%;border:2px solid #C9D4DE}
+  .radio.on{border:6px solid var(--blue)}
+  .add-dash{margin:10px 16px 0;border:1.8px dashed #B9C6D2;border-radius:14px;text-align:center;
+    padding:11px;color:var(--blue);font-size:13px;font-weight:800;background:transparent}
+
+  /* date rail */
+  .dates{display:flex;gap:8px;overflow-x:auto;padding:2px 16px}
+  .day{min-width:56px;background:#fff;border-radius:14px;text-align:center;padding:9px 0;
+    box-shadow:0 4px 12px rgba(0,0,0,.05)}
+  .day small{display:block;font-size:10px;color:var(--sub);font-weight:700}
+  .day b{font-size:16px;font-weight:850;color:var(--ink)}
+  .day.on{background:linear-gradient(140deg,var(--blue),var(--blue-d))}
+  .day.on small,.day.on b{color:#fff}
+
+  /* slot chips */
+  .mer{display:flex;gap:7px;padding:10px 16px 0}
+  .mer div{flex:1;text-align:center;background:#fff;border-radius:100px;padding:8px 0;font-size:12px;font-weight:750;color:var(--sub)}
+  .mer .on{background:#EDF4FB;border:1.6px solid var(--blue);color:var(--blue-d)}
+  .slots{display:flex;flex-wrap:wrap;gap:8px;padding:10px 16px 0}
+  .slot{background:#fff;border-radius:100px;padding:8px 15px;font-size:12px;font-weight:750;color:var(--ink);
+    box-shadow:0 3px 10px rgba(0,0,0,.04)}
+  .slot.on{background:linear-gradient(140deg,var(--blue),var(--blue-d));color:#fff}
+  .slot.off{opacity:.35;text-decoration:line-through}
+
+  /* payment */
+  .pay{display:flex;gap:8px;margin:0 16px}
+  .pay div{flex:1;background:#fff;border-radius:14px;padding:11px;text-align:center;font-size:12px;font-weight:800;color:var(--ink);
+    box-shadow:0 4px 12px rgba(0,0,0,.05)}
+  .pay .on{border:1.8px solid var(--blue);background:#EDF4FB;color:var(--blue-d)}
+  .pay small{display:block;font-weight:600;color:var(--sub);font-size:10px;margin-top:2px}
+
+  /* summary + CTA bar */
+  .bar{position:absolute;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #F0E9DC;
+    padding:10px 16px 26px}
+  .sum{display:flex;justify-content:space-between;font-size:11.5px;color:var(--sub);font-weight:650;margin-bottom:8px}
+  .sum b{color:var(--ink);font-size:13px}
+  .cta{background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;
+    text-align:center;padding:14px 0;font-size:14.5px;font-weight:800;position:relative;overflow:hidden}
+  .cta:after{content:'';position:absolute;top:0;bottom:0;width:44%;left:-50%;transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-50%}55%{left:130%}100%{left:130%}}
+
+  /* accordion (option B) */
+  .acc{background:#fff;border-radius:16px;margin:0 16px 10px;box-shadow:0 5px 16px rgba(0,0,0,.05);overflow:hidden}
+  .acc-h{display:flex;align-items:center;gap:10px;padding:12px 14px}
+  .acc-h .n{width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;font-size:12px;font-weight:800;
+    display:flex;align-items:center;justify-content:center}
+  .acc-h .n.now{background:var(--blue)}
+  .acc-h b{font-size:13.5px;color:var(--ink)}
+  .acc-h small{margin-left:auto;font-size:11px;color:var(--sub);font-weight:650}
+  .acc-body{border-top:1.5px dashed var(--line);padding:12px 14px}
+</style>
+</head>
+<body>
+
+<!-- ─────────── OPTION A: one scroll ─────────── -->
+<div class="stage">
+  <h2>A · One screen, one scroll</h2>
+  <p>Everything visible at once: members come FROM the cart (read-only chips — already chosen), then address, date, time, payment. One "Confirm booking" at the bottom. Fewest taps.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="top"><div class="circ">←</div><b>Book Collection</b></div>
+
+      <div class="sect">Booking for
+        <svg class="sq" viewBox="0 0 110 10"><polyline points="0,7 24,7 32,2 40,8 47,7 110,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="mem-strip">
+        <div class="mem-chip"><span class="av">👤</span>Harshal · Cardiac Profile</div>
+        <div class="mem-chip"><span class="av">👩</span>Priya · Cardiac Profile</div>
+      </div>
+
+      <div class="sect">Collection address
+        <svg class="sq" viewBox="0 0 110 10"><polyline points="0,7 24,7 32,2 40,8 47,7 110,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="card">
+        <div class="addr"><div class="pin">🏠</div><div><b>Home</b><small>12 Test Lane, Mumbai, MH 400001</small></div><div class="radio on"></div></div>
+        <div class="addr"><div class="pin">🏢</div><div><b>Office</b><small>4th Floor, BKC, Mumbai 400051</small></div><div class="radio"></div></div>
+      </div>
+      <div class="add-dash">+ Add a new address</div>
+
+      <div class="sect">Pick date &amp; time
+        <svg class="sq" viewBox="0 0 110 10"><polyline points="0,7 24,7 32,2 40,8 47,7 110,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="dates">
+        <div class="day on"><small>Sat</small><b>1</b></div>
+        <div class="day"><small>Sun</small><b>2</b></div>
+        <div class="day"><small>Mon</small><b>3</b></div>
+        <div class="day"><small>Tue</small><b>4</b></div>
+        <div class="day"><small>Wed</small><b>5</b></div>
+        <div class="day"><small>Thu</small><b>6</b></div>
+      </div>
+      <div class="mer"><div class="on">🌅 Morning</div><div>☀️ Afternoon</div><div>🌇 Evening</div></div>
+      <div class="slots">
+        <div class="slot off">07:00</div><div class="slot on">08:00</div><div class="slot">09:00</div>
+        <div class="slot">10:00</div><div class="slot">11:00</div>
+      </div>
+      <div style="margin:8px 16px 0;background:var(--green-bg);border:1.4px solid #BFE8CC;border-radius:11px;
+        padding:7px;text-align:center;font-size:11px;font-weight:750;color:#1F7A42">
+        ⏱ 12–14 hrs fasting needed — morning slots recommended</div>
+
+      <div class="sect">Payment
+        <svg class="sq" viewBox="0 0 110 10"><polyline points="0,7 24,7 32,2 40,8 47,7 110,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="pay">
+        <div class="on">💳 Pay online<small>UPI · cards · netbanking</small></div>
+        <div>💵 Pay at collection<small>cash / UPI to phlebo</small></div>
+      </div>
+      <div style="height:26px"></div>
+    </div>
+
+    <div class="bar">
+      <div class="sum"><span>2 members · Sat 1, 08:00 · Home</span><b>₹5440</b></div>
+      <div class="cta">Confirm Booking →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── OPTION B: smart accordion ─────────── -->
+<div class="stage">
+  <h2>B · One screen, smart accordion</h2>
+  <p>Same single screen, but each block collapses to a one-line summary once filled (tap to edit). The open block is always the one that needs input — guided like a wizard, without leaving the page.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="top"><div class="circ">←</div><b>Book Collection</b></div>
+      <div style="height:8px"></div>
+
+      <div class="acc">
+        <div class="acc-h"><div class="n">✓</div><b>Booking for</b><small>Harshal + Priya · edit ▾</small></div>
+      </div>
+
+      <div class="acc">
+        <div class="acc-h"><div class="n">✓</div><b>Address</b><small>Home · 12 Test Lane ▾</small></div>
+      </div>
+
+      <div class="acc">
+        <div class="acc-h"><div class="n now">3</div><b>Date &amp; time</b><small>choose ▾</small></div>
+        <div class="acc-body">
+          <div class="dates" style="padding:0">
+            <div class="day on"><small>Sat</small><b>1</b></div>
+            <div class="day"><small>Sun</small><b>2</b></div>
+            <div class="day"><small>Mon</small><b>3</b></div>
+            <div class="day"><small>Tue</small><b>4</b></div>
+            <div class="day"><small>Wed</small><b>5</b></div>
+          </div>
+          <div class="mer" style="padding:10px 0 0"><div class="on">🌅 Morning</div><div>☀️ Afternoon</div><div>🌇 Evening</div></div>
+          <div class="slots" style="padding:10px 0 0">
+            <div class="slot off">07:00</div><div class="slot on">08:00</div><div class="slot">09:00</div>
+            <div class="slot">10:00</div><div class="slot">11:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc">
+        <div class="acc-h"><div class="n" style="background:#D8CDBA">4</div><b>Payment</b><small>after slot ▾</small></div>
+      </div>
+      <div style="height:26px"></div>
+    </div>
+
+    <div class="bar">
+      <div class="sum"><span>2 members · Sat 1, 08:00 · Home</span><b>₹5440</b></div>
+      <div class="cta">Confirm Booking →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── OPTION C: A + accordions + innovations ─────────── -->
+<div class="stage">
+  <h2>C · A, compressed &amp; smarter</h2>
+  <p>Single scroll like A, but address &amp; payment collapse to one line once set. New: one-tap "Fastest slot" card, availability counts on slots, and the bottom bar is a live receipt stub that fills in as you pick.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="top"><div class="circ">←</div><b>Book Collection</b>
+        <div style="margin-left:auto;display:flex;gap:6px">
+          <div class="mem-chip" style="padding:5px 10px 5px 6px"><span class="av">👤</span>+<span class="av" style="margin-left:-14px">👩</span><span style="margin-left:2px">2</span></div>
+        </div>
+      </div>
+
+      <!-- fastest slot: one tap books everything -->
+      <div style="margin:10px 16px 0;background:linear-gradient(120deg,#2A9C54,#1F7A42);border-radius:16px;padding:13px 14px;
+        display:flex;align-items:center;gap:11px;box-shadow:0 8px 20px rgba(42,156,84,.35);animation:pulse 2.4s infinite">
+        <span style="font-size:22px">⚡</span>
+        <div style="flex:1">
+          <b style="color:#fff;font-size:13.5px">Fastest collection: tomorrow 07:00</b>
+          <small style="display:block;color:#D7F5E2;font-size:10.5px">Home address · fasting-friendly morning slot</small>
+        </div>
+        <div style="background:#fff;color:#1F7A42;border-radius:100px;font-size:11.5px;font-weight:850;padding:8px 12px">Book this</div>
+      </div>
+      <style>@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}</style>
+
+      <!-- address: collapsed accordion -->
+      <div class="acc" style="margin-top:14px">
+        <div class="acc-h"><div class="n">✓</div><b>Collection address</b><small>🏠 Home · 12 Test Lane ▾</small></div>
+      </div>
+
+      <!-- date & time: open, compact -->
+      <div class="acc">
+        <div class="acc-h"><div class="n now">•</div><b>Date &amp; time</b><small>Sat 1 · 08:00</small></div>
+        <div class="acc-body">
+          <div class="dates" style="padding:0">
+            <div class="day on"><small>Sat</small><b>1</b></div>
+            <div class="day"><small>Sun</small><b>2</b></div>
+            <div class="day"><small>Mon</small><b>3</b></div>
+            <div class="day"><small>Tue</small><b>4</b></div>
+            <div class="day"><small>Wed</small><b>5</b></div>
+          </div>
+          <div class="mer" style="padding:10px 0 0"><div class="on">🌅 Morning</div><div>☀️ Afternoon</div><div>🌇 Evening</div></div>
+          <div class="slots" style="padding:10px 0 0">
+            <div class="slot off">07:00</div>
+            <div class="slot on">08:00</div>
+            <div class="slot">09:00 <span style="color:#E8890C;font-size:9px">·2 left</span></div>
+            <div class="slot">10:00</div>
+            <div class="slot">11:00</div>
+          </div>
+          <div style="margin-top:9px;background:var(--green-bg);border:1.4px solid #BFE8CC;border-radius:11px;
+            padding:6px;text-align:center;font-size:10.5px;font-weight:750;color:#1F7A42">
+            ⏱ Fasting 12–14 hrs — start fasting by 8 PM tonight for this slot</div>
+        </div>
+      </div>
+
+      <!-- payment: collapsed to segmented row -->
+      <div class="acc">
+        <div class="acc-h"><div class="n" style="background:var(--blue)">₹</div><b>Payment</b>
+          <div style="margin-left:auto;display:flex;gap:5px">
+            <span style="background:#EDF4FB;border:1.4px solid var(--blue);color:var(--blue-d);border-radius:100px;font-size:10.5px;font-weight:800;padding:5px 9px">💳 Online</span>
+            <span style="background:#F4F1EA;color:var(--sub);border-radius:100px;font-size:10.5px;font-weight:700;padding:5px 9px">💵 At collection</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:26px"></div>
+    </div>
+
+    <!-- live receipt stub -->
+    <div class="bar" style="border-radius:20px 20px 0 0;border-top:2px dashed #D8CDBA">
+      <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--sub);font-weight:650">
+        <span>👤 Harshal + Priya</span><span>🏠 Home</span><span>📅 Sat 1 · 08:00</span><span>💳 Online</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin:7px 0 8px">
+        <span style="font-size:11px;color:var(--sub);font-weight:650">2 × Cardiac Profile · 15% family off</span>
+        <b style="font-size:17px;color:var(--ink)">₹5440 <s style="color:#A7B0BA;font-size:11px;font-weight:600">₹13400</s></b>
+      </div>
+      <div class="cta">Confirm Booking →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── OPTION C + COUPONS: applied state ─────────── -->
+<div class="stage">
+  <h2>C+ · Coupons on Book Collection (applied)</h2>
+  <p>New "Coupons & offers" card sits between Payment and the receipt. Applied coupon shows as a dashed green ticket with ✕ to remove; the receipt stub gains a coupon line and the payable updates live.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="top"><div class="circ">←</div><b>Book Collection</b>
+        <div style="margin-left:auto" class="mem-chip"><span class="av">👤</span>2</div>
+      </div>
+
+      <div class="acc" style="margin-top:12px">
+        <div class="acc-h"><div class="n">✓</div><b>Collection address</b><small>🏠 Home · 12 Test Lane ▾</small></div>
+      </div>
+      <div class="acc">
+        <div class="acc-h"><div class="n">✓</div><b>Date &amp; time</b><small>Sat 1 · 07:00 ▾</small></div>
+      </div>
+      <div class="acc">
+        <div class="acc-h"><div class="n" style="background:var(--blue)">₹</div><b>Payment</b>
+          <div style="margin-left:auto;display:flex;gap:5px">
+            <span style="background:#EDF4FB;border:1.4px solid var(--blue);color:var(--blue-d);border-radius:100px;font-size:10.5px;font-weight:800;padding:5px 9px">💳 Online</span>
+            <span style="background:#F4F1EA;color:var(--sub);border-radius:100px;font-size:10.5px;font-weight:700;padding:5px 9px">💵 At collection</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW: coupons card -->
+      <div class="acc">
+        <div class="acc-h"><div class="n" style="background:#F58B44">🎟</div><b>Coupons &amp; offers</b>
+          <small style="color:var(--green);font-weight:800">1 applied ▾</small></div>
+        <div class="acc-body">
+          <div style="border:1.8px dashed var(--green);background:var(--green-bg);border-radius:13px;
+            padding:10px 12px;display:flex;align-items:center;gap:10px">
+            <b style="font-size:12.5px;color:#1F7A42;letter-spacing:.5px">WELCOME200</b>
+            <small style="flex:1;font-size:10.5px;color:#3B7A55">First booking bonus · − ₹200</small>
+            <span style="color:#1F7A42;font-weight:800">✕</span>
+          </div>
+          <div style="display:flex;gap:7px;margin-top:9px;overflow-x:auto">
+            <span style="white-space:nowrap;background:#fff;border:1.4px dashed #BFD7EC;border-radius:100px;
+              font-size:10px;font-weight:800;color:var(--blue-d);padding:6px 11px">FULLBODY10 · 10% off</span>
+            <span style="white-space:nowrap;background:#fff;border:1.4px dashed #BFD7EC;border-radius:100px;
+              font-size:10px;font-weight:800;color:var(--blue-d);padding:6px 11px">FAMILY500 · ₹500 off</span>
+            <span style="white-space:nowrap;background:#fff;border:1.4px dashed #BFD7EC;border-radius:100px;
+              font-size:10px;font-weight:800;color:var(--blue-d);padding:6px 11px">＋ Enter code</span>
+          </div>
+        </div>
+      </div>
+      <div style="height:26px"></div>
+    </div>
+
+    <div class="bar" style="border-radius:20px 20px 0 0;border-top:2px dashed #D8CDBA">
+      <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--sub);font-weight:650">
+        <span>👤 Harshal + Priya</span><span>🏠 Home</span><span>📅 Sat 1 · 07:00</span><span>💳 Online</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin:7px 0 2px;font-size:11px;color:var(--sub);font-weight:650">
+        <span>2 × Cardiac Profile · family 15% off</span><span>₹5440</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin:0 0 8px;font-size:11px;font-weight:750;color:#1F7A42">
+        <span>🎟 WELCOME200</span><span>− ₹200</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+        <span style="font-size:11px;color:var(--sub);font-weight:650">To pay</span>
+        <b style="font-size:18px;color:var(--ink)">₹5240 <s style="color:#A7B0BA;font-size:11px;font-weight:600">₹13400</s></b>
+      </div>
+      <div class="cta">Confirm Booking →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── coupon picker sheet ─────────── -->
+<div class="stage">
+  <h2>C+ · "All coupons" sheet</h2>
+  <p>Tapping "＋ Enter code" or the coupons row header opens the picker: every live coupon as a dashed ticket with its rule (min order, per-user limit) and one-tap APPLY; manual code field at the bottom. Same sheet the cart uses — one component, two surfaces.</p>
+  <div class="phone">
+    <div class="scroll" style="filter:blur(1.5px);opacity:.5">
+      <div class="top"><div class="circ">←</div><b>Book Collection</b></div>
+      <div class="acc" style="margin-top:12px"><div class="acc-h"><div class="n">✓</div><b>Collection address</b><small>🏠 Home ▾</small></div></div>
+      <div class="acc"><div class="acc-h"><div class="n">✓</div><b>Date &amp; time</b><small>Sat 1 · 07:00 ▾</small></div></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;background:var(--cream);border-radius:24px 24px 0 0;
+      box-shadow:0 -12px 40px rgba(0,0,0,.25);padding:10px 16px 24px">
+      <div style="width:42px;height:4.5px;border-radius:3px;background:#D8CDBA;margin:0 auto 12px"></div>
+      <b style="font-size:15.5px;color:var(--ink);font-weight:850">🎟 Coupons &amp; offers</b>
+      <div style="margin-top:10px;border:1.8px dashed var(--green);background:var(--green-bg);border-radius:14px;padding:11px 13px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <b style="font-size:13px;color:#1F7A42;letter-spacing:.5px">WELCOME200</b>
+          <span style="background:var(--green);color:#fff;border-radius:100px;font-size:10.5px;font-weight:850;padding:6px 14px">APPLY</span>
+        </div>
+        <small style="font-size:10.5px;color:#3B7A55">₹200 off your first booking · min order ₹999</small>
+      </div>
+      <div style="margin-top:8px;border:1.8px dashed #BFD7EC;background:#fff;border-radius:14px;padding:11px 13px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <b style="font-size:13px;color:var(--blue-d);letter-spacing:.5px">FULLBODY10</b>
+          <span style="background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10.5px;font-weight:850;padding:6px 14px">APPLY</span>
+        </div>
+        <small style="font-size:10.5px;color:var(--sub)">10% off on Full Health Checkup · up to ₹300</small>
+      </div>
+      <div style="margin-top:8px;border:1.8px dashed #BFD7EC;background:#fff;border-radius:14px;padding:11px 13px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <b style="font-size:13px;color:var(--blue-d);letter-spacing:.5px">FAMILY500</b>
+          <span style="background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10.5px;font-weight:850;padding:6px 14px">APPLY</span>
+        </div>
+        <small style="font-size:10.5px;color:var(--sub)">₹500 off family bookings above ₹4999</small>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <div style="flex:1;background:#fff;border-radius:100px;box-shadow:0 3px 10px rgba(0,0,0,.06);
+          padding:11px 14px;font-size:12px;color:#B9C6D2">Have a code? Type it here…</div>
+        <span style="background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;
+          font-size:12px;font-weight:800;padding:11px 18px">Apply</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

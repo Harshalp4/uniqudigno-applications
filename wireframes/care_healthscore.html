@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Care — Health Score (beyond HealthKarma)</title>
+<style>
+  :root{
+    --blue:#428AC7; --blue-dark:#2F6FA6; --green:#36B665; --green-dark:#2A9C54;
+    --cream:#FAF3EA; --ink:#1F2937; --muted:#6B7280; --orange:#F5A623; --line:#E7EBF0; --red:#E4574F;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:#12161C; color:#E5E7EB; padding:34px 22px 60px}
+  h1{font-size:22px; font-weight:700; margin-bottom:6px}
+  .sub{color:#9CA3AF; font-size:13.5px; margin-bottom:30px; max-width:920px; line-height:1.5}
+  .row{display:flex; gap:34px; flex-wrap:wrap; justify-content:center}
+  .opt{width:330px}
+  .opt h2{font-size:15px; margin:0 0 2px; color:#fff}
+  .opt .tag{font-size:11.5px; color:#93C5FD; margin-bottom:10px}
+  .notes{margin-top:12px; font-size:12px; color:#B7BEC9; line-height:1.55}
+  .notes b{color:#fff}
+  .phone{width:330px; height:700px; background:#000; border-radius:42px; padding:9px;
+         box-shadow:0 22px 55px rgba(0,0,0,.55)}
+  .screen{width:100%; height:100%; border-radius:34px; overflow-y:auto; overflow-x:hidden;
+          position:relative; background:var(--cream); scrollbar-width:none}
+  .screen::-webkit-scrollbar{display:none}
+  .bar{padding:30px 14px 6px; display:flex; align-items:center; gap:8px}
+  .bar .who{font-size:15.5px; font-weight:800; color:var(--ink)}
+  .bar .sw{font-size:11px; color:var(--muted)}
+  .bar .re{margin-left:auto; background:#fff; border:1.4px dashed #C9BFAD; color:var(--blue); border-radius:99px;
+      padding:5px 11px; font-size:10.5px; font-weight:800}
+  h3{font-size:13.5px; font-weight:800; color:var(--ink); padding:8px 14px 8px}
+  .card{margin:0 14px 12px; background:#fff; border-radius:18px; padding:13px;
+      box-shadow:0 5px 14px rgba(0,0,0,.06)}
+  @keyframes ringfill{0%{background:conic-gradient(var(--green) 0deg, #EDE5D6 0deg)}}
+  @keyframes pop{0%{transform:scale(0)} 70%{transform:scale(1.2)} 100%{transform:scale(1)}}
+  @keyframes bob{0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)}}
+  .sheen{position:absolute; top:0; bottom:0; width:46%; transform:skewX(-18deg);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent); animation:sheen 3s infinite}
+  @keyframes sheen{0%{left:-60%} 55%{left:120%} 100%{left:120%}}
+  /* score */
+  .score{display:flex; align-items:center; gap:14px}
+  .ring{width:110px; height:110px; border-radius:50%; flex:0 0 auto; position:relative;
+      background:conic-gradient(var(--green) 0 200deg, #F5A623 200deg 240deg, #EDE5D6 240deg 360deg)}
+  .ring:after{content:''; position:absolute; inset:11px; border-radius:50%; background:#fff}
+  .ring b{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      z-index:2; font-size:26px; color:var(--green-dark)}
+  .ring b small{font-size:9px; color:var(--muted); font-weight:700}
+  .score .tx b{font-size:13px; color:var(--ink)}
+  .score .tx p{font-size:10.5px; color:var(--muted); margin-top:4px; line-height:1.45}
+  .trend{margin-top:7px}
+  .up{color:var(--green-dark); font-weight:800; font-size:11px}
+  .basis{display:inline-block; margin-top:7px; background:#EAF4FB; color:var(--blue-dark); border-radius:99px;
+      padding:3px 9px; font-size:9px; font-weight:800}
+  /* markers */
+  .marks{display:flex; gap:8px; overflow-x:auto; padding:0 14px 12px; scrollbar-width:none}
+  .marks::-webkit-scrollbar{display:none}
+  .mk{min-width:96px; background:#fff; border-radius:14px; padding:10px; box-shadow:0 4px 12px rgba(0,0,0,.05); border-top:3px solid var(--green)}
+  .mk.warn{border-top-color:var(--orange)} .mk.bad{border-top-color:var(--red)}
+  .mk b{font-size:11px; color:var(--ink)}
+  .mk .v{font-size:12.5px; font-weight:800; margin-top:4px}
+  .mk .v.ok{color:var(--green-dark)} .mk .v.warn{color:#B45D12} .mk .v.bad{color:var(--red)}
+  .mk span{display:block; font-size:8.5px; color:var(--muted); margin-top:2px}
+  /* risk cards with plans */
+  .risk{border-left:4px solid var(--red)}
+  .risk .hd{display:flex; align-items:center; gap:8px}
+  .risk .hd b{font-size:13px; color:var(--ink); flex:1}
+  .risk .lvl{background:#FCE9E4; color:var(--red); border-radius:99px; padding:2px 9px; font-size:9.5px; font-weight:800}
+  .risk p{font-size:10.5px; color:var(--muted); margin-top:6px; line-height:1.45}
+  .plan{display:flex; gap:7px; margin-top:10px}
+  .plan div{flex:1; border-radius:11px; padding:8px 6px; text-align:center; font-size:9.5px; font-weight:800}
+  .plan .t1{background:#EAF4FB; color:var(--blue-dark)}
+  .plan .t2{background:#F0FAF3; color:var(--green-dark)}
+  .plan .t3{background:#F6F1FE; color:#6D4FC1}
+  /* care plan rows */
+  .subrow{display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1.5px dashed #EFE7DA}
+  .subrow:last-child{border-bottom:none}
+  .subrow b{font-size:12px; color:var(--ink)}
+  .subrow span{font-size:10px; color:var(--muted); display:block; margin-top:2px}
+  .subrow .due{font-size:10px; font-weight:800; color:#B45D12; background:#FFF3E4; border-radius:99px; padding:3px 8px}
+  .subrow .book{font-size:10.5px; font-weight:800; color:var(--blue)}
+  /* suggestion */
+  .sugg{position:relative; overflow:hidden}
+  .why{background:#FFF9EE; border:1px dashed #EBD9B4; border-radius:10px; padding:7px 9px; font-size:9.5px;
+      color:#8A6A2F; margin-bottom:9px}
+  .sugg .nm{font-size:13px; font-weight:800; color:var(--ink)}
+  .sugg .inc{font-size:10px; color:var(--muted); margin-top:4px}
+  .sugg .rowp{display:flex; align-items:baseline; gap:6px; margin-top:8px}
+  .sugg .pr{font-size:16px; font-weight:800; color:var(--blue)}
+  .sugg .pr s{font-size:10.5px; color:#9CA3AF; font-weight:600}
+  .sugg .cta{margin-top:9px; background:linear-gradient(100deg,var(--blue),var(--blue-dark)); color:#fff; text-align:center;
+      border-radius:12px; padding:10px; font-size:12px; font-weight:800; position:relative; overflow:hidden}
+  /* wellio */
+  .ai{margin:0 14px 14px; border-radius:18px; padding:13px; color:#fff; display:flex; gap:10px; align-items:center;
+      background:linear-gradient(120deg,#6D4FC1,#4E3691); position:relative; overflow:hidden}
+  .ai .orb{width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.2); display:flex; align-items:center;
+      justify-content:center; font-size:16px; animation:bob 2.6s infinite}
+  .ai p{flex:1; font-size:11.5px; font-weight:700; line-height:1.35}
+  .ai .go{background:#fff; color:#4E3691; border-radius:99px; padding:6px 12px; font-size:10.5px; font-weight:800}
+  /* detail phone */
+  .dhead{margin:0 14px 12px; border-radius:18px; padding:14px; color:#fff;
+      background:linear-gradient(130deg,#E4574F,#B93B34)}
+  .dhead b{font-size:15px}
+  .dhead p{font-size:10.5px; opacity:.9; margin-top:4px}
+  .gauge{margin:0 14px 12px; background:#fff; border-radius:16px; padding:13px; box-shadow:0 5px 14px rgba(0,0,0,.06)}
+  .gauge b{font-size:12px; color:var(--ink)}
+  .track{height:10px; border-radius:99px; margin-top:9px; position:relative;
+      background:linear-gradient(90deg,#E4574F 0 30%, #F5A623 30% 45%, #7FD49B 45% 100%)}
+  .dotv{position:absolute; top:-4px; left:24%; width:18px; height:18px; border-radius:50%; background:#fff;
+      border:4px solid var(--red); animation:pop .6s both}
+  .gauge .lbls{display:flex; justify-content:space-between; font-size:8.5px; color:var(--muted); margin-top:6px}
+  .stepl{display:flex; gap:10px; padding:8px 0; border-bottom:1.5px dashed #EFE7DA}
+  .stepl:last-child{border-bottom:none}
+  .stepl .n{width:22px; height:22px; border-radius:50%; background:#EAF4FB; color:var(--blue-dark); font-size:10.5px;
+      font-weight:800; display:flex; align-items:center; justify-content:center; flex:0 0 auto}
+  .stepl b{font-size:11.5px; color:var(--ink)}
+  .stepl span{display:block; font-size:9.5px; color:var(--muted); margin-top:2px}
+</style>
+</head>
+<body>
+  <h1>Care = Health Score — our answer to HealthKarma</h1>
+  <p class="sub">Healthians' HealthKarma: quiz → opaque score → risk buckets → "32% of peers are healthier than you" → package upsell.
+     Ours is built on what they don't have: <b>your real lab results</b> (we hold the reports + a health-score table already),
+     transparent drivers, positive framing, an action plan per risk, and Wellio AI. Left = the Care tab; right = a risk detail.</p>
+  <div class="row">
+
+    <!-- MAIN -->
+    <div class="opt">
+      <h2>Care tab — "Your Health Score"</h2>
+      <div class="tag">Real-results based · transparent · action-first</div>
+      <div class="phone"><div class="screen">
+        <div class="bar">
+          <div><span class="who">Harshal ▾</span><span class="sw">&nbsp;· switch member</span></div>
+          <div class="re">🔄 Recheck (3 min)</div>
+        </div>
+        <div class="card">
+          <div class="score">
+            <div class="ring"><b>78<small>/100</small></b></div>
+            <div class="tx">
+              <b>Good — and improving</b>
+              <div class="trend"><span class="up">▲ +6 since May</span>
+                <svg width="120" height="26"><polyline points="0,20 20,18 40,21 60,14 80,15 100,9 120,6" fill="none" stroke="#36B665" stroke-width="2"/></svg>
+              </div>
+              <span class="basis">📄 Based on your 17 Jul lab results + lifestyle check</span>
+            </div>
+          </div>
+        </div>
+        <h3>What drives your score</h3>
+        <div class="marks">
+          <div class="mk bad"><b>Vitamin B12</b><div class="v bad">190 ↓</div><span>pg/mL · low</span></div>
+          <div class="mk warn"><b>Vitamin D</b><div class="v warn">27</div><span>ng/mL · borderline</span></div>
+          <div class="mk"><b>HbA1c</b><div class="v ok">5.4 ✓</div><span>% · normal</span></div>
+          <div class="mk"><b>Hemoglobin</b><div class="v ok">14.2 ✓</div><span>g/dL · normal</span></div>
+          <div class="mk"><b>TSH</b><div class="v ok">2.1 ✓</div><span>mIU/L · normal</span></div>
+        </div>
+        <h3>Needs attention (1)</h3>
+        <div class="card risk">
+          <div class="hd"><b>Vitamin B12 — low</b><span class="lvl">CONFIRMED ↓</span></div>
+          <p>Found low in your 17 Jul report. Common and very fixable — most people recover normal levels in 8–12 weeks.</p>
+          <div class="plan">
+            <div class="t1">🧪 Re-test in 12 wks<br>auto-reminder set</div>
+            <div class="t2">👨‍⚕️ Free diet consult<br>use your plan</div>
+            <div class="t3">🤖 Ask Wellio<br>what this means</div>
+          </div>
+        </div>
+        <h3>Your care plan</h3>
+        <div class="card">
+          <div class="subrow"><div><b>HbA1c — every 3 months</b><span>Last: 12 May</span></div><span class="due">Due 12 Aug</span></div>
+          <div class="subrow"><div><b>B12 re-test</b><span>After supplementation</span></div><span class="book">Book ›</span></div>
+        </div>
+        <h3>Suggested for you</h3>
+        <div class="card sugg">
+          <div class="why">🎯 Why this? Your B12 is low and D is borderline — this bundle re-tests both plus CBC.</div>
+          <div class="nm">Vitamin Check Bundle</div>
+          <div class="inc">Vitamin B12 · Vitamin D3 · C.B.C.</div>
+          <div class="rowp"><span class="pr">₹2050 <s>₹2500</s></span><span style="font-size:9.5px;color:var(--green-dark);font-weight:800">No fasting · 6h report</span></div>
+          <div class="cta">Add all 3 to cart<div class="sheen"></div></div>
+        </div>
+        <div class="ai">
+          <div class="orb">🤖</div>
+          <p>Ask Wellio anything about your reports — in plain language</p>
+          <div class="go">Ask</div>
+        </div>
+      </div></div>
+      <div class="notes">
+        <b>Beats HealthKarma on:</b> score from <b>real reports</b> (not just a quiz) with the source shown ·
+        transparent marker chips (tap any → your value vs range) · <b>positive trend framing</b> ("+6 since May",
+        no "peers are healthier than you" shaming) · every risk ships with a 3-step <b>action plan</b> ·
+        "why this?" on suggestions (no black-box upsell) · family switcher · Wellio AI on top.
+      </div>
+    </div>
+
+    <!-- DETAIL -->
+    <div class="opt">
+      <h2>Risk detail — tap "Vitamin B12"</h2>
+      <div class="tag">Your value vs range · fix plan · recheck loop</div>
+      <div class="phone"><div class="screen">
+        <div class="bar"><div><span class="who">← Vitamin B12</span></div></div>
+        <div class="dhead">
+          <b>Low — 190 pg/mL</b>
+          <p>From your Full Health Checkup · 17 Jul 2026</p>
+        </div>
+        <div class="gauge">
+          <b>Where you stand</b>
+          <div class="track"><div class="dotv"></div></div>
+          <div class="lbls"><span>Deficient &lt;200</span><span>Borderline 200–300</span><span>Normal 300–900</span></div>
+        </div>
+        <div class="card">
+          <b style="font-size:12px; color:var(--ink)">What it can feel like</b>
+          <p style="font-size:10.5px; color:var(--muted); margin-top:5px; line-height:1.5">
+            Tiredness, pins &amp; needles, low mood, brain fog. You reported <b>“always tired”</b> in your last check — this fits.</p>
+        </div>
+        <h3>Your fix plan</h3>
+        <div class="card">
+          <div class="stepl"><div class="n">1</div><div><b>Supplement for 8–12 weeks</b><span>Discuss dosage in a free diet consult</span></div></div>
+          <div class="stepl"><div class="n">2</div><div><b>Re-test B12 — ₹1000</b><span>Reminder auto-set for 21 Oct</span></div></div>
+          <div class="stepl"><div class="n">3</div><div><b>Score updates automatically</b><span>Your report refreshes your Health Score</span></div></div>
+        </div>
+        <div class="card sugg">
+          <div class="nm">Book the re-test now</div>
+          <div class="inc">Vitamin B12 (Cyanocobalamin) · no fasting</div>
+          <div class="rowp"><span class="pr">₹1000</span></div>
+          <div class="cta">Add to cart<div class="sheen"></div></div>
+        </div>
+        <div class="ai">
+          <div class="orb">🤖</div>
+          <p>“Why is my B12 low even though I eat well?”</p>
+          <div class="go">Ask</div>
+        </div>
+      </div></div>
+      <div class="notes">
+        <b>The loop that sells itself:</b> report → score → risk → plan → re-test booking → new report →
+        score rises. Every cycle is a booking with a <i>reason</i>, not a push. Recurring reminders keep it alive.
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

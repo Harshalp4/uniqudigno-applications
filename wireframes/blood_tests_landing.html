@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Blood Tests landing — mock</title>
+<style>
+  :root{
+    --blue:#428AC7; --blue-dark:#2F6FA6; --green:#36B665; --green-dark:#2A9C54;
+    --cream:#FAF3EA; --ink:#1F2937; --muted:#6B7280; --orange:#FF8A3D; --line:#E7EBF0;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:#12161C; color:#E5E7EB; padding:34px 22px 60px}
+  h1{font-size:22px; font-weight:700; margin-bottom:6px}
+  .sub{color:#9CA3AF; font-size:13.5px; margin-bottom:30px; max-width:860px; line-height:1.5}
+  .row{display:flex; gap:34px; flex-wrap:wrap; justify-content:center}
+  .opt{width:346px}
+  .opt h2{font-size:15px; margin:0 0 2px; color:#fff}
+  .opt .tag{font-size:11.5px; color:#93C5FD; margin-bottom:10px}
+  .notes{margin-top:12px; font-size:12px; color:#B7BEC9; line-height:1.55}
+  .notes b{color:#fff}
+  .phone{width:346px; height:730px; background:#000; border-radius:44px; padding:10px;
+         box-shadow:0 24px 60px rgba(0,0,0,.55)}
+  .screen{width:100%; height:100%; border-radius:36px; overflow-y:auto; overflow-x:hidden;
+          position:relative; background:#F6F8FA; scrollbar-width:none}
+  .screen::-webkit-scrollbar{display:none}
+  /* ---------- shared ---------- */
+  .appbar{position:sticky; top:0; z-index:20; padding:34px 16px 10px; display:flex; align-items:center; gap:10px}
+  .appbar .back{font-size:20px; color:var(--ink)}
+  .appbar .title{flex:1; text-align:center; font-weight:800; color:var(--ink); font-size:16.5px}
+  .appbar .cart{font-size:17px}
+  .loc{padding:0 16px 8px; font-size:12.5px; color:var(--muted)}
+  .loc b{color:var(--ink)}
+  .search{margin:0 16px 14px; background:#fff; border:1px solid var(--line); border-radius:14px;
+          padding:11px 14px; font-size:13px; color:#9CA3AF; display:flex; gap:8px; align-items:center}
+  .sect{display:flex; align-items:center; justify-content:space-between; padding:2px 16px 10px}
+  .sect h3{font-size:15.5px; font-weight:800; color:var(--ink)}
+  .sect .more{width:22px; height:22px; border-radius:50%; background:#E8F1FA; color:var(--blue);
+          display:flex; align-items:center; justify-content:center; font-size:12px}
+  .rail{display:flex; gap:10px; overflow-x:auto; padding:0 16px 16px; scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  /* concern tiles */
+  .con{min-width:86px; background:#fff; border:1px solid var(--line); border-radius:16px;
+       padding:14px 6px 10px; text-align:center}
+  .con .ic{font-size:26px; display:block; margin-bottom:8px; animation:bob 3.4s ease-in-out infinite}
+  .con:nth-child(2) .ic{animation-delay:.4s} .con:nth-child(3) .ic{animation-delay:.8s}
+  .con:nth-child(4) .ic{animation-delay:1.2s} .con:nth-child(5) .ic{animation-delay:1.6s}
+  @keyframes bob{0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)}}
+  .con .lb{font-size:11px; font-weight:600; color:var(--ink)}
+  /* advisor banner */
+  .banner{margin:2px 16px 18px; border-radius:18px; padding:16px; color:#fff; position:relative; overflow:hidden;
+          background:linear-gradient(115deg,var(--blue),var(--blue-dark))}
+  .banner p{font-size:13.5px; font-weight:700; line-height:1.45; width:72%}
+  .banner p span{color:#FFD9A0}
+  .callnow{display:inline-flex; align-items:center; gap:6px; margin-top:10px; background:var(--green);
+          border-radius:99px; padding:8px 16px; font-size:12.5px; font-weight:800; position:relative}
+  .callnow:before{content:''; position:absolute; inset:-4px; border-radius:99px;
+          border:2px solid rgba(255,255,255,.5); animation:ring 2s infinite}
+  @keyframes ring{0%{transform:scale(.9); opacity:.8} 100%{transform:scale(1.25); opacity:0}}
+  .banner .doc{position:absolute; right:-6px; bottom:-8px; font-size:64px; opacity:.9}
+  /* offer strip */
+  .strip{margin:0 16px 12px; background:#FFF3E4; border-radius:12px; padding:9px 12px; font-size:12px;
+         font-weight:700; color:#B45D12; display:flex; align-items:center; gap:8px}
+  .strip .fl{animation:flame 1.6s ease-in-out infinite}
+  @keyframes flame{0%,100%{transform:scale(1)} 50%{transform:scale(1.18)}}
+  /* package cards */
+  .pk{min-width:210px; background:#fff; border:1px solid var(--line); border-radius:18px; overflow:hidden;
+      display:flex; flex-direction:column}
+  .pk .body{padding:12px 12px 10px; flex:1}
+  .pk .nm{font-size:13.5px; font-weight:800; color:var(--ink); line-height:1.35}
+  .pk .meta{display:flex; align-items:center; gap:6px; margin-top:8px}
+  .pk .tests{font-size:11.5px; color:var(--orange); font-weight:700}
+  .pk .badge{margin-left:auto; background:#FCE9E4; color:#D14343; border-radius:8px; padding:2px 7px;
+      font-size:9.5px; font-weight:800; transform:rotate(-2deg)}
+  .pk .det{font-size:11px; color:var(--muted); text-decoration:underline; margin-top:8px; display:inline-block}
+  .pk .offer{background:#EAF4FB; padding:8px 12px; font-size:10.5px; font-weight:800; color:var(--muted)}
+  .pk .offer b{display:block; font-size:16px; color:var(--ink)}
+  .pk .offer s{color:#9CA3AF; font-weight:600}
+  .pk .book{background:linear-gradient(100deg,var(--blue),var(--blue-dark)); color:#fff; text-align:center;
+      padding:11px; font-size:13px; font-weight:800; position:relative; overflow:hidden}
+  .sheen{position:absolute; top:0; bottom:0; width:46%; transform:skewX(-18deg);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent); animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-60%} 55%{left:120%} 100%{left:120%}}
+  /* popular tests list */
+  .tests-card{margin:0 16px 18px; background:#fff; border:1px solid var(--line); border-radius:18px; padding:4px 14px}
+  .trow{display:flex; align-items:center; padding:12px 0; border-bottom:1.5px dashed #E4E9EF}
+  .trow:last-of-type{border-bottom:none}
+  .trow .tn{flex:1}
+  .trow .tn .nm{font-size:13.5px; font-weight:700; color:var(--blue)}
+  .trow .tn .pr{font-size:12.5px; font-weight:800; color:var(--ink); margin-top:3px}
+  .trow .tn .pr s{color:#9CA3AF; font-weight:600; margin-left:6px}
+  .trow .add{width:30px; height:30px; border-radius:9px; border:1.6px solid var(--blue); color:var(--blue);
+      display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800}
+  .viewmore{display:block; margin:4px auto 12px; background:#EAF4FB; color:var(--blue); border-radius:99px;
+      padding:8px 22px; font-size:12.5px; font-weight:700; width:fit-content}
+  /* gender & age */
+  .ga{min-width:150px; border-radius:16px; padding:14px; color:#fff; position:relative; overflow:hidden}
+  .ga .nm{font-weight:800; font-size:13.5px}
+  .ga .pr{margin-top:6px; font-size:15px; font-weight:800}
+  .ga .pr s{font-size:11px; opacity:.75; margin-left:5px}
+  .ga .tc{font-size:10.5px; opacity:.9; margin-top:2px}
+  .ga .em{position:absolute; right:8px; bottom:6px; font-size:34px; opacity:.85}
+  .foot{height:26px}
+</style>
+</head>
+<body>
+  <h1>Blood Tests — dedicated landing (mock)</h1>
+  <p class="sub">Opens when the <b>Blood Tests</b> tile is tapped on home. Care tab stays the full searchable catalogue
+     (option b). Data shown is your <b>real catalogue</b> — actual package prices and test rates. The phone scrolls —
+     drag inside it. Animations: floating concern icons, ringing Call&nbsp;Now, flame on the offer strip, sheen on BOOK&nbsp;NOW.</p>
+  <div class="row">
+    <div class="opt">
+      <h2>Blood Tests landing</h2>
+      <div class="tag">Header · concerns · advisor call · packages · popular tests · gender &amp; age</div>
+      <div class="phone"><div class="screen">
+
+        <div class="appbar" style="background:#F6F8FA">
+          <div class="back">←</div><div class="title">Blood Tests</div><div class="cart">🛒</div>
+        </div>
+        <div class="loc">📍 <b>Mumbai, MH</b> ▾</div>
+        <div class="search">🔍 Search for 'LFT'</div>
+
+        <div class="sect"><h3>Browse by Health Concern</h3><div class="more">›</div></div>
+        <div class="rail">
+          <div class="con"><span class="ic">💊</span><span class="lb">Vitamins</span></div>
+          <div class="con"><span class="ic">🤧</span><span class="lb">Allergy</span></div>
+          <div class="con"><span class="ic">🦋</span><span class="lb">Thyroid</span></div>
+          <div class="con"><span class="ic">🫘</span><span class="lb">Kidney</span></div>
+          <div class="con"><span class="ic">❤️</span><span class="lb">Heart</span></div>
+          <div class="con"><span class="ic">🩸</span><span class="lb">Diabetes</span></div>
+        </div>
+
+        <div class="banner">
+          <p>Talk to our <span>health advisors</span> now for attractive discounts on your bookings</p>
+          <div class="callnow">📞 Call Now</div>
+          <div class="doc">👩‍⚕️</div>
+        </div>
+
+        <div class="sect"><h3>Full Body Checkup Packages</h3><div class="more">›</div></div>
+        <div class="strip"><span class="fl">🔥</span> Save up to 76% on health packages</div>
+        <div class="rail">
+          <div class="pk">
+            <div class="body">
+              <div class="nm">Full Health Checkup</div>
+              <div class="meta"><span class="tests">🧪 89 Tests</span><span class="badge">72% OFF</span></div>
+              <span class="det">Details &gt;&gt;</span>
+            </div>
+            <div class="offer">EXCLUSIVE OFFER<b>₹1999 <s>₹7110</s></b></div>
+            <div class="book">BOOK NOW<div class="sheen"></div></div>
+          </div>
+          <div class="pk">
+            <div class="body">
+              <div class="nm">Women Profile</div>
+              <div class="meta"><span class="tests">🧪 90 Tests</span><span class="badge">62% OFF</span></div>
+              <span class="det">Details &gt;&gt;</span>
+            </div>
+            <div class="offer">EXCLUSIVE OFFER<b>₹2499 <s>₹6500</s></b></div>
+            <div class="book">BOOK NOW<div class="sheen"></div></div>
+          </div>
+          <div class="pk">
+            <div class="body">
+              <div class="nm">Men Profile</div>
+              <div class="meta"><span class="tests">🧪 90 Tests</span><span class="badge">64% OFF</span></div>
+              <span class="det">Details &gt;&gt;</span>
+            </div>
+            <div class="offer">EXCLUSIVE OFFER<b>₹2499 <s>₹7000</s></b></div>
+            <div class="book">BOOK NOW<div class="sheen"></div></div>
+          </div>
+          <div class="pk">
+            <div class="body">
+              <div class="nm">Diabetes Profile</div>
+              <div class="meta"><span class="tests">🧪 35 Tests</span><span class="badge">36% OFF</span></div>
+              <span class="det">Details &gt;&gt;</span>
+            </div>
+            <div class="offer">EXCLUSIVE OFFER<b>₹1450 <s>₹2250</s></b></div>
+            <div class="book">BOOK NOW<div class="sheen"></div></div>
+          </div>
+        </div>
+
+        <div class="sect"><h3>Popular Blood Tests</h3></div>
+        <div class="tests-card">
+          <div class="trow"><div class="tn"><div class="nm">C.B.C.</div><div class="pr">₹300</div></div><div class="add">+</div></div>
+          <div class="trow"><div class="tn"><div class="nm">T3 T4 TSH (Thyroid Profile)</div><div class="pr">₹500</div></div><div class="add">+</div></div>
+          <div class="trow"><div class="tn"><div class="nm">HbA1c</div><div class="pr">₹550</div></div><div class="add">+</div></div>
+          <div class="trow"><div class="tn"><div class="nm">Vitamin D3</div><div class="pr">₹1200</div></div><div class="add">+</div></div>
+          <div class="trow"><div class="tn"><div class="nm">Liver Profile (LFT)</div><div class="pr">₹1000</div></div><div class="add">+</div></div>
+          <a class="viewmore">View More</a>
+        </div>
+
+        <div class="sect"><h3>Packages by Gender &amp; Age</h3><div class="more">›</div></div>
+        <div class="rail">
+          <div class="ga" style="background:linear-gradient(135deg,#D66BA0,#B4487F)">
+            <div class="nm">Women Profile</div>
+            <div class="pr">₹2499 <s>₹6500</s></div>
+            <div class="tc">90 tests · with CA-125</div>
+            <div class="em">👩</div>
+          </div>
+          <div class="ga" style="background:linear-gradient(135deg,#4E8FC7,#2F6FA6)">
+            <div class="nm">Men Profile</div>
+            <div class="pr">₹2499 <s>₹7000</s></div>
+            <div class="tc">90 tests · with Testosterone</div>
+            <div class="em">👨</div>
+          </div>
+          <div class="ga" style="background:linear-gradient(135deg,#5AA97C,#3B8A5E)">
+            <div class="nm">Arthritis Profile</div>
+            <div class="pr">₹3000 <s>₹6400</s></div>
+            <div class="tc">32 tests · joints &amp; bones</div>
+            <div class="em">🧓</div>
+          </div>
+        </div>
+        <div class="foot"></div>
+
+      </div></div>
+      <div class="notes">
+        <b>Behavior:</b> concern tiles open the existing /browse/&lt;concern&gt; landings · Call Now dials the branding
+        support number · package BOOK NOW adds to cart (same as home) · [+] quick-adds the test · View More opens the
+        full test list (the Care tab screen) pre-filtered. <br><b>Dedup:</b> home tile → this landing; Care tab stays
+        the full catalogue/search. Everything on this page is server-driven — sections can be reordered/hidden from
+        the DB later like the home layout.
+      </div>
+    </div>
+  </div>
+</body>
+</html>

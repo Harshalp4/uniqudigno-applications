@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Booking Confirmed — wireframes</title>
+<style>
+  :root{
+    --cream:#FAF3E8; --ink:#1E2A38; --sub:#75808D; --blue:#3E7FBE; --blue-d:#2C5F94;
+    --teal:#CDEAEA; --green:#2A9C54; --green-bg:#E9F8EE; --line:#EDE4D3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{background:#232830;display:flex;gap:56px;justify-content:center;align-items:flex-start;padding:44px 20px;flex-wrap:wrap}
+  .stage{text-align:center}
+  .stage h2{color:#fff;font-size:15px;margin-bottom:6px;font-weight:800}
+  .stage p{color:#9aa5b1;font-size:11.5px;margin-bottom:16px;max-width:390px}
+  .phone{width:390px;height:820px;background:var(--cream);border-radius:46px;border:10px solid #0d0f12;
+    overflow:hidden;position:relative;box-shadow:0 30px 70px rgba(0,0,0,.5);text-align:left}
+  .scroll{height:100%;overflow-y:auto;padding-bottom:110px}
+  .scroll::-webkit-scrollbar{display:none}
+
+  /* success burst */
+  .burst{position:relative;width:92px;height:92px;margin:64px auto 0}
+  .burst .ring{position:absolute;inset:0;border-radius:50%;border:3px solid #7ED6A0;animation:ring 1.8s ease-out infinite}
+  @keyframes ring{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+  .burst .core{position:absolute;inset:8px;border-radius:50%;background:linear-gradient(140deg,#2A9C54,#1F7A42);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:38px;font-weight:800;
+    box-shadow:0 12px 30px rgba(42,156,84,.4);animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+  @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+  .conf{position:absolute;font-size:13px;animation:fall 2.6s ease-in infinite}
+  @keyframes fall{0%{transform:translateY(-8px) rotate(0);opacity:1}100%{transform:translateY(64px) rotate(220deg);opacity:0}}
+
+  h1.big{font-size:22px;font-weight:850;color:var(--ink);text-align:center;margin-top:14px}
+  .subt{font-size:12.5px;color:var(--sub);text-align:center;margin-top:3px}
+
+  /* ticket */
+  .ticket{margin:18px 16px 0;background:#fff;border-radius:18px;box-shadow:0 10px 26px rgba(0,0,0,.08);overflow:hidden}
+  .tk-top{background:linear-gradient(100deg,var(--blue),var(--blue-d));padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+  .tk-top b{color:#fff;font-size:14px;font-weight:800}
+  .tk-top span{background:rgba(255,255,255,.2);color:#fff;font-size:10.5px;font-weight:800;border-radius:100px;padding:4px 10px}
+  .tk-row{display:flex;gap:11px;align-items:flex-start;padding:10px 16px}
+  .tk-row + .tk-row{border-top:1.5px dashed var(--line)}
+  .tk-ico{width:30px;height:30px;border-radius:10px;background:#EDF4FB;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .tk-row b{font-size:13px;color:var(--ink);display:block}
+  .tk-row small{font-size:11px;color:var(--sub)}
+  .perf{position:relative;border-top:2px dashed var(--line)}
+  .perf i{position:absolute;top:-9px;width:18px;height:18px;border-radius:50%;background:var(--cream)}
+  .perf i.l{left:-9px}.perf i.r{right:-9px}
+  .tk-pay{display:flex;justify-content:space-between;align-items:center;padding:11px 16px}
+  .tk-pay small{font-size:11px;color:var(--sub);font-weight:650}
+  .tk-pay b{font-size:17px;color:var(--ink);font-weight:850}
+
+  /* prep checklist */
+  .sect{margin:18px 16px 8px;font-size:15px;font-weight:850;color:var(--ink)}
+  .sq{display:block;width:110px;height:8px;margin-top:2px}
+  .card{background:#fff;border-radius:16px;margin:0 16px;padding:12px 14px;box-shadow:0 5px 16px rgba(0,0,0,.05)}
+  .prep{display:flex;gap:10px;align-items:center;padding:7px 0;font-size:12.5px;font-weight:650;color:var(--ink)}
+  .prep + .prep{border-top:1.5px dashed var(--line)}
+  .prep span{font-size:16px}
+
+  /* timeline */
+  .tl{position:relative;padding-left:26px}
+  .tl:before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:2.5px;background:#E3F0E8;border-radius:2px}
+  .tl-item{position:relative;padding:7px 0}
+  .tl-item:before{content:'';position:absolute;left:-22px;top:11px;width:12px;height:12px;border-radius:50%;
+    background:#fff;border:3px solid #C9D9CE}
+  .tl-item.on:before{background:var(--green);border-color:#BFE8CC}
+  .tl-item b{font-size:12.5px;color:var(--ink);display:block}
+  .tl-item small{font-size:10.5px;color:var(--sub)}
+
+  /* actions */
+  .acts{display:flex;gap:8px;margin:14px 16px 0}
+  .acts div{flex:1;background:#fff;border-radius:13px;padding:10px 4px;text-align:center;font-size:10.5px;font-weight:750;
+    color:#3B5A77;box-shadow:0 4px 12px rgba(0,0,0,.05)}
+  .acts span{display:block;font-size:17px;margin-bottom:2px}
+
+  .bar{position:absolute;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #F0E9DC;padding:12px 16px 26px;display:flex;gap:10px}
+  .ghost{flex:1;border:1.8px solid var(--blue);color:var(--blue);border-radius:100px;text-align:center;padding:13px 0;font-size:13.5px;font-weight:800}
+  .cta{flex:1;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;
+    text-align:center;padding:13px 0;font-size:13.5px;font-weight:800;position:relative;overflow:hidden}
+  .cta:after{content:'';position:absolute;top:0;bottom:0;width:44%;left:-50%;transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-50%}55%{left:130%}100%{left:130%}}
+</style>
+</head>
+<body>
+
+<!-- ─────────── OPTION A: ticket + prep ─────────── -->
+<div class="stage">
+  <h2>A · Success burst → booking ticket → prep checklist</h2>
+  <p>Celebration moment (confetti + pulsing ring), the booking as a keepable ticket, then the ONE thing that matters next: how to prepare. Track + Home actions at the bottom.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="burst">
+        <div class="ring"></div>
+        <div class="core">✓</div>
+        <span class="conf" style="left:-16px;top:0">🎉</span>
+        <span class="conf" style="right:-18px;top:6px;animation-delay:.6s">✨</span>
+        <span class="conf" style="left:50%;top:-10px;animation-delay:1.2s">🎊</span>
+      </div>
+      <h1 class="big">Booking confirmed!</h1>
+      <div class="subt">#UDC-2481 · SMS &amp; email sent to you</div>
+
+      <div class="ticket">
+        <div class="tk-top"><b>Sample collection</b><span>PAID ✓</span></div>
+        <div class="tk-row"><div class="tk-ico">📅</div><div><b>Saturday 1 Aug · 07:00 – 08:00</b><small>Our phlebotomist will arrive in this window</small></div></div>
+        <div class="tk-row"><div class="tk-ico">🏠</div><div><b>Home</b><small>12 Test Lane, Mumbai, MH 400001</small></div></div>
+        <div class="tk-row"><div class="tk-ico">👤</div><div><b>Harshal — Cardiac Profile</b><small>35 tests · report in 6 hrs after lab receipt</small></div></div>
+        <div class="perf"><i class="l"></i><i class="r"></i></div>
+        <div class="tk-pay"><small>Paid online · saving ₹3500</small><b>₹3200</b></div>
+      </div>
+
+      <div class="sect">Get ready for your test
+        <svg class="sq" viewBox="0 0 110 10"><polyline points="0,7 24,7 32,2 40,8 47,7 110,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="card">
+        <div class="prep"><span>🚫🍽</span>Stop eating by <b>&nbsp;7 PM tonight</b>&nbsp;(12–14 hr fast)</div>
+        <div class="prep"><span>💧</span>Water is fine — stay hydrated</div>
+        <div class="prep"><span>💊</span>Ask your doctor before skipping medicines</div>
+        <div class="prep"><span>🪪</span>Keep an ID ready for the phlebotomist</div>
+      </div>
+
+      <div class="acts">
+        <div><span>📅</span>Add to calendar</div>
+        <div><span>📤</span>Share details</div>
+        <div><span>📞</span>Need help?</div>
+      </div>
+      <div style="height:20px"></div>
+    </div>
+    <div class="bar">
+      <div class="ghost">Go Home</div>
+      <div class="cta">Track Booking →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── OPTION B: journey timeline focus ─────────── -->
+<div class="stage">
+  <h2>B · Success → what happens next (timeline)</h2>
+  <p>Same celebration + compact ticket, but the hero is a live journey timeline — sets expectations for the whole service: phlebo assigned → collection → lab → report. Timeline later updates in the Orders screen.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="burst">
+        <div class="ring"></div>
+        <div class="core">✓</div>
+        <span class="conf" style="left:-16px;top:0">🎉</span>
+        <span class="conf" style="right:-18px;top:6px;animation-delay:.6s">✨</span>
+      </div>
+      <h1 class="big">You're booked, Harshal!</h1>
+      <div class="subt">#UDC-2481 · Sat 1 Aug, 07:00 · Home</div>
+
+      <div class="sect">What happens next
+        <svg class="sq" viewBox="0 0 110 10"><polyline points="0,7 24,7 32,2 40,8 47,7 110,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="card">
+        <div class="tl">
+          <div class="tl-item on"><b>Booking confirmed</b><small>Just now · payment received</small></div>
+          <div class="tl-item"><b>Phlebotomist assigned</b><small>Tonight — name &amp; number will appear here</small></div>
+          <div class="tl-item"><b>Sample collection</b><small>Sat 07:00–08:00 · fast 12–14 hrs before</small></div>
+          <div class="tl-item"><b>Lab processing</b><small>NABL certified lab</small></div>
+          <div class="tl-item"><b>Report ready 🎉</b><small>~6 hrs after the lab receives your sample</small></div>
+        </div>
+      </div>
+
+      <div class="ticket" style="margin-top:14px">
+        <div class="tk-top"><b>Booking summary</b><span>PAID ✓</span></div>
+        <div class="tk-row"><div class="tk-ico">👤</div><div><b>Harshal — Cardiac Profile</b><small>35 tests · ₹3200 · saved ₹3500</small></div></div>
+      </div>
+
+      <div style="margin:14px 16px 0;background:var(--green-bg);border:1.4px solid #BFE8CC;border-radius:12px;
+        padding:9px;text-align:center;font-size:11.5px;font-weight:750;color:#1F7A42">
+        🚫🍽 Fasting reminder: stop eating by 7 PM tonight — we'll also remind you by notification
+      </div>
+      <div style="height:20px"></div>
+    </div>
+    <div class="bar">
+      <div class="ghost">Go Home</div>
+      <div class="cta">Track Booking →</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

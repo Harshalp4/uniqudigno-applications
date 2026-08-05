@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Health Packages — A+B combined</title>
+<style>
+  :root{
+    --cream:#FAF3E8; --ink:#1E2A38; --sub:#75808D; --blue:#3E7FBE; --blue-d:#2C5F94;
+    --teal:#CDEAEA; --green:#2A9C54; --green-bg:#E9F8EE; --line:#EDE4D3; --orange:#F58B44;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{background:#232830;display:flex;gap:52px;justify-content:center;align-items:flex-start;padding:44px 20px;flex-wrap:wrap}
+  .stage{text-align:center}
+  .stage h2{color:#fff;font-size:14px;margin-bottom:5px;font-weight:800}
+  .stage p{color:#9aa5b1;font-size:11px;margin-bottom:14px;max-width:370px}
+  .phone{width:370px;height:790px;background:var(--cream);border-radius:44px;border:9px solid #0d0f12;
+    overflow:hidden;position:relative;box-shadow:0 26px 60px rgba(0,0,0,.5);text-align:left}
+  .scroll{height:100%;overflow-y:auto;padding-bottom:30px}
+  .scroll::-webkit-scrollbar{display:none}
+  .top{display:flex;align-items:center;gap:10px;padding:48px 15px 0}
+  .circ{width:37px;height:37px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:15px;color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.07)}
+  .sq{display:block;width:110px;height:8px;margin:2px 0 0}
+  .chips{display:flex;gap:6px;overflow-x:auto;padding:10px 15px 8px}
+  .chip{white-space:nowrap;border-radius:100px;font-size:10.5px;font-weight:800;padding:7px 13px;background:#fff;color:var(--sub);box-shadow:0 3px 8px rgba(0,0,0,.05)}
+  .chip.on{background:linear-gradient(120deg,var(--blue),var(--blue-d));color:#fff;box-shadow:0 4px 12px rgba(62,127,190,.4)}
+  .card{background:#fff;border-radius:18px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden;position:relative}
+  .ribbon{position:absolute;top:12px;right:-30px;transform:rotate(45deg);background:var(--orange);color:#fff;
+    font-size:9px;font-weight:800;padding:3px 0;width:110px;text-align:center}
+  .pill{display:inline-block;border-radius:100px;font-size:9px;font-weight:800;padding:3px 8px}
+  .bookbtn{background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;
+    font-size:11px;font-weight:800;padding:7px 16px}
+  .bar{height:7px;background:#F1EBDE;border-radius:4px;flex:1}
+  .bar i{display:block;height:7px;background:linear-gradient(90deg,var(--blue),var(--blue-d));border-radius:4px}
+  .cta{position:relative;overflow:hidden}
+  .cta:after{content:'';position:absolute;top:0;bottom:0;width:44%;left:-50%;transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-50%}55%{left:130%}100%{left:130%}}
+</style>
+</head>
+<body>
+
+<!-- Frame 1: default -->
+<div class="stage">
+  <h2>1 · Default — spotlight + rich compare cards</h2>
+  <p>Chips on top (A). Best-value gradient spotlight (B). Every other package: emoji identity + ribbon (A) with the compare bar + ₹/test line (B). One Book action per card.</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div>
+      <div><b style="font-size:17px;font-weight:850;color:var(--ink)">Health Packages</b>
+        <svg class="sq" viewBox="0 0 110 10"><polyline points="0,7 24,7 32,2 40,8 47,7 110,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="circ" style="margin-left:auto">🛒</div></div>
+
+    <div class="chips">
+      <span class="chip on">Popular</span><span class="chip">Full Body</span><span class="chip">Diabetes</span>
+      <span class="chip">Heart</span><span class="chip">Women</span><span class="chip">Senior</span>
+    </div>
+
+    <!-- spotlight -->
+    <div style="margin:2px 15px 12px;background:linear-gradient(130deg,var(--blue),var(--blue-d));border-radius:20px;padding:15px;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-8px;top:-12px;font-size:82px;opacity:.14">🩺</div>
+      <span class="pill" style="background:#fff;color:var(--blue-d)">⭐ BEST VALUE · ₹22/TEST</span>
+      <b style="display:block;color:#fff;font-size:17px;font-weight:850;margin-top:8px">Full Health Checkup</b>
+      <span style="color:#CFE2F3;font-size:11px">89 tests — heart, liver, kidney, thyroid, vitamins & more</span>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px">
+        <b style="color:#fff;font-size:22px;font-weight:850">₹1999</b>
+        <s style="color:#9CC3E8;font-size:12px">₹7110</s>
+        <span class="pill" style="background:rgba(255,255,255,.22);color:#fff">SAVE ₹5111</span>
+      </div>
+      <div class="cta" style="background:#fff;color:var(--blue-d);border-radius:100px;text-align:center;padding:10px 0;font-size:12.5px;font-weight:850;margin-top:10px">BOOK NOW →</div>
+    </div>
+
+    <!-- rich compare cards -->
+    <div class="card" style="margin:0 15px 10px">
+      <div class="ribbon">36% OFF</div>
+      <div style="padding:12px 14px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:40px;height:40px;border-radius:12px;background:#FDEBD8;display:flex;align-items:center;justify-content:center;font-size:19px">🍬</div>
+          <div style="flex:1">
+            <b style="font-size:14px;color:var(--ink);font-weight:850">Diabetes Profile</b>
+            <div style="font-size:10px;color:var(--sub)">Sugar control + kidney & heart risk</div>
+          </div>
+          <span class="pill" style="background:#EDF4FB;color:var(--blue-d)">MOST BOOKED</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:9px">
+          <div class="bar"><i style="width:39%"></i></div>
+          <span style="font-size:9.5px;color:var(--sub);font-weight:700">35 tests</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-top:8px">
+          <b style="font-size:17px;color:var(--blue);font-weight:850">₹1450</b>
+          <s style="font-size:10px;color:#A7B0BA">₹2250</s>
+          <span class="pill" style="background:var(--green-bg);color:var(--green)">SAVE ₹800</span>
+          <span style="font-size:9.5px;color:var(--sub);font-weight:700">· ₹41/test</span>
+          <span class="bookbtn" style="margin-left:auto">Book</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin:0 15px 10px">
+      <div class="ribbon">52% OFF</div>
+      <div style="padding:12px 14px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:40px;height:40px;border-radius:12px;background:#FBDDDD;display:flex;align-items:center;justify-content:center;font-size:19px">🫀</div>
+          <div style="flex:1">
+            <b style="font-size:14px;color:var(--ink);font-weight:850">Cardiac Profile</b>
+            <div style="font-size:10px;color:var(--sub)">Complete heart-risk picture with HsCRP</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:9px">
+          <div class="bar"><i style="width:39%"></i></div>
+          <span style="font-size:9.5px;color:var(--sub);font-weight:700">35 tests</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-top:8px">
+          <b style="font-size:17px;color:var(--blue);font-weight:850">₹3200</b>
+          <s style="font-size:10px;color:#A7B0BA">₹6700</s>
+          <span class="pill" style="background:var(--green-bg);color:var(--green)">SAVE ₹3500</span>
+          <span style="font-size:9.5px;color:var(--sub);font-weight:700">· ₹91/test</span>
+          <span class="bookbtn" style="margin-left:auto">Book</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin:0 15px 10px">
+      <div class="ribbon">53% OFF</div>
+      <div style="padding:12px 14px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:40px;height:40px;border-radius:12px;background:#E8F0DD;display:flex;align-items:center;justify-content:center;font-size:19px">🦴</div>
+          <div style="flex:1">
+            <b style="font-size:14px;color:var(--ink);font-weight:850">Arthritis Profile</b>
+            <div style="font-size:10px;color:var(--sub)">Joint pain & inflammation work-up</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:9px">
+          <div class="bar"><i style="width:36%"></i></div>
+          <span style="font-size:9.5px;color:var(--sub);font-weight:700">32 tests</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-top:8px">
+          <b style="font-size:17px;color:var(--blue);font-weight:850">₹3000</b>
+          <s style="font-size:10px;color:#A7B0BA">₹6400</s>
+          <span class="pill" style="background:var(--green-bg);color:var(--green)">SAVE ₹3400</span>
+          <span style="font-size:9.5px;color:var(--sub);font-weight:700">· ₹94/test</span>
+          <span class="bookbtn" style="margin-left:auto">Book</span>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- Frame 2: chip filtered -->
+<div class="stage">
+  <h2>2 · "Women" chip active</h2>
+  <p>Filtering swaps the spotlight for the best match in that category and shows only relevant packages, with a green count strip — same behavior as the All Tests explorer.</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div>
+      <div><b style="font-size:17px;font-weight:850;color:var(--ink)">Health Packages</b>
+        <svg class="sq" viewBox="0 0 110 10"><polyline points="0,7 24,7 32,2 40,8 47,7 110,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="circ" style="margin-left:auto">🛒</div></div>
+
+    <div class="chips">
+      <span class="chip">Popular</span><span class="chip">Full Body</span><span class="chip">Diabetes</span>
+      <span class="chip">Heart</span><span class="chip on">Women</span><span class="chip">Senior</span>
+    </div>
+
+    <div style="margin:0 15px 10px;background:var(--green-bg);border:1.4px solid #BFE8CC;border-radius:12px;
+      padding:8px;text-align:center;font-size:11px;font-weight:800;color:#1F7A42">👩 Women — 2 packages · from ₹2499</div>
+
+    <div style="margin:0 15px 12px;background:linear-gradient(130deg,#D66BA0,#B4487F);border-radius:20px;padding:15px;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-8px;top:-12px;font-size:82px;opacity:.16">👩</div>
+      <span class="pill" style="background:#fff;color:#B4487F">⭐ RECOMMENDED FOR HER</span>
+      <b style="display:block;color:#fff;font-size:17px;font-weight:850;margin-top:8px">Women Profile</b>
+      <span style="color:#F6D9E7;font-size:11px">90 tests — hormones, thyroid, iron, vitamins & more</span>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px">
+        <b style="color:#fff;font-size:22px;font-weight:850">₹2499</b>
+        <s style="color:#F0BFD7;font-size:12px">₹6500</s>
+        <span class="pill" style="background:rgba(255,255,255,.22);color:#fff">SAVE ₹4001</span>
+      </div>
+      <div class="cta" style="background:#fff;color:#B4487F;border-radius:100px;text-align:center;padding:10px 0;font-size:12.5px;font-weight:850;margin-top:10px">BOOK NOW →</div>
+    </div>
+
+    <div class="card" style="margin:0 15px 10px">
+      <div style="padding:12px 14px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:40px;height:40px;border-radius:12px;background:#F8DCD4;display:flex;align-items:center;justify-content:center;font-size:19px">🎗️</div>
+          <div style="flex:1">
+            <b style="font-size:14px;color:var(--ink);font-weight:850">Women Cancer Marker</b>
+            <div style="font-size:10px;color:var(--sub)">Early screening panel · CA 125 & more</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:9px">
+          <div class="bar"><i style="width:8%"></i></div>
+          <span style="font-size:9.5px;color:var(--sub);font-weight:700">5 tests</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin-top:8px">
+          <b style="font-size:17px;color:var(--blue);font-weight:850">₹3500</b>
+          <span class="bookbtn" style="margin-left:auto">Book</span>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+</body>
+</html>

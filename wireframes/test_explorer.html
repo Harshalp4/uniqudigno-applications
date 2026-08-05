@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Browsing 100+ tests — options</title>
+<style>
+  :root{
+    --cream:#FAF3E8; --ink:#1E2A38; --sub:#75808D; --blue:#3E7FBE; --blue-d:#2C5F94;
+    --teal:#CDEAEA; --green:#2A9C54; --line:#EDE4D3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{background:#232830;display:flex;gap:48px;justify-content:center;align-items:flex-start;padding:44px 20px;flex-wrap:wrap}
+  .stage{text-align:center}
+  .stage h2{color:#fff;font-size:14px;margin-bottom:5px;font-weight:800}
+  .stage p{color:#9aa5b1;font-size:11px;margin-bottom:14px;max-width:360px}
+  .phone{width:360px;height:760px;background:var(--cream);border-radius:42px;border:9px solid #0d0f12;
+    overflow:hidden;position:relative;box-shadow:0 26px 60px rgba(0,0,0,.5);text-align:left}
+  .scroll{height:100%;overflow-y:auto;padding-bottom:40px}
+  .scroll::-webkit-scrollbar{display:none}
+  .top{display:flex;align-items:center;gap:10px;padding:48px 15px 8px}
+  .circ{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:15px;color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.07)}
+  .top b{font-size:16px;font-weight:850;color:var(--ink)}
+  .card{background:#fff;border-radius:16px;box-shadow:0 5px 16px rgba(0,0,0,.05)}
+  .dash{border-top:1.5px dashed var(--line)}
+  .trow{display:flex;justify-content:space-between;align-items:center;padding:9px 0}
+  .trow b{font-size:13px;color:var(--ink);display:block}
+  .trow small{font-size:10.5px;color:var(--blue);font-weight:800}
+  .plus{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800}
+  .pill{display:inline-block;border-radius:100px;font-size:10.5px;font-weight:800;padding:6px 12px}
+</style>
+</head>
+<body>
+
+<!-- A · A–Z index rail -->
+<div class="stage">
+  <h2>A · A–Z jump rail</h2>
+  <p>Contacts-style: sticky letter headers + a draggable alphabet rail on the right. Drag your thumb down the rail to fly to any letter — 99 tests feel like 26.</p>
+  <div class="phone">
+    <div class="scroll" style="padding-right:26px">
+      <div class="top"><div class="circ">←</div><b>All Blood Tests (99)</b></div>
+      <div style="margin:4px 15px 10px;background:#fff;border-radius:100px;box-shadow:0 4px 12px rgba(0,0,0,.06);padding:9px 14px;display:flex;gap:8px;align-items:center">
+        <span style="color:#B9C6D2">🔍</span><span style="font-size:12.5px;color:#B9C6D2">Filter this list…</span>
+      </div>
+      <div style="margin:0 15px 4px;position:sticky;top:0;background:var(--cream);padding:6px 0">
+        <span style="font-size:15px;font-weight:850;color:var(--blue)">A</span>
+        <span style="font-size:10px;color:var(--sub);font-weight:700"> · 12 tests</span>
+      </div>
+      <div class="card" style="margin:0 15px;padding:2px 14px">
+        <div class="trow"><div><b>ACE</b><small>₹1400</small></div><div class="plus">+</div></div>
+        <div class="dash"></div>
+        <div class="trow"><div><b>ACL IgG IgM [Each]</b><small>₹1300</small></div><div class="plus">+</div></div>
+        <div class="dash"></div>
+        <div class="trow"><div><b>ADA</b><small>₹1000</small></div><div class="plus">+</div></div>
+        <div class="dash"></div>
+        <div class="trow"><div><b>AFB [Each Sample]</b><small>₹250</small></div><div class="plus">+</div></div>
+      </div>
+      <div style="margin:10px 15px 4px">
+        <span style="font-size:15px;font-weight:850;color:var(--blue)">B</span>
+        <span style="font-size:10px;color:var(--sub);font-weight:700"> · 6 tests</span>
+      </div>
+      <div class="card" style="margin:0 15px;padding:2px 14px">
+        <div class="trow"><div><b>Beta HCG</b><small>₹800</small></div><div class="plus">+</div></div>
+        <div class="dash"></div>
+        <div class="trow"><div><b>Blood Group ABO & Rh</b><small>₹100</small></div><div class="plus">+</div></div>
+        <div class="dash"></div>
+        <div class="trow"><div><b>Blood Sugar F/PP</b><small>₹100</small></div><div class="plus">+</div></div>
+      </div>
+      <div style="margin:10px 15px 4px">
+        <span style="font-size:15px;font-weight:850;color:var(--blue)">C</span>
+      </div>
+      <div class="card" style="margin:0 15px;padding:2px 14px">
+        <div class="trow"><div><b>C.B.C.</b><small>₹300</small></div><div class="plus">+</div></div>
+        <div class="dash"></div>
+        <div class="trow"><div><b>Calcium</b><small>₹250</small></div><div class="plus">+</div></div>
+      </div>
+    </div>
+    <div style="position:absolute;right:5px;top:120px;bottom:40px;display:flex;flex-direction:column;justify-content:space-between;
+      align-items:center;background:rgba(255,255,255,.75);border-radius:100px;padding:8px 4px;width:18px">
+      <span style="font-size:8.5px;font-weight:800;color:var(--blue)">A</span><span style="font-size:8.5px;color:var(--sub)">B</span>
+      <span style="font-size:8.5px;color:var(--sub)">C</span><span style="font-size:8.5px;color:var(--sub)">D</span>
+      <span style="font-size:8.5px;color:var(--sub)">E</span><span style="font-size:8.5px;color:var(--sub)">F</span>
+      <span style="font-size:8.5px;color:var(--sub)">H</span><span style="font-size:8.5px;color:var(--sub)">I</span>
+      <span style="font-size:8.5px;color:var(--sub)">L</span><span style="font-size:8.5px;color:var(--sub)">M</span>
+      <span style="font-size:8.5px;color:var(--sub)">P</span><span style="font-size:8.5px;color:var(--sub)">R</span>
+      <span style="font-size:8.5px;color:var(--sub)">S</span><span style="font-size:8.5px;color:var(--sub)">T</span>
+      <span style="font-size:8.5px;color:var(--sub)">U</span><span style="font-size:8.5px;color:var(--sub)">V</span>
+    </div>
+  </div>
+</div>
+
+<!-- B · Health-concern accordion -->
+<div class="stage">
+  <h2>B · Grouped by health concern</h2>
+  <p>Tests organised the way patients think — 🫀 Heart, 🍬 Diabetes, 🦋 Thyroid, 💧 Kidney, 🫁 Liver, ☀️ Vitamins… Accordion sections with counts; only one open at a time. Uses the same category tags as the home rails.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="top"><div class="circ">←</div><b>All Blood Tests (99)</b></div>
+      <div style="display:flex;gap:6px;overflow-x:auto;padding:4px 15px 10px">
+        <span class="pill" style="background:#EDF4FB;border:1.4px solid var(--blue);color:var(--blue-d)">All</span>
+        <span class="pill" style="background:#fff;color:var(--sub)">Under ₹500</span>
+        <span class="pill" style="background:#fff;color:var(--sub)">Fasting-free</span>
+      </div>
+      <div class="card" style="margin:0 15px 8px">
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px">
+          <span style="font-size:18px">🍬</span><b style="font-size:13.5px;color:var(--ink)">Diabetes</b>
+          <span style="margin-left:auto;font-size:11px;color:var(--sub);font-weight:700">8 tests ⌃</span>
+        </div>
+        <div style="border-top:1.5px dashed var(--line);padding:2px 14px">
+          <div class="trow"><div><b>Blood Sugar F/PP</b><small>₹100</small></div><div class="plus">+</div></div>
+          <div class="dash"></div>
+          <div class="trow"><div><b>HbA1c</b><small>₹550</small></div><div class="plus">+</div></div>
+          <div class="dash"></div>
+          <div class="trow"><div><b>RBS</b><small>₹60</small></div><div class="plus">+</div></div>
+          <div class="dash"></div>
+          <div class="trow"><div><b>Insulin Fasting</b><small>₹900</small></div><div class="plus">+</div></div>
+        </div>
+      </div>
+      <div class="card" style="margin:0 15px 8px"><div style="display:flex;align-items:center;gap:10px;padding:12px 14px">
+        <span style="font-size:18px">🫀</span><b style="font-size:13.5px;color:var(--ink)">Heart</b>
+        <span style="margin-left:auto;font-size:11px;color:var(--sub);font-weight:700">7 tests ⌄</span></div></div>
+      <div class="card" style="margin:0 15px 8px"><div style="display:flex;align-items:center;gap:10px;padding:12px 14px">
+        <span style="font-size:18px">🦋</span><b style="font-size:13.5px;color:var(--ink)">Thyroid</b>
+        <span style="margin-left:auto;font-size:11px;color:var(--sub);font-weight:700">5 tests ⌄</span></div></div>
+      <div class="card" style="margin:0 15px 8px"><div style="display:flex;align-items:center;gap:10px;padding:12px 14px">
+        <span style="font-size:18px">🫁</span><b style="font-size:13.5px;color:var(--ink)">Liver</b>
+        <span style="margin-left:auto;font-size:11px;color:var(--sub);font-weight:700">6 tests ⌄</span></div></div>
+      <div class="card" style="margin:0 15px 8px"><div style="display:flex;align-items:center;gap:10px;padding:12px 14px">
+        <span style="font-size:18px">💧</span><b style="font-size:13.5px;color:var(--ink)">Kidney</b>
+        <span style="margin-left:auto;font-size:11px;color:var(--sub);font-weight:700">6 tests ⌄</span></div></div>
+      <div class="card" style="margin:0 15px 8px"><div style="display:flex;align-items:center;gap:10px;padding:12px 14px">
+        <span style="font-size:18px">☀️</span><b style="font-size:13.5px;color:var(--ink)">Vitamins</b>
+        <span style="margin-left:auto;font-size:11px;color:var(--sub);font-weight:700">4 tests ⌄</span></div></div>
+      <div class="card" style="margin:0 15px 8px"><div style="display:flex;align-items:center;gap:10px;padding:12px 14px">
+        <span style="font-size:18px">🩸</span><b style="font-size:13.5px;color:var(--ink)">General & Others</b>
+        <span style="margin-left:auto;font-size:11px;color:var(--sub);font-weight:700">63 tests ⌄</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- C · Explorer sheet -->
+<div class="stage">
+  <h2>C · "Test Explorer" full sheet (A + B combined)</h2>
+  <p>View More opens a full-height sheet: pinned filter search, concern chips as a rail, THEN the A–Z list with the jump rail. One surface, three ways to find any test in seconds.</p>
+  <div class="phone">
+    <div style="height:96px;filter:blur(1.5px);opacity:.55">
+      <div class="top"><div class="circ">←</div><b>Blood Tests</b></div>
+    </div>
+    <div style="position:absolute;top:82px;left:0;right:0;bottom:0;background:var(--cream);border-radius:24px 24px 0 0;
+      box-shadow:0 -12px 40px rgba(0,0,0,.25)">
+      <div style="width:42px;height:4.5px;border-radius:3px;background:#D8CDBA;margin:9px auto 6px"></div>
+      <div style="display:flex;align-items:center;gap:8px;padding:0 15px 8px">
+        <b style="font-size:15px;color:var(--ink);font-weight:850">All tests</b>
+        <span style="font-size:10.5px;color:var(--sub);font-weight:700">99 · A–Z</span>
+        <div style="margin-left:auto;background:#fff;border-radius:100px;box-shadow:0 3px 10px rgba(0,0,0,.06);padding:7px 12px;display:flex;gap:6px;align-items:center">
+          <span style="color:#B9C6D2;font-size:12px">🔍</span><span style="font-size:11.5px;color:#B9C6D2">Filter…</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;overflow-x:auto;padding:0 15px 10px">
+        <span class="pill" style="background:#EDF4FB;border:1.4px solid var(--blue);color:var(--blue-d)">All</span>
+        <span class="pill" style="background:#fff;color:var(--sub)">🍬 Diabetes</span>
+        <span class="pill" style="background:#fff;color:var(--sub)">🫀 Heart</span>
+        <span class="pill" style="background:#fff;color:var(--sub)">🦋 Thyroid</span>
+        <span class="pill" style="background:#fff;color:var(--sub)">☀️ Vitamins</span>
+      </div>
+      <div style="height:calc(100% - 108px);overflow-y:auto;padding:0 26px 20px 15px">
+        <div style="padding:4px 0"><span style="font-size:14px;font-weight:850;color:var(--blue)">A</span></div>
+        <div class="card" style="padding:2px 14px">
+          <div class="trow"><div><b>ACE</b><small>₹1400</small></div><div class="plus">+</div></div>
+          <div class="dash"></div>
+          <div class="trow"><div><b>ADA</b><small>₹1000</small></div><div class="plus">+</div></div>
+          <div class="dash"></div>
+          <div class="trow"><div><b>AMH</b><small>₹2100</small></div><div class="plus">+</div></div>
+        </div>
+        <div style="padding:8px 0 4px"><span style="font-size:14px;font-weight:850;color:var(--blue)">B</span></div>
+        <div class="card" style="padding:2px 14px">
+          <div class="trow"><div><b>Beta HCG</b><small>₹800</small></div><div class="plus">+</div></div>
+          <div class="dash"></div>
+          <div class="trow"><div><b>Blood Sugar F/PP</b><small>₹100</small></div><div class="plus">+</div></div>
+        </div>
+        <div style="padding:8px 0 4px"><span style="font-size:14px;font-weight:850;color:var(--blue)">C</span></div>
+        <div class="card" style="padding:2px 14px">
+          <div class="trow"><div><b>C.B.C.</b><small>₹300</small></div><div class="plus">+</div></div>
+        </div>
+      </div>
+      <div style="position:absolute;right:4px;top:118px;bottom:16px;display:flex;flex-direction:column;justify-content:space-between;
+        align-items:center;background:rgba(255,255,255,.8);border-radius:100px;padding:8px 4px;width:17px">
+        <span style="font-size:8px;font-weight:800;color:var(--blue)">A</span><span style="font-size:8px;color:var(--sub)">B</span>
+        <span style="font-size:8px;color:var(--sub)">C</span><span style="font-size:8px;color:var(--sub)">D</span>
+        <span style="font-size:8px;color:var(--sub)">E</span><span style="font-size:8px;color:var(--sub)">F</span>
+        <span style="font-size:8px;color:var(--sub)">H</span><span style="font-size:8px;color:var(--sub)">L</span>
+        <span style="font-size:8px;color:var(--sub)">P</span><span style="font-size:8px;color:var(--sub)">S</span>
+        <span style="font-size:8px;color:var(--sub)">T</span><span style="font-size:8px;color:var(--sub)">V</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

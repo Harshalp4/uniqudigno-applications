@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Home — final combined design</title>
+<style>
+  :root{
+    --cream:#FAF3E8; --ink:#1E2A38; --sub:#75808D; --blue:#3E7FBE; --blue-d:#2C5F94;
+    --teal:#CDEAEA; --green:#2A9C54; --green-bg:#E9F8EE; --line:#EDE4D3; --orange:#F58B44; --amber:#FDF3E7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{background:#232830;display:flex;gap:48px;justify-content:center;align-items:flex-start;padding:44px 20px;flex-wrap:wrap}
+  .stage{text-align:center}
+  .stage h2{color:#fff;font-size:14px;margin-bottom:5px;font-weight:800}
+  .stage p{color:#9aa5b1;font-size:11px;margin-bottom:14px;max-width:380px;text-align:left}
+  .phone{width:380px;height:822px;background:var(--cream);border-radius:44px;border:9px solid #0d0f12;
+    overflow:hidden;position:relative;box-shadow:0 26px 60px rgba(0,0,0,.5);text-align:left}
+  .scroll{height:100%;overflow-y:auto;padding-bottom:78px}
+  .scroll::-webkit-scrollbar{display:none}
+  .card{background:#fff;border-radius:16px;box-shadow:0 5px 16px rgba(0,0,0,.05)}
+  .pill{display:inline-block;border-radius:100px;font-size:9px;font-weight:800;padding:3px 8px}
+  .dock{position:absolute;left:14px;right:14px;bottom:12px;height:50px;background:#fff;border-radius:100px;
+    box-shadow:0 8px 24px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:space-around;font-size:10px;color:var(--sub)}
+  .dock b{color:var(--blue);font-weight:800}
+  .cta{position:relative;overflow:hidden}
+  .cta:after{content:'';position:absolute;top:0;bottom:0;width:44%;left:-50%;transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-50%}55%{left:130%}100%{left:130%}}
+  @keyframes glowpulse{0%,100%{box-shadow:0 8px 22px rgba(245,139,68,.14)}50%{box-shadow:0 8px 28px rgba(245,139,68,.3)}}
+  .sect{display:flex;align-items:baseline;margin:15px 16px 7px}
+  .sect b{font-size:14.5px;color:var(--ink);font-weight:850}
+  .sect a{margin-left:auto;font-size:11px;font-weight:800;color:var(--blue)}
+  .sq{width:64px;height:8px;margin-left:8px}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <h2>FINAL · Care + intent, one home</h2>
+  <p><b>Hierarchy:</b> ① slim recall banner (only when something is due) → ② the "start" hero with prescription-first intents → ③ trust band → ④ family circle with statuses → ⑤ symptom chips → ⑥ reasoned recommendations. New users simply see it without ① and with an empty family circle — same layout, zero redesign between states.</p>
+  <div class="phone"><div class="scroll">
+
+    <!-- ── header ── -->
+    <div style="padding:52px 16px 0;display:flex;align-items:center;gap:10px">
+      <div style="position:relative">
+        <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(130deg,var(--blue),var(--blue-d));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:850;font-size:16px">H</div>
+        <span style="position:absolute;bottom:-1px;right:-1px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2px solid var(--cream)"></span>
+      </div>
+      <div style="flex:1">
+        <b style="font-size:15.5px;color:var(--ink);font-weight:850">Hi, Harshal</b>
+        <div style="font-size:10px;color:var(--sub)">📍 Mumbai · <u>change</u></div>
+      </div>
+      <div style="width:35px;height:35px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.06);font-size:13px">🌐</div>
+      <div style="width:35px;height:35px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.06);font-size:13px">🔔</div>
+      <div style="width:35px;height:35px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.06);font-size:13px;position:relative">🛒
+        <span style="position:absolute;top:-3px;right:-3px;background:var(--orange);color:#fff;font-size:8px;font-weight:800;border-radius:8px;padding:1px 4px">1</span></div>
+    </div>
+
+    <!-- ── search ── -->
+    <div style="margin:11px 16px 0;background:#fff;border-radius:100px;box-shadow:0 4px 14px rgba(0,0,0,.06);
+      padding:11px 15px;display:flex;gap:8px;align-items:center">
+      <span style="color:#B9C6D2">🔍</span><span style="font-size:12px;color:#B9C6D2">Try 'HbA1c' or 'always tired'…</span>
+      <span style="margin-left:auto;color:var(--blue)">🎤</span>
+    </div>
+
+    <!-- ── ① slim recall banner (conditional) ── -->
+    <div style="margin:12px 16px 0;background:#fff;border:1.5px solid #F0C987;border-radius:14px;padding:10px 13px;
+      display:flex;align-items:center;gap:10px;animation:glowpulse 2.6s infinite">
+      <span style="font-size:18px">⏰</span>
+      <div style="flex:1">
+        <b style="font-size:12px;color:var(--ink)">HbA1c due — last tested 92 days ago</b>
+        <div style="font-size:9.5px;color:var(--sub)">Same as last time · 🏠 home · fasting slot</div>
+      </div>
+      <span class="cta" style="background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:11px;font-weight:850;padding:8px 13px">Repeat ₹550</span>
+    </div>
+
+    <!-- ── ② the start hero ── -->
+    <div style="margin:12px 16px 0;background:linear-gradient(130deg,var(--blue),var(--blue-d));border-radius:20px;padding:14px;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-8px;top:-12px;font-size:74px;opacity:.13">🧬</div>
+      <b style="color:#fff;font-size:14.5px;font-weight:850">Book a test — how would you like to start?</b>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-top:11px">
+        <div class="cta" style="background:#fff;border-radius:13px;padding:11px 13px;display:flex;align-items:center;gap:10px">
+          <span style="font-size:20px">📄</span>
+          <div style="flex:1"><b style="font-size:12.5px;color:var(--ink)">Upload doctor's prescription</b>
+            <div style="font-size:9.5px;color:var(--sub)">Photo it — exact price in 2 minutes</div></div>
+          <span style="color:var(--blue);font-weight:800">›</span>
+        </div>
+        <div style="display:flex;gap:7px">
+          <div style="flex:1;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);border-radius:13px;padding:10px 12px">
+            <span style="font-size:18px">🧪</span>
+            <b style="display:block;font-size:11.5px;color:#fff;margin-top:3px">Know your test?</b>
+            <div style="font-size:9px;color:#CFE2F3">CBC ₹300 · TSH ₹350</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);border-radius:13px;padding:10px 12px">
+            <span style="font-size:18px">🩺</span>
+            <b style="display:block;font-size:11.5px;color:#fff;margin-top:3px">Full checkup</b>
+            <div style="font-size:9px;color:#CFE2F3">89 tests · ₹1999</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ③ trust band ── -->
+    <div style="margin:9px 16px 0;display:flex;justify-content:space-between;padding:0 4px">
+      <span style="font-size:8.5px;color:var(--sub);font-weight:700">🏅 NABL CERTIFIED</span>
+      <span style="font-size:8.5px;color:var(--sub);font-weight:700">💉 VERIFIED PHLEBOS</span>
+      <span style="font-size:8.5px;color:var(--sub);font-weight:700">⏱ 6-HR REPORTS</span>
+      <span style="font-size:8.5px;color:var(--sub);font-weight:700">₹ NO HIDDEN FEES</span>
+    </div>
+
+    <!-- ── ④ family circle ── -->
+    <div class="sect"><b>Your family's health</b>
+      <svg class="sq" viewBox="0 0 64 10"><polyline points="0,7 18,7 25,2 32,8 38,7 64,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <a>Manage ›</a></div>
+    <div style="display:flex;gap:9px;overflow-x:auto;padding:0 16px">
+      <div class="card" style="min-width:112px;padding:10px;text-align:center">
+        <div style="font-size:22px">👤</div><b style="display:block;font-size:10.5px;color:var(--ink);margin-top:2px">You</b>
+        <span class="pill" style="background:var(--amber);color:#C97716;margin-top:3px">HbA1c DUE</span>
+      </div>
+      <div class="card" style="min-width:112px;padding:10px;text-align:center">
+        <div style="font-size:22px">👴</div><b style="display:block;font-size:10.5px;color:var(--ink);margin-top:2px">Papa</b>
+        <span class="pill" style="background:#FDECEA;color:#D64541;margin-top:3px">NO CHECKUP 1YR</span>
+      </div>
+      <div class="card" style="min-width:112px;padding:10px;text-align:center">
+        <div style="font-size:22px">👩</div><b style="display:block;font-size:10.5px;color:var(--ink);margin-top:2px">Priya</b>
+        <span class="pill" style="background:var(--green-bg);color:var(--green);margin-top:3px">ALL GOOD ✓</span>
+      </div>
+      <div style="min-width:76px;border:1.6px dashed #C9BFA9;border-radius:16px;padding:10px;text-align:center">
+        <div style="font-size:20px;color:var(--blue)">＋</div><b style="display:block;font-size:9.5px;color:var(--blue);margin-top:2px">Add</b>
+      </div>
+    </div>
+
+    <!-- ── ⑤ symptom chips ── -->
+    <div class="sect"><b>Not sure? Start from how you feel</b></div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding:0 16px">
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">😴 Always tired</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">💇 Hair fall</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">⚖️ Weight gain</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">🦴 Joint pain</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">🫀 Chest discomfort</span>
+    </div>
+
+    <!-- ── ⑥ reasoned recommendations ── -->
+    <div class="sect"><b>Picked for your family</b>
+      <svg class="sq" viewBox="0 0 64 10"><polyline points="0,7 18,7 25,2 32,8 38,7 64,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <a>All packages ›</a></div>
+    <div style="display:flex;gap:10px;overflow-x:auto;padding:0 16px">
+      <div class="card" style="min-width:205px;padding:12px;border-top:3px solid var(--blue)">
+        <span class="pill" style="background:#EDF4FB;color:var(--blue-d)">BECAUSE YOU TRACK SUGAR</span>
+        <b style="display:block;font-size:13px;color:var(--ink);font-weight:850;margin-top:5px">🍬 Diabetes Profile</b>
+        <div style="font-size:9.5px;color:var(--sub)">HbA1c + kidney + lipids · 35 tests</div>
+        <div style="display:flex;align-items:center;margin-top:7px">
+          <b style="font-size:16px;color:var(--blue);font-weight:850">₹1450</b>
+          <s style="font-size:9.5px;color:#A7B0BA;margin-left:5px">₹2250</s>
+          <span style="margin-left:auto;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10.5px;font-weight:850;padding:6px 13px">Book</span>
+        </div>
+      </div>
+      <div class="card" style="min-width:205px;padding:12px;border-top:3px solid var(--green)">
+        <span class="pill" style="background:var(--green-bg);color:var(--green)">FOR PAPA · NO CHECKUP 1YR</span>
+        <b style="display:block;font-size:13px;color:var(--ink);font-weight:850;margin-top:5px">🧓 Senior Citizen Profile</b>
+        <div style="font-size:9.5px;color:var(--sub)">Complete senior checkup · 90 tests</div>
+        <div style="display:flex;align-items:center;margin-top:7px">
+          <b style="font-size:16px;color:var(--blue);font-weight:850">₹2499</b>
+          <span style="margin-left:auto;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10.5px;font-weight:850;padding:6px 13px">Book</span>
+        </div>
+      </div>
+      <div class="card" style="min-width:205px;padding:12px;border-top:3px solid var(--orange)">
+        <span class="pill" style="background:var(--amber);color:#C97716">⭐ BEST VALUE · ₹22/TEST</span>
+        <b style="display:block;font-size:13px;color:var(--ink);font-weight:850;margin-top:5px">🩺 Full Health Checkup</b>
+        <div style="font-size:9.5px;color:var(--sub)">89 tests · ⭐ 4.8 (2,100 bookings)</div>
+        <div style="display:flex;align-items:center;margin-top:7px">
+          <b style="font-size:16px;color:var(--blue);font-weight:850">₹1999</b>
+          <s style="font-size:9.5px;color:#A7B0BA;margin-left:5px">₹7110</s>
+          <span style="margin-left:auto;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10.5px;font-weight:850;padding:6px 13px">Book</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- family savings strip -->
+    <div style="margin:13px 16px 0;background:linear-gradient(120deg,#2A9C54,#1F7A42);border-radius:14px;padding:10px 13px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:19px">👨‍👩‍👧</span>
+      <div style="flex:1;font-size:11px;color:#fff;font-weight:750">Book for 2+ members together — save up to 25% each</div>
+      <span style="background:#fff;color:#1F7A42;border-radius:100px;font-size:10px;font-weight:850;padding:6px 11px">Try</span>
+    </div>
+
+    <div style="margin:12px 16px 0;text-align:center;font-size:9.5px;color:var(--sub)">
+      🗣 <u>हिंदी</u> · <u>मराठी</u> &nbsp;·&nbsp; 🏅 NABL certified since 2005
+    </div>
+    <div style="height:14px"></div>
+    <div class="dock"><b>⌂ Home</b><span>♡ Care</span><span>📈 Vitals</span><span>👤 Profile</span></div>
+  </div></div>
+</div>
+
+<div class="stage">
+  <h2>V2 · ①+② merged — one smart hero</h2>
+  <p>The recall and the start options become ONE card. For a chronic user the hero opens with "Welcome back — HbA1c is due" + Repeat CTA, then "or start something new" with the three intents in a compact row. New users see the same card, just without the recall block. One hero, zero banners.</p>
+  <div class="phone"><div class="scroll">
+
+    <!-- header + search (same) -->
+    <div style="padding:52px 16px 0;display:flex;align-items:center;gap:10px">
+      <div style="position:relative">
+        <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(130deg,var(--blue),var(--blue-d));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:850;font-size:16px">H</div>
+        <span style="position:absolute;bottom:-1px;right:-1px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2px solid var(--cream)"></span>
+      </div>
+      <div style="flex:1">
+        <b style="font-size:15.5px;color:var(--ink);font-weight:850">Hi, Harshal</b>
+        <div style="font-size:10px;color:var(--sub)">📍 Mumbai · <u>change</u></div>
+      </div>
+      <div style="width:35px;height:35px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.06);font-size:13px">🌐</div>
+      <div style="width:35px;height:35px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.06);font-size:13px">🔔</div>
+      <div style="width:35px;height:35px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.06);font-size:13px;position:relative">🛒
+        <span style="position:absolute;top:-3px;right:-3px;background:var(--orange);color:#fff;font-size:8px;font-weight:800;border-radius:8px;padding:1px 4px">1</span></div>
+    </div>
+    <div style="margin:11px 16px 0;background:#fff;border-radius:100px;box-shadow:0 4px 14px rgba(0,0,0,.06);
+      padding:11px 15px;display:flex;gap:8px;align-items:center">
+      <span style="color:#B9C6D2">🔍</span><span style="font-size:12px;color:#B9C6D2">Try 'HbA1c' or 'always tired'…</span>
+      <span style="margin-left:auto;color:var(--blue)">🎤</span>
+    </div>
+
+    <!-- ── THE SMART HERO: recall + intents in one card ── -->
+    <div style="margin:12px 16px 0;background:linear-gradient(135deg,var(--blue),var(--blue-d));border-radius:22px;overflow:hidden;position:relative;box-shadow:0 14px 32px rgba(44,95,148,.3)">
+      <div style="position:absolute;right:-8px;top:-12px;font-size:78px;opacity:.12">🧬</div>
+
+      <!-- recall block (conditional) -->
+      <div style="padding:14px 15px 12px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:18px">⏰</div>
+          <div style="flex:1">
+            <b style="color:#fff;font-size:13.5px;font-weight:850">Welcome back — your HbA1c is due</b>
+            <div style="color:#CFE2F3;font-size:10px">Last tested 92 days ago · same setup as last time</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <span class="cta" style="flex:1.5;background:#fff;color:var(--blue-d);border-radius:100px;text-align:center;padding:10px 0;font-size:12px;font-weight:850">⚡ Repeat test · ₹550 →</span>
+          <span style="flex:1;border:1.4px solid rgba(255,255,255,.5);color:#fff;border-radius:100px;text-align:center;padding:10px 0;font-size:11.5px;font-weight:700">Later</span>
+        </div>
+      </div>
+
+      <!-- divider with label -->
+      <div style="display:flex;align-items:center;gap:10px;padding:0 15px">
+        <div style="flex:1;height:1px;background:rgba(255,255,255,.25)"></div>
+        <span style="color:#9CC3E8;font-size:9px;font-weight:800;letter-spacing:1px">OR START SOMETHING NEW</span>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,.25)"></div>
+      </div>
+
+      <!-- intents compact row -->
+      <div style="display:flex;gap:8px;padding:12px 15px 15px">
+        <div style="flex:1.2;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);border-radius:13px;padding:10px 11px;text-align:center">
+          <span style="font-size:19px">📄</span>
+          <b style="display:block;font-size:10.5px;color:#fff;margin-top:3px;line-height:1.25">Upload prescription</b>
+          <div style="font-size:8.5px;color:#CFE2F3">price in 2 min</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);border-radius:13px;padding:10px 11px;text-align:center">
+          <span style="font-size:19px">🧪</span>
+          <b style="display:block;font-size:10.5px;color:#fff;margin-top:3px;line-height:1.25">Book a test</b>
+          <div style="font-size:8.5px;color:#CFE2F3">from ₹60</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);border-radius:13px;padding:10px 11px;text-align:center">
+          <span style="font-size:19px">🩺</span>
+          <b style="display:block;font-size:10.5px;color:#fff;margin-top:3px;line-height:1.25">Full checkup</b>
+          <div style="font-size:8.5px;color:#CFE2F3">₹1999 · 72% off</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- trust band -->
+    <div style="margin:9px 16px 0;display:flex;justify-content:space-between;padding:0 4px">
+      <span style="font-size:8.5px;color:var(--sub);font-weight:700">🏅 NABL CERTIFIED</span>
+      <span style="font-size:8.5px;color:var(--sub);font-weight:700">💉 VERIFIED PHLEBOS</span>
+      <span style="font-size:8.5px;color:var(--sub);font-weight:700">⏱ 6-HR REPORTS</span>
+      <span style="font-size:8.5px;color:var(--sub);font-weight:700">₹ NO HIDDEN FEES</span>
+    </div>
+
+    <!-- family circle -->
+    <div class="sect"><b>Your family's health</b>
+      <svg class="sq" viewBox="0 0 64 10"><polyline points="0,7 18,7 25,2 32,8 38,7 64,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <a>Manage ›</a></div>
+    <div style="display:flex;gap:9px;overflow-x:auto;padding:0 16px">
+      <div class="card" style="min-width:112px;padding:10px;text-align:center">
+        <div style="font-size:22px">👤</div><b style="display:block;font-size:10.5px;color:var(--ink);margin-top:2px">You</b>
+        <span class="pill" style="background:var(--amber);color:#C97716;margin-top:3px">HbA1c DUE</span>
+      </div>
+      <div class="card" style="min-width:112px;padding:10px;text-align:center">
+        <div style="font-size:22px">👴</div><b style="display:block;font-size:10.5px;color:var(--ink);margin-top:2px">Papa</b>
+        <span class="pill" style="background:#FDECEA;color:#D64541;margin-top:3px">NO CHECKUP 1YR</span>
+      </div>
+      <div class="card" style="min-width:112px;padding:10px;text-align:center">
+        <div style="font-size:22px">👩</div><b style="display:block;font-size:10.5px;color:var(--ink);margin-top:2px">Priya</b>
+        <span class="pill" style="background:var(--green-bg);color:var(--green);margin-top:3px">ALL GOOD ✓</span>
+      </div>
+      <div style="min-width:76px;border:1.6px dashed #C9BFA9;border-radius:16px;padding:10px;text-align:center">
+        <div style="font-size:20px;color:var(--blue)">＋</div><b style="display:block;font-size:9.5px;color:var(--blue);margin-top:2px">Add</b>
+      </div>
+    </div>
+
+    <!-- symptom chips -->
+    <div class="sect"><b>Not sure? Start from how you feel</b></div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding:0 16px">
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">😴 Always tired</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">💇 Hair fall</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">⚖️ Weight gain</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">🦴 Joint pain</span>
+    </div>
+
+    <!-- reasoned recommendations -->
+    <div class="sect"><b>Picked for your family</b>
+      <svg class="sq" viewBox="0 0 64 10"><polyline points="0,7 18,7 25,2 32,8 38,7 64,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <a>All packages ›</a></div>
+    <div style="display:flex;gap:10px;overflow-x:auto;padding:0 16px">
+      <div class="card" style="min-width:205px;padding:12px;border-top:3px solid var(--blue)">
+        <span class="pill" style="background:#EDF4FB;color:var(--blue-d)">BECAUSE YOU TRACK SUGAR</span>
+        <b style="display:block;font-size:13px;color:var(--ink);font-weight:850;margin-top:5px">🍬 Diabetes Profile</b>
+        <div style="font-size:9.5px;color:var(--sub)">HbA1c + kidney + lipids · 35 tests</div>
+        <div style="display:flex;align-items:center;margin-top:7px">
+          <b style="font-size:16px;color:var(--blue);font-weight:850">₹1450</b>
+          <s style="font-size:9.5px;color:#A7B0BA;margin-left:5px">₹2250</s>
+          <span style="margin-left:auto;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10.5px;font-weight:850;padding:6px 13px">Book</span>
+        </div>
+      </div>
+      <div class="card" style="min-width:205px;padding:12px;border-top:3px solid var(--green)">
+        <span class="pill" style="background:var(--green-bg);color:var(--green)">FOR PAPA · NO CHECKUP 1YR</span>
+        <b style="display:block;font-size:13px;color:var(--ink);font-weight:850;margin-top:5px">🧓 Senior Citizen Profile</b>
+        <div style="font-size:9.5px;color:var(--sub)">Complete senior checkup · 90 tests</div>
+        <div style="display:flex;align-items:center;margin-top:7px">
+          <b style="font-size:16px;color:var(--blue);font-weight:850">₹2499</b>
+          <span style="margin-left:auto;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10.5px;font-weight:850;padding:6px 13px">Book</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- family savings strip -->
+    <div style="margin:13px 16px 0;background:linear-gradient(120deg,#2A9C54,#1F7A42);border-radius:14px;padding:10px 13px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:19px">👨‍👩‍👧</span>
+      <div style="flex:1;font-size:11px;color:#fff;font-weight:750">Book for 2+ members together — save up to 25% each</div>
+      <span style="background:#fff;color:#1F7A42;border-radius:100px;font-size:10px;font-weight:850;padding:6px 11px">Try</span>
+    </div>
+
+    <div style="margin:12px 16px 0;text-align:center;font-size:9.5px;color:var(--sub)">
+      🗣 <u>हिंदी</u> · <u>मराठी</u> &nbsp;·&nbsp; 🏅 NABL certified since 2005
+    </div>
+    <div style="height:14px"></div>
+    <div class="dock"><b>⌂ Home</b><span>♡ Care</span><span>📈 Vitals</span><span>👤 Profile</span></div>
+  </div></div>
+</div>
+
+<div class="stage">
+  <h2>V3 · Self-explanatory & interactive ⭐</h2>
+  <p>V2 + the answers to every silent question: <b>"how does this work?"</b> (3-step strip), <b>"do I pay now?"</b> (microcopy under CTA), <b>"which test do I need?"</b> (symptom chips expand inline with suggested tests + one-tap add-all), <b>"what's inside?"</b> (package cards preview their tests on tap), <b>"can I talk to someone?"</b> (WhatsApp bubble). Live slot count creates gentle urgency.</p>
+  <div class="phone"><div class="scroll">
+
+    <!-- header + search -->
+    <div style="padding:52px 16px 0;display:flex;align-items:center;gap:10px">
+      <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(130deg,var(--blue),var(--blue-d));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:850;font-size:16px">H</div>
+      <div style="flex:1">
+        <b style="font-size:15.5px;color:var(--ink);font-weight:850">Hi, Harshal</b>
+        <div style="font-size:10px;color:var(--sub)">📍 Mumbai · <u>change</u></div>
+      </div>
+      <div style="width:35px;height:35px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.06);font-size:13px">🌐</div>
+      <div style="width:35px;height:35px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.06);font-size:13px">🔔</div>
+      <div style="width:35px;height:35px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.06);font-size:13px;position:relative">🛒
+        <span style="position:absolute;top:-3px;right:-3px;background:var(--orange);color:#fff;font-size:8px;font-weight:800;border-radius:8px;padding:1px 4px">1</span></div>
+    </div>
+    <div style="margin:11px 16px 0;background:#fff;border-radius:100px;box-shadow:0 4px 14px rgba(0,0,0,.06);
+      padding:11px 15px;display:flex;gap:8px;align-items:center">
+      <span style="color:#B9C6D2">🔍</span><span style="font-size:12px;color:#B9C6D2">Try 'HbA1c' or 'always tired'…</span>
+      <span style="margin-left:auto;color:var(--blue)">🎤</span>
+    </div>
+
+    <!-- smart hero (V2) + live slot + microcopy -->
+    <div style="margin:12px 16px 0;background:linear-gradient(135deg,var(--blue),var(--blue-d));border-radius:22px;overflow:hidden;position:relative;box-shadow:0 14px 32px rgba(44,95,148,.3)">
+      <div style="padding:14px 15px 12px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:18px">⏰</div>
+          <div style="flex:1">
+            <b style="color:#fff;font-size:13.5px;font-weight:850">Your HbA1c is due</b>
+            <div style="color:#CFE2F3;font-size:10px">Last tested 92 days ago · same setup as last time</div>
+          </div>
+          <span style="background:rgba(255,255,255,.18);color:#B9F6CE;font-size:9px;font-weight:800;border-radius:100px;padding:4px 9px">🟢 7 slots tomorrow</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <span class="cta" style="flex:1.5;background:#fff;color:var(--blue-d);border-radius:100px;text-align:center;padding:10px 0;font-size:12px;font-weight:850">⚡ Repeat test · ₹550 →</span>
+          <span style="flex:1;border:1.4px solid rgba(255,255,255,.5);color:#fff;border-radius:100px;text-align:center;padding:10px 0;font-size:11.5px;font-weight:700">Later</span>
+        </div>
+        <div style="text-align:center;color:#9CC3E8;font-size:9px;margin-top:7px">💳 No payment needed now — pay after sample collection · free cancellation till 2 hrs before</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:0 15px">
+        <div style="flex:1;height:1px;background:rgba(255,255,255,.25)"></div>
+        <span style="color:#9CC3E8;font-size:9px;font-weight:800;letter-spacing:1px">OR START SOMETHING NEW</span>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,.25)"></div>
+      </div>
+      <div style="display:flex;gap:8px;padding:12px 15px 15px">
+        <div style="flex:1.2;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);border-radius:13px;padding:10px 11px;text-align:center">
+          <span style="font-size:19px">📄</span>
+          <b style="display:block;font-size:10.5px;color:#fff;margin-top:3px">Upload prescription</b>
+          <div style="font-size:8.5px;color:#CFE2F3">price in 2 min</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);border-radius:13px;padding:10px 11px;text-align:center">
+          <span style="font-size:19px">🧪</span>
+          <b style="display:block;font-size:10.5px;color:#fff;margin-top:3px">Book a test</b>
+          <div style="font-size:8.5px;color:#CFE2F3">from ₹60</div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);border-radius:13px;padding:10px 11px;text-align:center">
+          <span style="font-size:19px">🩺</span>
+          <b style="display:block;font-size:10.5px;color:#fff;margin-top:3px">Full checkup</b>
+          <div style="font-size:8.5px;color:#CFE2F3">₹1999 · 72% off</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS — self-explanatory 3 steps -->
+    <div style="margin:12px 16px 0;background:#fff;border-radius:16px;box-shadow:0 5px 16px rgba(0,0,0,.05);padding:11px 13px">
+      <div style="display:flex;align-items:center">
+        <div style="flex:1;text-align:center">
+          <div style="width:34px;height:34px;border-radius:50%;background:#EDF4FB;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:15px;border:2px solid var(--blue)">📱</div>
+          <div style="font-size:9px;font-weight:750;color:var(--ink);margin-top:4px">Book in 60 sec</div>
+        </div>
+        <div style="width:26px;height:2px;background:repeating-linear-gradient(90deg,#BFD7EC 0 4px,transparent 4px 8px);margin-bottom:14px"></div>
+        <div style="flex:1;text-align:center">
+          <div style="width:34px;height:34px;border-radius:50%;background:#F7F1E6;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:15px">🏠</div>
+          <div style="font-size:9px;font-weight:750;color:var(--sub);margin-top:4px">We come to you</div>
+        </div>
+        <div style="width:26px;height:2px;background:repeating-linear-gradient(90deg,#BFD7EC 0 4px,transparent 4px 8px);margin-bottom:14px"></div>
+        <div style="flex:1;text-align:center">
+          <div style="width:34px;height:34px;border-radius:50%;background:#F7F1E6;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:15px">📄</div>
+          <div style="font-size:9px;font-weight:750;color:var(--sub);margin-top:4px">Report in 6 hrs</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- family circle -->
+    <div class="sect"><b>Your family's health</b><a>Manage ›</a></div>
+    <div style="display:flex;gap:9px;overflow-x:auto;padding:0 16px">
+      <div class="card" style="min-width:112px;padding:10px;text-align:center">
+        <div style="font-size:22px">👤</div><b style="display:block;font-size:10.5px;color:var(--ink);margin-top:2px">You</b>
+        <span class="pill" style="background:var(--amber);color:#C97716;margin-top:3px">HbA1c DUE</span>
+      </div>
+      <div class="card" style="min-width:112px;padding:10px;text-align:center;border:1.5px solid #F3C9C4">
+        <div style="font-size:22px">👴</div><b style="display:block;font-size:10.5px;color:var(--ink);margin-top:2px">Papa</b>
+        <span class="pill" style="background:#FDECEA;color:#D64541;margin-top:3px">NO CHECKUP 1YR</span>
+        <div style="font-size:9px;font-weight:800;color:var(--blue);margin-top:4px">Book for Papa ›</div>
+      </div>
+      <div class="card" style="min-width:112px;padding:10px;text-align:center">
+        <div style="font-size:22px">👩</div><b style="display:block;font-size:10.5px;color:var(--ink);margin-top:2px">Priya</b>
+        <span class="pill" style="background:var(--green-bg);color:var(--green);margin-top:3px">ALL GOOD ✓</span>
+      </div>
+      <div style="min-width:76px;border:1.6px dashed #C9BFA9;border-radius:16px;padding:10px;text-align:center">
+        <div style="font-size:20px;color:var(--blue)">＋</div><b style="display:block;font-size:9.5px;color:var(--blue);margin-top:2px">Add</b>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE symptom chips: one expanded -->
+    <div class="sect"><b>Not sure? Start from how you feel</b></div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding:0 16px">
+      <span style="white-space:nowrap;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:11px;font-weight:800;padding:8px 13px">😴 Always tired ✓</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">💇 Hair fall</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">⚖️ Weight gain</span>
+      <span style="white-space:nowrap;background:#fff;border-radius:100px;font-size:11px;font-weight:750;color:var(--ink);padding:8px 13px;box-shadow:0 3px 10px rgba(0,0,0,.05)">🦴 Joint pain</span>
+    </div>
+    <!-- inline expansion -->
+    <div style="margin:8px 16px 0;background:#fff;border:1.6px solid var(--blue);border-radius:16px;padding:12px 13px;box-shadow:0 8px 20px rgba(62,127,190,.12)">
+      <div style="font-size:11px;color:var(--sub)">Tiredness is usually checked with:</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:7px">
+        <span style="background:#F7F1E6;border-radius:100px;font-size:10.5px;font-weight:750;color:var(--ink);padding:6px 11px">🦋 Thyroid ₹350</span>
+        <span style="background:#F7F1E6;border-radius:100px;font-size:10.5px;font-weight:750;color:var(--ink);padding:6px 11px">🩸 CBC ₹300</span>
+        <span style="background:#F7F1E6;border-radius:100px;font-size:10.5px;font-weight:750;color:var(--ink);padding:6px 11px">☀️ Vitamin D ₹900</span>
+        <span style="background:#F7F1E6;border-radius:100px;font-size:10.5px;font-weight:750;color:var(--ink);padding:6px 11px">💊 B12 ₹700</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+        <span class="cta" style="flex:1;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;text-align:center;padding:9px 0;font-size:11.5px;font-weight:850">Add all 4 · ₹2250 ₹1799</span>
+        <span style="font-size:10.5px;font-weight:800;color:var(--blue)">Pick individually ›</span>
+      </div>
+    </div>
+
+    <!-- package card with inline "what's inside" preview -->
+    <div class="sect"><b>Picked for your family</b><a>All packages ›</a></div>
+    <div style="margin:0 16px;background:#fff;border-radius:18px;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:12px 14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:40px;height:40px;border-radius:13px;background:#FDEBD8;display:flex;align-items:center;justify-content:center;font-size:19px">🍬</div>
+        <div style="flex:1">
+          <span class="pill" style="background:#EDF4FB;color:var(--blue-d)">BECAUSE YOU TRACK SUGAR</span>
+          <b style="display:block;font-size:13.5px;color:var(--ink);font-weight:850;margin-top:2px">Diabetes Profile</b>
+        </div>
+        <span style="color:var(--blue);font-weight:800">⌃</span>
+      </div>
+      <!-- expanded preview -->
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:9px">
+        <span style="background:var(--green-bg);border-radius:100px;font-size:9.5px;font-weight:750;color:#1F7A42;padding:4px 9px">✓ HbA1c</span>
+        <span style="background:var(--green-bg);border-radius:100px;font-size:9.5px;font-weight:750;color:#1F7A42;padding:4px 9px">✓ Blood Sugar F/PP</span>
+        <span style="background:var(--green-bg);border-radius:100px;font-size:9.5px;font-weight:750;color:#1F7A42;padding:4px 9px">✓ Kidney (RFT)</span>
+        <span style="background:var(--green-bg);border-radius:100px;font-size:9.5px;font-weight:750;color:#1F7A42;padding:4px 9px">✓ Lipids</span>
+        <span style="background:#F7F1E6;border-radius:100px;font-size:9.5px;font-weight:750;color:var(--sub);padding:4px 9px">+31 more</span>
+      </div>
+      <div style="display:flex;align-items:center;margin-top:10px">
+        <div>
+          <b style="font-size:17px;color:var(--blue);font-weight:850">₹1450</b>
+          <s style="font-size:10px;color:#A7B0BA;margin-left:4px">₹2250</s>
+          <div style="font-size:9px;color:var(--sub)">that's ₹41/test · one report</div>
+        </div>
+        <span class="cta" style="margin-left:auto;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:11.5px;font-weight:850;padding:9px 18px">Book</span>
+      </div>
+    </div>
+
+    <div style="margin:12px 16px 0;text-align:center;font-size:9.5px;color:var(--sub)">
+      🗣 <u>हिंदी</u> · <u>मराठी</u> &nbsp;·&nbsp; 🏅 NABL certified since 2005
+    </div>
+    <div style="height:14px"></div>
+
+    <!-- WhatsApp help bubble -->
+    <div style="position:absolute;right:16px;bottom:74px;width:48px;height:48px;border-radius:50%;background:#25D366;
+      display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 10px 24px rgba(37,211,102,.4);animation:glowpulse 2.6s infinite">💬</div>
+    <div class="dock"><b>⌂ Home</b><span>♡ Care</span><span>📈 Vitals</span><span>👤 Profile</span></div>
+  </div></div>
+</div>
+
+</body>
+</html>

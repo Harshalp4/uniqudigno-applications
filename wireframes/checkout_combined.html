@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Checkout — combined A+B+C+D</title>
+<style>
+  :root{
+    --blue:#428AC7; --blue-dark:#2F6FA6; --green:#36B665; --green-dark:#2A9C54;
+    --cream:#FAF3EA; --ink:#1F2937; --muted:#6B7280; --line:#E7EBF0; --red:#E4574F;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:#12161C; color:#E5E7EB; padding:34px 22px 60px}
+  h1{font-size:22px; font-weight:700; margin-bottom:6px}
+  .sub{color:#9CA3AF; font-size:13.5px; margin-bottom:30px; max-width:900px; line-height:1.5}
+  .row{display:flex; gap:34px; flex-wrap:wrap; justify-content:center}
+  .opt{width:330px}
+  .opt h2{font-size:15px; margin:0 0 2px; color:#fff}
+  .opt .tag{font-size:11.5px; color:#93C5FD; margin-bottom:10px}
+  .notes{margin-top:12px; font-size:12px; color:#B7BEC9; line-height:1.55}
+  .notes b{color:#fff}
+  .phone{width:330px; height:700px; background:#000; border-radius:42px; padding:9px;
+         box-shadow:0 22px 55px rgba(0,0,0,.55)}
+  .screen{width:100%; height:100%; border-radius:34px; overflow-y:auto; overflow-x:hidden;
+          position:relative; background:var(--cream); scrollbar-width:none}
+  .screen::-webkit-scrollbar{display:none}
+  .sheen{position:absolute; top:0; bottom:0; width:46%; transform:skewX(-18deg);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent); animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-60%} 55%{left:120%} 100%{left:120%}}
+  @keyframes pop{0%{transform:scale(0)} 70%{transform:scale(1.25)} 100%{transform:scale(1)}}
+  @keyframes shimmer{0%{background-position:-200px 0} 100%{background-position:200px 0}}
+  @keyframes slidehint{0%,100%{transform:translateX(0)} 50%{transform:translateX(10px)}}
+  .bar{position:sticky; top:0; z-index:10; padding:30px 14px 8px; display:flex; gap:8px; align-items:center; background:var(--cream)}
+  .bar b{flex:1; text-align:center; font-size:15.5px; color:var(--ink)}
+  /* stepper (A) */
+  .steps{display:flex; align-items:center; justify-content:center; gap:4px; padding:0 14px 12px; font-size:9.5px; color:var(--muted)}
+  .step{display:flex; flex-direction:column; align-items:center; gap:3px; width:58px}
+  .step .dotb{width:21px; height:21px; border-radius:50%; background:#E7DFD2; color:#8A8272; font-weight:800;
+      display:flex; align-items:center; justify-content:center; font-size:10px}
+  .step.done .dotb{background:var(--green); color:#fff}
+  .step.on .dotb{background:var(--blue); color:#fff}
+  .stline{flex:0 0 18px; height:2px; background:#E7DFD2; margin-top:-13px}
+  /* bill-first hero (C) */
+  .bighead{margin:0 14px 12px; border-radius:20px; padding:15px; color:#fff; position:relative; overflow:hidden;
+      background:linear-gradient(135deg,var(--blue),var(--blue-dark))}
+  .bighead .lbl{font-size:10.5px; opacity:.85}
+  .bighead .amt{font-size:28px; font-weight:800; margin-top:2px}
+  .bighead .amt s{font-size:12.5px; opacity:.7; font-weight:600; margin-left:8px}
+  .bighead .save{display:inline-block; margin-top:7px; background:rgba(255,255,255,.18); border-radius:99px;
+      padding:4px 11px; font-size:10.5px; font-weight:800}
+  /* coupon chips (C) */
+  h3{font-size:13px; font-weight:800; color:var(--ink)}
+  .chips{display:flex; gap:8px; overflow-x:auto; padding:8px 14px 12px; scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .cchip{white-space:nowrap; border:1.5px dashed #C9BFAD; border-radius:99px; padding:7px 12px; font-size:11px; font-weight:800; color:var(--blue); background:#fff}
+  .cchip.on{background:#DFF3E7; border-color:var(--green); color:var(--green-dark)}
+  /* receipt (D) */
+  .ticket{margin:0 14px 12px; background:#fff; border-radius:16px; position:relative; padding:14px 14px 11px;
+      box-shadow:0 8px 20px rgba(0,0,0,.07)}
+  .ticket:before,.ticket:after{content:''; position:absolute; width:16px; height:16px; border-radius:50%; background:var(--cream); top:63%}
+  .ticket:before{left:-8px} .ticket:after{right:-8px}
+  .tline{display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted); padding:3.5px 0}
+  .tline b{color:var(--ink)}
+  .tline .g{color:var(--green-dark); font-weight:800}
+  .tdash{border-top:2px dashed #EDE5D6; margin:8px 0}
+  .cpnrow{display:flex; align-items:center; gap:8px; background:#F0FAF3; border:1.5px dashed var(--green);
+      border-radius:11px; padding:8px 11px; margin:5px 0 3px}
+  .cpnrow .tick{width:20px; height:20px; border-radius:50%; background:var(--green); color:#fff; font-size:11px; font-weight:800;
+      display:flex; align-items:center; justify-content:center; animation:pop .6s both}
+  .cpnrow .code{font-size:11.5px; font-weight:800; color:var(--green-dark); letter-spacing:.8px}
+  .cpnrow .amtoff{margin-left:auto; font-size:11.5px; font-weight:800; color:var(--green-dark)}
+  .cpnrow .rm{font-size:10.5px; color:var(--red); font-weight:800; margin-left:8px}
+  .allcpn{display:flex; justify-content:space-between; font-size:11.5px; font-weight:800; color:var(--blue); padding:7px 2px 0}
+  .total{display:flex; justify-content:space-between; font-size:14px; font-weight:800; color:var(--ink); padding-top:4px}
+  /* wallet + saved strip (B) */
+  .card{margin:0 14px 12px; background:#fff; border-radius:16px; padding:12px; box-shadow:0 6px 16px rgba(0,0,0,.06)}
+  .wallet{display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--ink); font-weight:700}
+  .wallet .sw{margin-left:auto; width:36px; height:20px; border-radius:99px; background:var(--green); position:relative}
+  .wallet .sw:after{content:''; position:absolute; right:2px; top:2px; width:16px; height:16px; border-radius:50%; background:#fff}
+  .saved{margin:0 14px 12px; border-radius:14px; padding:10px 13px; font-size:12px; font-weight:800; color:#1F7A43;
+      background:linear-gradient(90deg,#DFF3E7,#CDEBD8,#DFF3E7); background-size:400px 100%;
+      animation:shimmer 2.6s linear infinite; display:flex; gap:8px; align-items:center}
+  /* trust row (C) */
+  .trust{display:flex; gap:8px; margin:0 14px 12px}
+  .trust div{flex:1; background:#fff; border-radius:11px; padding:9px 6px; text-align:center; font-size:9.5px; font-weight:700; color:var(--muted)}
+  .trust div span{display:block; font-size:16px; margin-bottom:3px}
+  /* swipe to pay (D) */
+  .paybar{position:sticky; bottom:0; background:var(--cream); padding:8px 14px 16px}
+  .slider{background:var(--ink); border-radius:99px; padding:6px; display:flex; align-items:center; gap:10px; position:relative; overflow:hidden}
+  .slider .knob{width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,var(--green),var(--green-dark));
+      color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; animation:slidehint 1.8s ease-in-out infinite; z-index:2}
+  .slider .txt{flex:1; text-align:center; color:#E8EEF5; font-size:13px; font-weight:800}
+  .slider .amt2{color:#9FD6B4; margin-right:14px; font-size:13px; font-weight:800; z-index:2}
+  /* coupon sheet (B) */
+  .dim{position:absolute; inset:0; background:rgba(20,28,38,.45); z-index:19}
+  .sheetmock{position:absolute; left:0; right:0; bottom:0; z-index:20; background:#fff; border-radius:22px 22px 0 0;
+      box-shadow:0 -12px 34px rgba(0,0,0,.3); padding:14px}
+  .sheetmock .grab{width:36px; height:4px; border-radius:99px; background:#E3E7ED; margin:0 auto 10px}
+  .cpn-in{display:flex; gap:8px; margin-bottom:12px}
+  .cpn-in input{flex:1; border:1.5px dashed #B9C8D8; border-radius:11px; padding:10px 12px; font-size:12px; color:var(--ink); letter-spacing:1px; background:#FBFCFE}
+  .cpn-in .apply{background:var(--blue); color:#fff; border-radius:11px; padding:10px 16px; font-size:12px; font-weight:800; display:flex; align-items:center}
+  .cpnopt{border:1.5px dashed #CBD7E4; border-radius:13px; padding:10px 12px; margin-bottom:9px}
+  .cpnopt .code{font-size:12px; font-weight:800; color:var(--blue); letter-spacing:.6px; background:#EAF4FB;
+      display:inline-block; padding:2px 8px; border-radius:6px}
+  .cpnopt.applied .code{color:var(--green-dark); background:#DFF3E7}
+  .cpnopt .d{font-size:10.5px; color:var(--muted); margin-top:5px}
+  .cpnopt .ap{float:right; font-size:11.5px; font-weight:800; color:var(--green-dark)}
+</style>
+</head>
+<body>
+  <h1>Checkout — one design combining A + B + C + D</h1>
+  <p class="sub"><b>A</b>'s progress stepper · <b>C</b>'s pay-first hero &amp; coupon chips · <b>D</b>'s receipt ticket &amp; swipe-to-pay ·
+     <b>B</b>'s cream identity, savings shimmer, applied-state tick and "view all" coupon sheet (right phone shows the sheet open).
+     Real cart: Full Health Checkup ₹1999 + C.B.C. ₹300 · WELCOME200 −₹200 · wallet −₹430.</p>
+  <div class="row">
+
+    <!-- main screen -->
+    <div class="opt">
+      <h2>Main checkout screen</h2>
+      <div class="tag">Scroll inside the phone</div>
+      <div class="phone"><div class="screen">
+        <div class="bar"><span style="color:var(--ink)">←</span><b>Checkout</b><span></span></div>
+        <div class="steps">
+          <div class="step done"><div class="dotb">✓</div>Cart</div><div class="stline"></div>
+          <div class="step on"><div class="dotb">2</div>Review</div><div class="stline"></div>
+          <div class="step"><div class="dotb">3</div>Slot</div><div class="stline"></div>
+          <div class="step"><div class="dotb">4</div>Pay</div>
+        </div>
+        <div class="bighead">
+          <div class="lbl">To pay</div>
+          <div class="amt">₹1,669 <s>₹7,410</s></div>
+          <div class="save">🎉 Saving ₹5,741 (77%)</div>
+          <div class="sheen"></div>
+        </div>
+        <div class="saved">🏷️ WELCOME200 applied — instant ₹200 off</div>
+        <h3 style="padding:0 14px">Coupons for you</h3>
+        <div class="chips">
+          <div class="cchip on">✓ WELCOME200 · −₹200</div>
+          <div class="cchip">FULLBODY10</div>
+          <div class="cchip">＋ Enter code</div>
+        </div>
+        <div class="ticket">
+          <div class="tline"><b>Full Health Checkup</b><b>₹1999</b></div>
+          <div class="tline" style="margin-top:-3px"><span style="font-size:10px">89 tests · fasting 12h</span><s style="font-size:10px">₹7110</s></div>
+          <div class="tline"><b>C.B.C.</b><b>₹300</b></div>
+          <div class="tdash"></div>
+          <div class="tline"><span>MRP total</span><b><s style="color:#9CA3AF">₹7,410</s></b></div>
+          <div class="tline"><span>Catalogue discount</span><span class="g">−₹5,111</span></div>
+          <div class="cpnrow"><div class="tick">✓</div><span class="code">WELCOME200</span><span class="amtoff">−₹200</span><span class="rm">✕</span></div>
+          <div class="tline"><span>Wallet</span><span class="g">−₹430</span></div>
+          <div class="tline"><span>Home collection</span><b>FREE</b></div>
+          <div class="tdash"></div>
+          <div class="total"><span>To pay</span><span>₹1,669</span></div>
+          <div class="allcpn"><span>View all coupons</span><span>›</span></div>
+        </div>
+        <div class="card"><div class="wallet">💰 Use wallet balance (₹430)<div class="sw"></div></div></div>
+        <div class="trust">
+          <div><span>🏠</span>Free home collection</div>
+          <div><span>🧪</span>NABL certified</div>
+          <div><span>⏱️</span>Reports in 6h</div>
+        </div>
+        <div class="paybar">
+          <div class="slider"><div class="knob">→</div><div class="txt">Swipe to book</div><div class="amt2">₹1,669</div><div class="sheen"></div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- sheet open state -->
+    <div class="opt">
+      <h2>"View all coupons" sheet open</h2>
+      <div class="tag">Same screen, coupon sheet state</div>
+      <div class="phone"><div class="screen">
+        <div class="bar"><span style="color:var(--ink)">←</span><b>Checkout</b><span></span></div>
+        <div class="bighead">
+          <div class="lbl">To pay</div>
+          <div class="amt">₹1,669 <s>₹7,410</s></div>
+          <div class="save">🎉 Saving ₹5,741 (77%)</div>
+        </div>
+        <div class="ticket" style="opacity:.5">
+          <div class="tline"><b>Full Health Checkup</b><b>₹1999</b></div>
+          <div class="tline"><b>C.B.C.</b><b>₹300</b></div>
+        </div>
+        <div class="dim"></div>
+        <div class="sheetmock">
+          <div class="grab"></div>
+          <h3 style="margin-bottom:10px">Coupons</h3>
+          <div class="cpn-in"><input placeholder="Enter coupon code"><div class="apply">APPLY</div></div>
+          <div class="cpnopt applied"><span class="ap">✓ APPLIED</span><span class="code">WELCOME200</span><div class="d">₹200 off on your first booking above ₹999</div></div>
+          <div class="cpnopt"><span class="ap">APPLY</span><span class="code">FULLBODY10</span><div class="d">Extra 10% off on Full Health Checkup</div></div>
+          <div class="cpnopt"><span class="ap">APPLY</span><span class="code">FAMILY500</span><div class="d">₹500 off on orders above ₹4,000</div></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+  <p class="notes" style="max-width:900px; margin:18px auto 0">
+    <b>How the pieces fit:</b> stepper keeps orientation (A) · the gradient "To pay" hero answers the only question that
+    matters first (C) · one-tap coupon chips + shimmer confirmation (C+B) · the itemised receipt with the coupon as a
+    dashed green tag and ✕ to remove (D+B) · wallet toggle + trust row · dark swipe-to-book slider with live amount (D).
+    The "View all coupons" sheet (right) lists server-driven offers with APPLY buttons and a manual code input for
+    edge cases. All animations (sheen, shimmer, tick pop, knob nudge) follow the app's existing motion language and
+    switch off under reduce-motion.</p>
+</body>
+</html>

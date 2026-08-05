@@ -1,0 +1,2130 @@
+
+╔══════════════════════════════════════════════════════════════════════════════════╗
+║         VITALSCAN — MASTER DEVELOPMENT PROMPT v3.0                            ║
+║         Full-Stack Healthcare Diagnostics Platform                             ║
+║         Bit2Sky India Private Limited                                          ║
+║         FINAL — RBAC + Security + All Gaps Fixed + Zero Hardcoding            ║
+╚══════════════════════════════════════════════════════════════════════════════════╝
+
+=================================================================================
+SECTION 0 — DOCUMENT RULES
+=================================================================================
+
+1. Single source of truth. No deviation without written approval.
+2. Read ALL sections before writing a single line of code.
+3. ZERO HARDCODING: No value, label, color, route, template text, weight,
+   threshold, or business rule is hardcoded in any app or service.
+   Everything must be configurable from the admin portal.
+4. SECURITY FIRST: Every feature must be built with security from day one.
+   Retrofitting security is 10x more expensive than building it in.
+5. LEAST PRIVILEGE: Every user, service, and admin account has only the
+   minimum permissions required to perform their function.
+6. ASSUME BREACH: Design every component as if the others are compromised.
+   Verify ownership on every resource access. Trust nothing implicitly.
+7. HIPAA ALIGNMENT: All PHI (Protected Health Information) handling must
+   follow HIPAA Privacy Rule, Security Rule, and Breach Notification Rule.
+   This includes: reports, parameters, diagnoses, prescriptions, names,
+   phone numbers, dates of birth, addresses, and health scores.
+
+
+=================================================================================
+SECTION 1 — PLATFORM OVERVIEW
+=================================================================================
+
+PRODUCT NAME:         VitalScan (white-label, configurable)
+DEFAULT BRAND:        Bit2Sky
+DEFAULT LOGO URL:     https://bit2sky.com/wp-content/uploads/2023/01/bit2sky-logo.png
+LOGO FALLBACK:        https://picsum.photos/seed/bit2sky/200/60
+DEFAULT TAGLINE:      "Your health, intelligently managed"
+DEFAULT PRIMARY:      #00897B
+TARGET MARKET:        Indian urban families, 25–65 age group
+COMPETITOR BASE:      Healthians, Apollo 24|7, 1mg, Zocdoc
+
+PLATFORM COMPONENTS:
+  1. VitalScan Customer App     Flutter (iOS + Android)
+  2. VitalScan Technician App   Flutter (iOS + Android, separate project)
+  3. VitalScan Partner App      Flutter (iOS + Android, separate project)
+  4. VitalScan Admin Portal     Angular 19+ (web, desktop-first)
+  5. VitalScan API              .NET 10 Web API
+  6. VitalScan Database         Neon PostgreSQL (single DB, multi-schema)
+
+All apps share the same .NET 10 API.
+Shared Dart package: vitalscan_core (models, API client, theme utils)
+
+
+=================================================================================
+SECTION 2 — CONFIRMED TECH STACK
+=================================================================================
+
+BACKEND
+  Framework:          .NET 10 Web API
+  Language:           C# 13
+  ORM:                Entity Framework Core 9
+  Auth:               JWT (RS256) + Refresh Tokens + ASP.NET Core Identity
+  Validation:         FluentValidation
+  Mapping:            AutoMapper (role-based profiles)
+  Background Jobs:    Hangfire (PostgreSQL backing store)
+  Logging:            Serilog → Azure Application Insights (PHI-scrubbed)
+  API Docs:           Swagger/OpenAPI 3.0 (dev + staging only, NOT production)
+  Real-time:          SignalR
+  Rate Limiting:      ASP.NET Core built-in + Redis (distributed, sliding window)
+  Caching:            IMemoryCache (L1) + Azure Cache for Redis (L2)
+  WAF:                Azure Front Door with WAF rules (OWASP Core Rule Set 3.2)
+  Secrets:            Azure Key Vault (ALL secrets — no appsettings.json secrets)
+  PII Encryption:     AES-256-GCM for phone numbers, DOB, addresses at rest
+  TLS:                TLS 1.3 minimum, HSTS enabled, all redirects HTTPS
+
+DATABASE
+  Engine:             PostgreSQL 16 (Neon serverless)
+  Encryption at rest: AES-256 (Neon built-in)
+  TLS in transit:     TLS 1.3 (enforced in connection string)
+  Extensions:         pg_trgm, uuid-ossp, pgcrypto (for field-level encryption)
+  Row-level security: enforced at application layer (not DB RLS — for portability)
+  Schemas:
+    core        users, auth, config, audit
+    catalogue   tests, packages, categories, doctors, centres, supplements, specialties
+    booking     bookings, slots, technicians, subscriptions, group_bookings
+    reports     lab_reports, parameters, diet_plans, consultations
+    health      scores, vitals, steps, lifestyle_logs, reminders, symptom_checks
+    commerce    cart, coupons, payments, wallet, refunds, cashback, membership_tiers
+    comms       notifications, ai_sessions, support_tickets, whatsapp_templates
+    content     home_sections, quick_actions, nav_items, onboarding_slides,
+                banners, articles, ai_prompts
+    admin       roles, permissions, role_permissions, partners, audit_logs
+
+FILE STORAGE
+  Provider:           Azure Blob Storage (private containers only)
+  Access:             Signed URLs with 15-minute expiry (never public URLs)
+  Containers:
+    vitalscan-reports         lab report PDFs
+    vitalscan-reports-diet    diet-enhanced reports
+    vitalscan-prescriptions   prescriptions
+    vitalscan-documents       family vault docs
+    vitalscan-assets          logos, banners (public-read OK)
+    vitalscan-avatars         profile photos
+    vitalscan-supplements     supplement images (public-read OK)
+  SSRF Protection:    Allowlist of permitted image domains for user-supplied URLs:
+    images.unsplash.com, images.pexels.com, picsum.photos,
+    *.blob.core.windows.net, bit2sky.com
+
+MOBILE (Flutter)
+  State:              Riverpod 2.x
+  Navigation:         GoRouter
+  HTTP:               Dio + cert pinning interceptor
+  Token storage:      flutter_secure_storage (Keychain/Keystore)
+  Push:               firebase_messaging (FCM v1)
+  Health:             health package (HealthKit + Health Connect)
+  Payments:           razorpay_flutter
+  PDF:                flutter_pdfview
+  Charts:             fl_chart
+  Image:              cached_network_image
+  Barcode:            mobile_scanner (technician app)
+  Biometric:          local_auth
+  Root detection:     flutter_jailbreak_detection
+  Real-time:          signalr_netcore
+  Security audit:     flutter pub audit (in CI pipeline)
+
+ADMIN (Angular 19+)
+  UI:                 Angular Material 19
+  State:              NgRx (signals-based)
+  Charts:             ApexCharts
+  Tables:             AG Grid Community
+  Drag-drop:          Angular CDK DragDrop
+  Rich Text:          Quill (article CMS)
+  2FA:                TOTP (via authenticator apps — mandatory for all admin users)
+  Session timeout:    30 minutes idle (configurable from app_config)
+  Security:           SRI on CDN resources, strict CSP, no inline scripts
+
+PAYMENT             Razorpay (UPI, Card, Netbanking, Cash on Collection)
+NOTIFICATIONS       WhatsApp WABA + FCM + MSG91 SMS fallback + Azure Comms Email
+AI COPILOT          Anthropic Claude API (backend proxy only, key in Azure Key Vault)
+CI/CD               GitHub Actions (dev → staging → production)
+SECRETS             Azure Key Vault + GitHub Actions Secrets
+MONITORING          Azure Application Insights + Azure Monitor alerts
+PENTESTING          Annual third-party penetration test (scheduled pre-launch)
+DEPENDENCY SCAN     Dependabot (weekly PRs) + npm audit + flutter pub audit in CI
+
+
+=================================================================================
+SECTION 3 — COMPLETE RBAC SYSTEM
+=================================================================================
+
+PHILOSOPHY:
+  Permission-based authorization, not role-based.
+  Roles are just named collections of permissions.
+  Every API endpoint requires an explicit permission check.
+  Every Angular route and button requires a permission check.
+  No hardcoded role names in controller code — only permission codes.
+
+────────────────────────────────────────────────────────
+3A. DATABASE TABLES
+────────────────────────────────────────────────────────
+
+TABLE: admin.permissions
+  id          UUID PK
+  code        VARCHAR(100) UNIQUE NOT NULL   -- e.g. "bookings.view"
+  module      VARCHAR(50) NOT NULL           -- e.g. "bookings"
+  action      VARCHAR(30) NOT NULL
+    CHECK (action IN ('view','create','update','delete','export',
+                      'approve','assign','manage','broadcast'))
+  description TEXT NOT NULL
+  created_at  TIMESTAMPTZ DEFAULT now()
+
+COMPLETE PERMISSION SEED DATA:
+
+  -- USERS
+  users.view, users.create, users.update, users.deactivate, users.export,
+  users.view_pii            -- view unmasked phone/email/DOB
+  users.delete              -- soft delete (super_admin only)
+
+  -- BOOKINGS
+  bookings.view, bookings.create, bookings.update, bookings.delete,
+  bookings.assign_technician, bookings.cancel, bookings.reschedule,
+  bookings.export
+
+  -- TESTS & PACKAGES
+  tests.view, tests.create, tests.update, tests.delete,
+  packages.view, packages.create, packages.update, packages.delete,
+  categories.view, categories.create, categories.update, categories.delete,
+  specialties.view, specialties.create, specialties.update, specialties.delete
+
+  -- REPORTS
+  reports.view, reports.upload, reports.update, reports.delete,
+  reports.download, reports.export,
+  reports.view_ai_summary   -- view AI-generated summaries
+
+  -- DOCTORS & CENTRES
+  doctors.view, doctors.create, doctors.update, doctors.delete,
+  centres.view, centres.create, centres.update, centres.delete,
+  consultations.view, consultations.manage
+
+  -- TECHNICIANS
+  technicians.view, technicians.create, technicians.update, technicians.delete,
+  technicians.manage_zones
+
+  -- PAYMENTS & FINANCE
+  payments.view, payments.refund, payments.export,
+  coupons.view, coupons.create, coupons.update, coupons.delete,
+  wallet.view, wallet.adjust,
+  membership.view, membership.update,
+  cashback.view, cashback.create, cashback.update,
+  refunds.view, refunds.process
+
+  -- PARTNERS
+  partners.view, partners.verify, partners.payout, partners.update
+
+  -- CONTENT
+  content.view, content.create, content.update, content.delete,
+  banners.view, banners.create, banners.update, banners.delete,
+  articles.view, articles.create, articles.update, articles.delete,
+  home_layout.view, home_layout.update,
+  nav_items.view, nav_items.update,
+  onboarding.view, onboarding.update,
+  ai_prompts.view, ai_prompts.create, ai_prompts.activate,
+  whatsapp_templates.view, whatsapp_templates.update,
+  supplements.view, supplements.create, supplements.update, supplements.delete
+
+  -- NOTIFICATIONS
+  notifications.view, notifications.broadcast
+
+  -- SUPPORT
+  support.view, support.respond, support.assign, support.close
+
+  -- ANALYTICS
+  analytics.view, analytics.export
+
+  -- CONFIG & ROLES
+  config.view, config.update,
+  roles.view, roles.create, roles.update, roles.delete,
+  audit_logs.view
+
+TABLE: admin.roles
+  id          UUID PK
+  name        VARCHAR(50) UNIQUE NOT NULL
+  description TEXT
+  is_system   BOOLEAN DEFAULT false   -- system roles cannot be deleted
+  created_at  TIMESTAMPTZ DEFAULT now()
+  updated_at  TIMESTAMPTZ DEFAULT now()
+
+TABLE: admin.role_permissions
+  id            UUID PK
+  role_id       UUID NOT NULL REFERENCES admin.roles(id) ON DELETE CASCADE
+  permission_id UUID NOT NULL REFERENCES admin.permissions(id) ON DELETE CASCADE
+  UNIQUE(role_id, permission_id)
+
+TABLE: admin.user_roles
+  id          UUID PK
+  user_id     UUID NOT NULL REFERENCES core.users(id) ON DELETE CASCADE
+  role_id     UUID NOT NULL REFERENCES admin.roles(id) ON DELETE CASCADE
+  assigned_by UUID REFERENCES core.users(id)
+  assigned_at TIMESTAMPTZ DEFAULT now()
+  UNIQUE(user_id, role_id)
+
+────────────────────────────────────────────────────────
+3B. DEFAULT ROLE DEFINITIONS
+────────────────────────────────────────────────────────
+
+ROLE: super_admin (is_system=true)
+  Permissions: ALL
+  Notes: Cannot be deleted. Maximum 3 users. Requires 2FA + IP allowlist.
+
+ROLE: admin (is_system=true)
+  Permissions: ALL except:
+    roles.delete, users.delete, config.delete (destructive ops reserved for super_admin)
+
+ROLE: operations
+  Permissions:
+    bookings.view, bookings.update, bookings.assign_technician,
+    bookings.cancel, bookings.reschedule,
+    technicians.view, technicians.manage_zones,
+    reports.view, reports.upload, reports.update,
+    users.view, notifications.view,
+    analytics.view
+
+ROLE: finance
+  Permissions:
+    payments.view, payments.refund, payments.export,
+    coupons.view, coupons.create, coupons.update, coupons.delete,
+    wallet.view, wallet.adjust,
+    membership.view, membership.update,
+    cashback.view, cashback.create, cashback.update,
+    refunds.view, refunds.process,
+    partners.view, partners.payout,
+    analytics.view, analytics.export,
+    bookings.view
+
+ROLE: lab
+  Permissions:
+    reports.view, reports.upload, reports.update, reports.download,
+    bookings.view,
+    tests.view, packages.view
+
+ROLE: content
+  Permissions:
+    content.view, content.create, content.update, content.delete,
+    banners.view, banners.create, banners.update, banners.delete,
+    articles.view, articles.create, articles.update, articles.delete,
+    home_layout.view, home_layout.update,
+    nav_items.view, nav_items.update,
+    onboarding.view, onboarding.update,
+    ai_prompts.view, ai_prompts.create, ai_prompts.activate,
+    whatsapp_templates.view, whatsapp_templates.update,
+    supplements.view, supplements.create, supplements.update,
+    notifications.view
+
+ROLE: support
+  Permissions:
+    support.view, support.respond, support.assign, support.close,
+    users.view,              -- masked PII only
+    bookings.view,
+    reports.view,
+    notifications.view
+
+ROLE: technician (app user — separate from admin portal)
+  Permissions (enforced at API level, not admin portal):
+    bookings.view             -- own assigned bookings only
+    bookings.update           -- status updates only, own bookings only
+    technicians.view          -- own profile only
+
+ROLE: partner (app user — separate from admin portal)
+  Permissions (enforced at API level):
+    bookings.view             -- own created bookings only
+    bookings.create           -- create on behalf of customers
+    reports.view              -- own customers' reports only
+    partners.view             -- own profile + commission only
+
+ROLE: customer (app user — no admin portal access)
+  Permissions (enforced at API level):
+    All customer-facing endpoints, own data only
+
+────────────────────────────────────────────────────────
+3C. PERMISSION ENFORCEMENT IN .NET API
+────────────────────────────────────────────────────────
+
+IMPLEMENTATION:
+
+1. On JWT issuance: load user's permissions from DB → embed in JWT claims
+   Claims: [...roles, ...permissions as "permission" claim type]
+   Cache permissions in Redis (5-minute TTL) to avoid DB hit per request.
+   On role/permission change: invalidate user's Redis cache + force re-auth.
+
+2. Custom permission attribute:
+   [RequirePermission("bookings.view")]
+   public async Task<IActionResult> GetBookings() { ... }
+
+3. Custom authorization handler:
+   PermissionAuthorizationHandler checks "permission" claims in JWT.
+   Falls back to DB check if claim missing (handles permission changes mid-session).
+
+4. Resource ownership check (SEPARATE from permission check):
+   // Every GET/PUT/DELETE verifies the resource belongs to current user
+   // This prevents IDOR (Insecure Direct Object Reference) attacks
+   var booking = await _db.Bookings.FindAsync(id);
+   if (booking.UserId != currentUserId && !userIsAdmin)
+       throw new ForbiddenException("Access denied");
+
+5. Role-specific data filtering:
+   // Partners see only their bookings
+   if (user.Role == "partner")
+       query = query.Where(b => b.PartnerId == currentUser.PartnerId);
+   // Technicians see only their assigned bookings
+   if (user.Role == "technician")
+       query = query.Where(b => b.TechnicianId == currentUser.Id);
+   // Support sees masked PII (AutoMapper profile: SupportUserDto masks phone)
+
+6. Response shaping by role (AutoMapper profiles):
+   AdminUserDto:       full data including phone, email, DOB
+   SupportUserDto:     phone masked (+91 XXXXX XX210), no DOB
+   PartnerCustomerDto: name + booking status only
+
+────────────────────────────────────────────────────────
+3D. PERMISSION ENFORCEMENT IN ANGULAR ADMIN
+────────────────────────────────────────────────────────
+
+On admin login:
+  GET /api/v1/auth/me/permissions
+  Response: { "permissions": ["bookings.view","bookings.update",...] }
+  Store in NgRx store.
+
+Route guards:
+  canActivate: [PermissionGuard('bookings.view')]
+
+Directive for buttons/elements:
+  *appHasPermission="'bookings.assign_technician'"
+  <button *appHasPermission="'bookings.cancel'">Cancel</button>
+
+Never hide security by CSS display:none — remove from DOM or disable.
+
+Admin 2FA:
+  All admin users must enroll TOTP on first login.
+  QR code generated, verified, backup codes issued.
+  2FA required on every login — no bypass option.
+  Super_admin: 2FA + IP allowlist (configurable from Azure).
+
+Idle session timeout:
+  30-minute idle auto-logout (reads admin_session_timeout_minutes from config).
+  Warning shown at 25 minutes with extend option.
+
+────────────────────────────────────────────────────────
+3E. API: PERMISSIONS ENDPOINT
+────────────────────────────────────────────────────────
+
+GET  /api/v1/auth/me/permissions    [Auth: Bearer]
+  Response: {
+    "role": "operations",
+    "permissions": ["bookings.view","bookings.update","bookings.assign_technician"],
+    "is_admin_portal_user": true
+  }
+
+GET  /api/v1/admin/roles            [Requires: roles.view]
+GET  /api/v1/admin/roles/{id}       [Requires: roles.view]
+POST /api/v1/admin/roles            [Requires: roles.create]
+PUT  /api/v1/admin/roles/{id}       [Requires: roles.update]
+DELETE /api/v1/admin/roles/{id}     [Requires: roles.delete — super_admin only]
+
+GET  /api/v1/admin/permissions      [Requires: roles.view]
+PUT  /api/v1/admin/roles/{id}/permissions  [Requires: roles.update]
+POST /api/v1/admin/users/{id}/roles  [Requires: roles.update]
+DELETE /api/v1/admin/users/{id}/roles/{roleId}  [Requires: roles.update]
+
+
+=================================================================================
+SECTION 4 — COMPREHENSIVE SECURITY SPECIFICATION
+=================================================================================
+
+────────────────────────────────────────────────────────
+4A. AUTHENTICATION HARDENING
+────────────────────────────────────────────────────────
+
+JWT CONFIGURATION:
+  Algorithm:          RS256 (asymmetric — NOT HS256)
+  Private key:        RSA 2048-bit, stored in Azure Key Vault
+  Public key:         Served via /.well-known/jwks.json endpoint
+  Access token TTL:   15 minutes
+  Refresh token TTL:  30 days (mobile) / 8 hours (admin portal)
+  Claims:
+    sub:              user.id (UUID)
+    jti:              UUID (unique per token — enables blacklisting)
+    role:             user.role
+    permissions:      array of permission codes
+    aud:              "vitalscan-api"
+    iss:              "vitalscan-auth"
+    device_id:        SHA256(device_info) — for binding
+  Signing key rotation: Every 90 days via Azure Key Vault rotation policy
+
+REFRESH TOKEN:
+  Generation:         RandomNumberGenerator.GetBytes(64) → Base64
+  Storage:            SHA-256 hash stored in DB (never plain text)
+  Rotation:           On every use, old token invalidated, new token issued
+  Reuse detection:    If revoked token is used again → revoke ALL user tokens
+                      → send security alert to user via WhatsApp
+                      → log security event
+  Device binding:     Refresh token bound to device_id claim
+                      If device changes → require full re-auth
+
+OTP SECURITY:
+  Length:             6 digits
+  Expiry:             5 minutes
+  Max attempts:       5 (then lockout)
+  Progressive lockout:
+    3 failures        → 2-minute wait
+    5 failures        → 15-minute wait
+    10 failures       → 24-hour lockout (requires CS intervention)
+  Rate limiting:      3 OTP sends per mobile per 10 minutes
+                      5 OTP sends per IP per 10 minutes
+  Storage:            bcrypt hash (never plain OTP in DB)
+  Channel:            WhatsApp first, SMS fallback after 30s
+  Brute force:        Bot detection via honeypot field in login form (Angular)
+
+ADMIN PORTAL AUTH:
+  Method:             Email + password + mandatory TOTP
+  Password policy:    Min 12 chars, 1 upper, 1 lower, 1 number, 1 special
+  Password storage:   bcrypt cost factor 12
+  Failed attempts:    5 attempts → 15-min lockout
+  2FA:                TOTP (Google Authenticator / Authy compatible)
+                      Mandatory on first login
+                      Backup codes: 8 single-use codes issued on enrollment
+  Session:            30-minute idle timeout (admin_session_timeout_minutes config)
+  IP allowlist:       Optional per super_admin account (Azure Static Web Apps config)
+
+────────────────────────────────────────────────────────
+4B. API SECURITY HARDENING
+────────────────────────────────────────────────────────
+
+SECURITY HEADERS (added by middleware on every response):
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options:    nosniff
+  X-Frame-Options:           DENY
+  X-XSS-Protection:          1; mode=block
+  Referrer-Policy:           strict-origin-when-cross-origin
+  Permissions-Policy:        camera=(), microphone=(), geolocation=()
+  Content-Security-Policy:
+    default-src 'self';
+    img-src 'self' https://images.unsplash.com https://*.blob.core.windows.net data:;
+    font-src 'self' https://fonts.gstatic.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    script-src 'self';
+    connect-src 'self' https://api.anthropic.com;
+    frame-ancestors 'none';
+
+CORS:
+  Allowed origins (explicit, NO wildcard):
+    https://admin.vitalscan.app
+    https://vitalscan.app
+    http://localhost:4200 (dev only, feature-flagged)
+  Methods: GET, POST, PUT, DELETE, OPTIONS
+  Headers: Authorization, Content-Type, X-App-Source
+  Credentials: true
+
+RATE LIMITING (distributed, Redis-backed, sliding window):
+
+  GROUP: Authentication (strictest)
+    POST /auth/otp/send        → 3/10min per mobile + 5/10min per IP
+    POST /auth/otp/verify      → 5/5min per session_id
+    POST /auth/google          → 10/min per IP
+    POST /auth/token/refresh   → 20/min per user
+
+  GROUP: AI (expensive)
+    POST /ai/sessions/*/message → 20/hour per user
+    POST /ai/sessions           → 10/hour per user
+
+  GROUP: Write operations
+    POST /bookings             → 10/min per user
+    POST /cart/items           → 30/min per user
+    POST /support/tickets      → 5/hour per user
+
+  GROUP: Read operations (authenticated)
+    GET  /reports/*            → 30/min per user
+    GET  /tests, /packages     → 60/min per user
+
+  GROUP: Public reads
+    GET  /config/*, /home/*    → 100/min per IP (backed by Redis cache)
+
+  GROUP: Admin operations
+    All /admin/*               → 100/min per admin user
+    POST /admin/notifications/broadcast → 2/hour per admin
+    POST /admin/reports        → 20/min per admin
+
+  GROUP: Webhooks
+    POST /payment/webhook      → 200/min from Razorpay IP allowlist only
+
+  IP BLOCKING:
+    100+ rate limit violations in 1 hour → 1-hour IP block (Redis)
+    500+ violations in 24 hours → 7-day IP block + alert to admin
+
+INPUT VALIDATION:
+  All inputs validated with FluentValidation before processing.
+  String fields: max length enforced, HTML stripped (HtmlSanitizer library)
+  File uploads:
+    MIME type validated server-side (never trust Content-Type header)
+    File content inspected (magic bytes check)
+    Max sizes:
+      Profile photo:  2MB (JPEG, PNG, WebP only)
+      Report PDF:     10MB (PDF only)
+      Document:       5MB (PDF, JPEG, PNG)
+      Banner image:   3MB (JPEG, PNG, WebP)
+    Filenames: sanitized, UUID-renamed on storage
+  URL fields: validated against SSRF allowlist
+  Numeric fields: range-validated
+  UUIDs: format-validated before any DB query
+
+SQL INJECTION:
+  EF Core parameterized queries used exclusively.
+  Raw SQL forbidden. If unavoidable: FromSqlRaw with @params only.
+  Regular automated scanning: OWASP ZAP in CI pipeline
+
+MASS ASSIGNMENT PROTECTION:
+  Only explicit DTO properties bound in controller actions.
+  [ApiController] binding never maps directly to domain entities.
+  Update endpoints only accept fields the user is permitted to change.
+
+INSECURE DIRECT OBJECT REFERENCE (IDOR) PREVENTION:
+  Every resource access verifies ownership before returning data.
+  Pattern (applied to every GET/PUT/DELETE):
+    var resource = await _db.FindAsync(id)
+                   ?? throw new NotFoundException();
+    if (!OwnershipService.CanAccess(currentUser, resource))
+        throw new ForbiddenException();
+  Consistent 403 response regardless of whether resource exists
+  (prevents resource enumeration attacks).
+
+OUTPUT FILTERING:
+  AutoMapper profiles per role — different response DTOs per caller role.
+  Phone numbers, email, DOB masked in non-admin responses unless
+    caller has users.view_pii permission.
+  Report content only returned if caller owns the report or is family member.
+  Never include: password hashes, OTP hashes, JWT signing keys,
+    internal IDs beyond what client needs, stack traces.
+
+ERROR RESPONSES (consistent, no information leakage):
+  400: "Validation failed" + field errors (no internal details)
+  401: "Authentication required"
+  403: "Access denied"          ← NEVER reveal WHY access was denied
+  404: "Resource not found"     ← same response whether forbidden or truly not found
+  429: "Too many requests. Retry after {seconds}."
+  500: "An error occurred. Reference: {correlation_id}"
+       ← correlation_id maps to Application Insights log, never exposed details
+
+SWAGGER / API DOCS:
+  Enabled: development + staging environments only
+  Production: disabled entirely (returns 404)
+  Auth required: even on staging, require admin Bearer token to access Swagger UI
+
+PAGINATION:
+  All list endpoints enforce pagination.
+  Max pageSize: 100 (enforced server-side, never trust client)
+  Default pageSize: 20
+
+────────────────────────────────────────────────────────
+4C. SECRETS MANAGEMENT
+────────────────────────────────────────────────────────
+
+NEVER store in code, appsettings.json, or Docker images:
+  - JWT private key (RSA)
+  - Razorpay secret key
+  - Anthropic Claude API key
+  - Azure Blob Storage connection string
+  - PostgreSQL connection string
+  - FCM server key
+  - WhatsApp WABA token
+  - MSG91 API key
+  - Azure Communication Services key
+  - Redis connection string
+
+ALL secrets → Azure Key Vault
+Access: Azure Managed Identity (no credentials stored anywhere)
+Local dev: dotnet user-secrets (never committed to git)
+CI/CD: GitHub Actions Secrets → environment variables only
+.gitignore: appsettings.*.json, *.pfx, *.pem, .env, user-secrets.json
+
+Secret rotation schedule:
+  JWT signing key:      90 days (automated via Key Vault rotation policy)
+  Razorpay key:         180 days (manual, coordinate with payment team)
+  DB password:          90 days
+  All API keys:         180 days
+
+────────────────────────────────────────────────────────
+4D. FLUTTER APP SECURITY
+────────────────────────────────────────────────────────
+
+CERTIFICATE PINNING:
+  Use: dio_certificate_pinning package
+  Pin: leaf certificate SHA-256 fingerprint of api.vitalscan.app
+  Backup pin: intermediate CA certificate
+  Dynamic pinning: fallback to JWKS endpoint if cert rotated
+  On pin failure: block request, show "Connection security error" dialog,
+    log to Application Insights, do NOT proceed.
+
+TOKEN STORAGE:
+  Access token: flutter_secure_storage → Keychain (iOS) / Keystore (Android)
+  Refresh token: flutter_secure_storage (encrypted)
+  NEVER: SharedPreferences, local files, or in-memory only
+
+CODE OBFUSCATION:
+  Build command:
+    flutter build apk --obfuscate --split-debug-info=./build/debug-info/
+    flutter build ios --obfuscate --split-debug-info=./build/debug-info/
+  Debug symbols: stored separately, never in app bundle
+
+ROOT / JAILBREAK DETECTION:
+  Package: flutter_jailbreak_detection
+  On detection:
+    - Show warning dialog explaining security risks
+    - Disable report viewing (PHI protection)
+    - Disable biometric auth (unreliable on compromised devices)
+    - Log security event to Application Insights
+    - Continue limited functionality (booking, search — no PHI)
+
+BIOMETRIC AUTH FOR PHI ACCESS:
+  Package: local_auth
+  Required before:
+    - Viewing report detail
+    - Downloading report PDF
+    - Viewing family health vault documents
+    - Accessing AI chat (contains health data)
+  Fallback: app PIN (4–6 digit)
+  If biometric unavailable: PIN required (no bypass)
+
+SCREENSHOT PREVENTION (sensitive screens):
+  Android: FLAG_SECURE on MainActivity (prevents screenshots + screen recording)
+  iOS: Blur overlay on app switch (UIApplication.shared.keyWindow)
+  Apply to: report detail, report PDF viewer, AI copilot, health score
+
+DEEP LINK VALIDATION:
+  Validate all incoming deep links before routing.
+  Allowlist of permitted deep link patterns.
+  Never auto-navigate from unverified external intents.
+  Flutter Android: use intent filters with autoVerify=true
+
+SENSITIVE DATA IN MEMORY:
+  Zero-out PHI strings after use where possible.
+  Never log health data, report content, or OTPs to console or Crashlytics.
+  Use PHI-scrubbing in Serilog sink configuration.
+
+DEPENDENCY SECURITY:
+  flutter pub audit run in CI pipeline.
+  Flag HIGH/CRITICAL vulnerabilities as pipeline failure.
+  Review all new third-party packages before adding.
+
+OFFLINE DATA SECURITY:
+  Any PHI cached offline (Hive) must use HiveAesCipher with key from Keystore.
+  Cache TTL: 24 hours maximum for PHI data.
+  On logout: clear all offline PHI cache.
+
+────────────────────────────────────────────────────────
+4E. ANGULAR ADMIN SECURITY
+────────────────────────────────────────────────────────
+
+CONTENT SECURITY POLICY (Angular build + HTTP headers):
+  default-src 'self';
+  script-src 'self';          ← no 'unsafe-inline', no 'unsafe-eval'
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  img-src 'self' https: data:;
+  font-src 'self' https://fonts.gstatic.com;
+  connect-src 'self' https://api.vitalscan.app;
+  frame-ancestors 'none';
+
+  Configure in angular.json headers or Azure Static Web Apps staticwebapp.config.json.
+
+XSS PREVENTION:
+  Never use innerHTML with user-generated content.
+  Use Angular's DomSanitizer for any dynamic HTML (article body rendering).
+  All template bindings use Angular's default escaping {{ }}.
+
+CSRF:
+  Angular HttpClient XSRF token included by default.
+  API validates X-XSRF-TOKEN header on POST/PUT/DELETE.
+
+SUBRESOURCE INTEGRITY (SRI):
+  All CDN scripts and styles include integrity attribute.
+  angular.json: subresourceIntegrity: true in build options.
+
+SENSITIVE DATA MASKING IN UI:
+  Phone: shown as +91 XXXXX XX210 by default.
+  "Reveal" button requires users.view_pii permission.
+  Financial data: masked in grid until finance role confirmed.
+  Report content: accessible only to lab/operations/admin roles.
+
+IDLE SESSION:
+  30-minute idle auto-logout.
+  Countdown warning at 25 minutes.
+  Idle time from app_config: admin_session_timeout_minutes.
+  On timeout: clear NgRx store, redirect to /login.
+
+IP ALLOWLIST (super_admin accounts):
+  Optional. Configured in Azure Static Web Apps.
+  If set: login from non-allowlisted IP shows security warning + requires
+  email verification before proceeding.
+
+AUDIT LOGGING IN ADMIN:
+  Every admin action logged to core.audit_logs:
+    - User ID + role
+    - Action (create/update/delete/export/approve)
+    - Entity type + entity ID
+    - Old values (JSONB before state)
+    - New values (JSONB after state)
+    - IP address + user agent
+    - Timestamp
+  Immutable: audit logs cannot be edited or deleted (even by super_admin).
+  Retention: 2 years minimum.
+
+────────────────────────────────────────────────────────
+4F. PHI PROTECTION (HIPAA ALIGNMENT)
+────────────────────────────────────────────────────────
+
+PHI FIELDS IDENTIFIED:
+  core.users:           name, mobile, email, date_of_birth
+  core.family_members:  name, date_of_birth, gender, blood_group
+  core.addresses:       line1, line2, landmark, city, state
+  reports.lab_reports:  all parameter values, diagnoses, lab names
+  reports.report_params: parameter_name, value, status
+  comms.ai_chat_messages: content (may contain health data)
+  booking.bookings:     all booking data linked to user
+
+ENCRYPTION AT REST:
+  Phone numbers, email addresses: AES-256-GCM encrypted using pgcrypto
+  DOB: AES-256-GCM encrypted
+  Report parameter values: encrypted in PDF (Azure Blob, private container)
+  AI chat content: encrypted at rest in DB (pgcrypto)
+
+MINIMUM NECESSARY PRINCIPLE:
+  API endpoints return only fields required for the specific function.
+  Support agents never see financial data.
+  Finance team never sees full report content.
+  Lab staff never see wallet or payment data.
+
+DATA RETENTION:
+  User reports: retained for 7 years (medical records standard)
+  Audit logs: retained for 2 years
+  AI chat history: retained for 1 year, then anonymized
+  OTP records: deleted after 24 hours
+  Refresh tokens: deleted after expiry
+
+BREACH NOTIFICATION:
+  Defined procedure in runbook (not in code):
+    - Incident detected → isolate affected systems
+    - Assess scope within 72 hours
+    - Notify affected users via WhatsApp + email
+    - Log all access that may have been exposed
+  Azure Sentinel configured for anomaly detection.
+
+BAA (Business Associate Agreements) required with:
+  - Neon (PostgreSQL hosting)
+  - Azure (Blob, App Service, Key Vault, Comms)
+  - Anthropic (Claude API — check current BAA availability)
+  - Firebase (FCM)
+  - Razorpay (payment data)
+  - MSG91 (SMS — contains mobile numbers)
+
+────────────────────────────────────────────────────────
+4G. INFRASTRUCTURE SECURITY
+────────────────────────────────────────────────────────
+
+AZURE FRONT DOOR + WAF:
+  OWASP Core Rule Set 3.2 enabled in prevention mode.
+  Custom rules:
+    - Block requests with SQL injection patterns in body
+    - Block requests with XSS patterns in headers
+    - Rate limit by IP (backs up API-level limiting)
+    - Geo-filter: allow only India (+ expand as needed)
+    - Block known bad IP ranges (Azure Threat Intelligence feed)
+
+TLS:
+  Minimum TLS 1.3 on all endpoints.
+  HSTS preloading enabled.
+  Certificate: Azure-managed (auto-renewed).
+  All inter-service communication (API → DB, API → Redis): TLS required.
+
+NETWORK SECURITY:
+  Azure App Service: VNet integration
+  Neon PostgreSQL: private endpoint, not publicly accessible
+  Redis: private endpoint
+  No direct internet access from DB or Redis
+  API is the only publicly accessible component
+
+CONTAINER SECURITY:
+  Base image: mcr.microsoft.com/dotnet/aspnet:10.0 (Microsoft official)
+  No root user in container (USER app)
+  Read-only filesystem where possible
+  Container scanning: Microsoft Defender for Containers in CI
+
+DEPENDENCY SCANNING:
+  Dependabot enabled for: .NET (NuGet), npm, Flutter (pub.dev)
+  Weekly automated PRs for security updates
+  Critical/High CVEs: pipeline fails, must be fixed before deploy
+  flutter pub audit: run in CI, fail on HIGH+
+
+PENETRATION TESTING:
+  Schedule: annually before major release + after significant changes
+  Scope: API, admin portal, Flutter apps, infrastructure
+  Provider: OWASP ZAP (automated, in CI) + third-party annual pentest
+  OWASP ZAP: runs in CI pipeline on staging, fails on HIGH findings
+
+SECURITY TRAINING:
+  All developers: OWASP Top 10 awareness (documented)
+  Before first commit: security onboarding checklist signed off
+  After any breach: mandatory security review
+
+────────────────────────────────────────────────────────
+4H. SECURITY MONITORING & ALERTING
+────────────────────────────────────────────────────────
+
+AZURE APPLICATION INSIGHTS — alert on:
+  >10 failed logins from same IP in 5 minutes
+  >5 failed OTPs for same mobile in 10 minutes
+  Any JWT reuse detection (revoked token used)
+  Any admin account login from new IP
+  API error rate >5% in 5 minutes
+  P95 latency >2s for 5 minutes
+  Any report download from unrecognized IP for a given user
+  Any bulk export (>50 records) by non-finance role
+
+AUDIT EVENTS LOGGED (core.audit_logs):
+  All authentication: login, logout, OTP send/verify, token refresh
+  All admin actions: create, update, delete, export, approve on any entity
+  All report accesses: view, download, share link generation
+  All payment events: charge, refund, webhook received
+  All permission changes: role assigned/removed
+  All config changes: any app_config key updated
+  All PHI access: any endpoint returning unmasked user PII
+
+LOGGING RULES (PHI protection):
+  NEVER log: OTP values, report content, full phone numbers, DOB, JWT tokens
+  ALWAYS log: correlation_id, user_id (UUID only), action, entity_id, IP
+  PHI scrubbing: Serilog destructuring policy removes PHI from log entries
+  Log level in production: Warning and above only (no Debug/Info in prod)
+
+────────────────────────────────────────────────────────
+4I. SECURITY TESTING IN CI/CD
+────────────────────────────────────────────────────────
+
+CI PIPELINE SECURITY GATES (must pass before deploy):
+  - dotnet build → 0 warnings on security-related analyzers
+  - Security analyzer: Microsoft.CodeAnalysis.NetAnalyzers
+  - Dependency scan: Dependabot / dotnet list package --vulnerable
+  - OWASP ZAP scan: against staging API (fail on HIGH findings)
+  - Semgrep: static analysis for common .NET security patterns
+  - flutter pub audit: fail on HIGH+
+  - npm audit: fail on HIGH+
+  - Secrets scan: GitLeaks (prevent secret commits)
+  - Container scan: Microsoft Defender for Containers
+
+PRE-DEPLOY CHECKLIST (automated in pipeline):
+  ✅ TLS active on all endpoints
+  ✅ Swagger disabled on production
+  ✅ All secrets in Key Vault (no appsettings.json secrets)
+  ✅ Audit logging active
+  ✅ RBAC policies match current role matrix
+  ✅ Security headers present in responses
+  ✅ CORS allowlist correct (no wildcard)
+  ✅ Rate limiting active
+  ✅ PHI encryption configured
+
+
+=================================================================================
+SECTION 5 — WHITE-LABEL BRANDING + FULL CONFIGURABILITY
+=================================================================================
+
+(Same as v2 Section 3, retained in full)
+
+ZERO HARDCODING RULE: No value, label, color, route, template, weight,
+percentage, or business rule is hardcoded in any app or service.
+
+TABLE: core.app_config (full 50+ key seed — see Section 15)
+TABLE: content.home_sections (dynamic home layout)
+TABLE: content.quick_actions (configurable action grid)
+TABLE: content.onboarding_slides (CMS-driven)
+TABLE: content.nav_items (configurable bottom nav)
+TABLE: content.ai_prompts (versioned AI system prompt)
+TABLE: comms.whatsapp_templates (template name mapping)
+TABLE: commerce.membership_tiers (tier rules, benefits, multipliers)
+
+All APIs:
+  GET /config/branding        → branding from DB (cached 1h)
+  GET /config/features        → feature flags (cached 1h)
+  GET /home/layout            → dynamic sections (cached 15m)
+  GET /home/quick-actions     → grid items from DB (cached 1h)
+  GET /nav/bottom             → bottom nav from DB (cached 1h)
+  GET /onboarding/slides      → slides from DB (cached 24h)
+  GET /wallet/tier-benefits   → tiers from DB (cached 1h)
+
+
+=================================================================================
+SECTION 6 — COMPLETE DATABASE SCHEMA
+=================================================================================
+
+(All tables from v2 Section 4, plus security additions below)
+
+SECURITY ADDITIONS TO EXISTING TABLES:
+
+core.users — add columns:
+  otp_lockout_until         TIMESTAMPTZ          -- progressive lockout expiry
+  otp_attempt_count         INT DEFAULT 0
+  admin_2fa_secret          TEXT                 -- TOTP secret (encrypted)
+  admin_2fa_enabled         BOOLEAN DEFAULT false
+  admin_2fa_backup_codes    TEXT[]               -- hashed backup codes
+  last_ip_address           VARCHAR(45)
+  failed_login_count        INT DEFAULT 0
+  login_locked_until        TIMESTAMPTZ
+  password_hash             VARCHAR(255)         -- admin portal users only
+  password_changed_at       TIMESTAMPTZ
+  pii_encrypted             BOOLEAN DEFAULT true -- flag for migration tracking
+
+core.refresh_tokens — add columns:
+  token_family              UUID NOT NULL        -- all tokens in same login family
+  is_theft_detected         BOOLEAN DEFAULT false
+  reused_at                 TIMESTAMPTZ          -- if reuse detected
+
+core.audit_logs — ensure immutability:
+  No UPDATE or DELETE permissions on this table for any role.
+  INSERT only via application service account.
+  Separate read-only DB user for audit log queries.
+
+New security table:
+TABLE: core.security_events
+  id                UUID PK
+  event_type        VARCHAR(50) NOT NULL
+    CHECK (event_type IN (
+      'otp_max_attempts','token_reuse_detected','login_locked',
+      'admin_new_ip','bulk_download_detected','rate_limit_blocked',
+      'jwt_reuse_detected','permission_escalation_attempt',
+      'ssrf_attempt','invalid_file_upload'
+    ))
+  user_id           UUID REFERENCES core.users(id)
+  ip_address        VARCHAR(45)
+  user_agent        TEXT
+  details           JSONB
+  severity          VARCHAR(10) CHECK (severity IN ('low','medium','high','critical'))
+  resolved          BOOLEAN DEFAULT false
+  resolved_by       UUID REFERENCES core.users(id)
+  resolved_at       TIMESTAMPTZ
+  created_at        TIMESTAMPTZ DEFAULT now()
+
+INDEX: CREATE INDEX idx_security_events_type ON core.security_events(event_type, severity, created_at DESC);
+
+(All other tables from v2 Section 4 remain unchanged — see v2 for full schema)
+
+
+=================================================================================
+SECTION 7 — COMPLETE API SPECIFICATION
+=================================================================================
+
+BASE URL:       https://api.vitalscan.app/api/v1
+AUTH:           Bearer JWT (RS256) in Authorization header
+APP SOURCE:     X-App-Source: flutter_ios | flutter_android | web | admin | technician | partner
+CORRELATION:    X-Correlation-ID: UUID (generated by client, logged server-side)
+TLS:            TLS 1.3 minimum, enforced by Azure Front Door
+SWAGGER:        Dev + staging only (admin Bearer token required)
+
+STANDARD RESPONSE:
+{
+  "success": true,
+  "data": { ... },
+  "message": "OK",
+  "errors": null,
+  "correlation_id": "uuid",
+  "pagination": { "page":1, "pageSize":20, "total":100, "totalPages":5 }
+}
+
+ERROR RESPONSE (no internal details):
+{
+  "success": false,
+  "data": null,
+  "message": "Validation failed",
+  "errors": [{ "field": "mobile", "message": "Invalid format" }],
+  "correlation_id": "uuid"
+}
+
+────────────────────────────────────────────────────────
+AUTH ENDPOINTS
+────────────────────────────────────────────────────────
+POST   /auth/otp/send              Rate: 3/10min mobile + 5/10min IP
+POST   /auth/otp/verify            Rate: 5/5min per session_id
+POST   /auth/token/refresh         Rate: 20/min per user
+POST   /auth/google                Rate: 10/min per IP
+POST   /auth/admin/login           Email + password + TOTP
+POST   /auth/admin/2fa/enroll      [Admin, first login]
+POST   /auth/admin/2fa/verify
+POST   /auth/logout                Revokes refresh token
+POST   /auth/logout-all            Revokes ALL user tokens (theft response)
+
+GET    /auth/me/permissions        [Auth: Bearer]
+GET    /.well-known/jwks.json      [Public] RS256 public key endpoint
+
+────────────────────────────────────────────────────────
+CONFIG & LAYOUT (all from DB, zero hardcoding)
+────────────────────────────────────────────────────────
+GET    /config/branding            Public, cache 1h
+GET    /config/features            Public, cache 1h
+GET    /home/layout                Public, cache 15m
+GET    /home/quick-actions         Public, cache 1h
+GET    /nav/bottom                 Public, cache 1h
+GET    /onboarding/slides          Public, cache 24h
+
+PUT    /admin/config/{key}         [Requires: config.update]
+POST   /admin/config/logo          [Requires: config.update]
+PUT    /admin/home/layout          [Requires: home_layout.update]
+PUT    /admin/home/sections/{id}   [Requires: home_layout.update]
+PUT    /admin/home/quick-actions   [Requires: home_layout.update]
+PUT    /admin/nav/bottom           [Requires: nav_items.update]
+POST   /admin/onboarding/slides    [Requires: onboarding.update]
+PUT    /admin/onboarding/slides/{id}
+DELETE /admin/onboarding/slides/{id}
+
+────────────────────────────────────────────────────────
+USERS (ownership enforced on all)
+────────────────────────────────────────────────────────
+GET    /users/me                   Own data only
+PUT    /users/me                   Own data only, explicit field allowlist
+POST   /users/me/photo             Own photo, MIME + size validated
+DELETE /users/me                   Soft delete, PHI anonymized
+
+GET    /users/me/family
+POST   /users/me/family
+PUT    /users/me/family/{id}       Verify family member belongs to user
+DELETE /users/me/family/{id}       Verify ownership
+
+GET    /users/me/addresses
+POST   /users/me/addresses
+PUT    /users/me/addresses/{id}    Verify address belongs to user
+DELETE /users/me/addresses/{id}
+POST   /users/me/addresses/{id}/set-default
+
+GET    /users/me/dashboard
+
+GET    /admin/users                [Requires: users.view] — masked PII by default
+GET    /admin/users/{id}           [Requires: users.view]
+GET    /admin/users/{id}/pii       [Requires: users.view_pii] — unmasked
+PUT    /admin/users/{id}/status    [Requires: users.update]
+DELETE /admin/users/{id}           [Requires: users.delete — super_admin only]
+GET    /admin/users/export         [Requires: users.export] — PHI masked in export
+
+────────────────────────────────────────────────────────
+CATALOGUE (all category/specialty tabs from DB)
+────────────────────────────────────────────────────────
+GET    /categories?type=&show_in_filter=true   Public, cache 1h
+GET    /specialties?show_in_filter=true        Public, cache 1h
+
+GET    /tests                      Public, cache 5m, pg_trgm search
+GET    /tests/{slug}               Public
+GET    /tests/{id}/parameters      Public
+GET    /tests/{id}/faqs            Public
+GET    /tests/{id}/reviews         Public
+GET    /tests/popular              Public, cache 15m
+GET    /tests/recommended          Auth: uses user profile + reports
+GET    /tests/search?q=            Public, rate limited
+GET    /tests/by-concern?tag=      Public
+GET    /tests/by-risk?tag=         Public
+
+GET    /packages                   Public, cache 5m
+GET    /packages/{slug}            Public
+GET    /packages/{id}/tests        Public
+GET    /packages/compare?ids=      Public
+GET    /packages/custom/my-packages  Auth: own packages only
+POST   /packages/custom/build      Auth: reads discount config, no hardcoding
+POST   /packages/custom/save       Auth: own packages only
+DELETE /packages/custom/{id}       Auth: verify ownership
+
+GET    /centres                    Public, cache 5m
+GET    /centres/{id}               Public
+GET    /centres/{id}/pricing       Public
+GET    /centres/{id}/slots         Public
+
+GET    /doctors                    Public, cache 5m
+GET    /doctors/{slug}             Public
+GET    /doctors/{id}/slots         Public
+
+GET    /supplements                Public
+GET    /supplements/{slug}         Public
+GET    /supplements/recommended    Auth: based on user's latest report
+
+Admin CRUD for all catalogue entities — permission required per action:
+  [Requires: tests.create], [Requires: tests.update], etc.
+
+────────────────────────────────────────────────────────
+CART (ownership enforced)
+────────────────────────────────────────────────────────
+GET    /cart                       Auth: own cart only
+POST   /cart/items                 Auth: item validation + family member ownership
+DELETE /cart/items/{id}            Auth: verify cart item belongs to user's cart
+PUT    /cart/items/{id}            Auth: verify ownership
+POST   /cart/coupon                Auth: coupon validation (expiry, limits, per-user)
+DELETE /cart/coupon                Auth
+POST   /cart/wallet-points         Auth: cap enforced from config (not hardcoded)
+DELETE /cart/wallet-points         Auth
+GET    /cart/summary               Auth: full price breakup with all discounts
+
+────────────────────────────────────────────────────────
+BOOKING (ownership + role enforcement)
+────────────────────────────────────────────────────────
+GET    /bookings/slots             Auth: pincode serviceability check
+POST   /bookings                   Auth: slot capacity validated, Razorpay order created
+POST   /bookings/{id}/confirm      Auth: Razorpay HMAC signature verified
+GET    /bookings/{id}              Auth: ownership verified
+GET    /bookings/{id}/tracking     Auth: ownership verified
+GET    /bookings                   Auth: filtered by user (customer/technician/partner)
+GET    /bookings/upcoming          Auth: own upcoming only
+GET    /bookings/past              Auth: own past only
+PUT    /bookings/{id}/cancel       Auth: ownership + cancel window from config
+PUT    /bookings/{id}/reschedule   Auth: ownership + reschedule limit from config
+POST   /bookings/{id}/hard-copy    Auth: ownership + report.status == 'ready'
+
+POST   /technician/location        [Requires: technician role, own location only]
+PUT    /admin/bookings/{id}/assign-technician  [Requires: bookings.assign_technician]
+PUT    /admin/bookings/{id}/status [Requires: bookings.update — technician filtered to own]
+GET    /admin/bookings             [Requires: bookings.view]
+GET    /admin/bookings/export      [Requires: bookings.export]
+
+POST   /payment/webhook            Razorpay IP allowlist + HMAC verification
+GET    /admin/refunds              [Requires: refunds.view]
+PUT    /admin/refunds/{id}/process [Requires: refunds.process]
+
+────────────────────────────────────────────────────────
+SUBSCRIPTIONS
+────────────────────────────────────────────────────────
+GET    /subscriptions              Auth: own only
+POST   /subscriptions              Auth
+PUT    /subscriptions/{id}/pause   Auth: ownership verified
+PUT    /subscriptions/{id}/resume  Auth: ownership verified
+DELETE /subscriptions/{id}         Auth: ownership verified
+
+────────────────────────────────────────────────────────
+GROUP BOOKING
+────────────────────────────────────────────────────────
+POST   /group-bookings             Auth: feature flag checked
+GET    /group-bookings/{code}      Public (code required)
+POST   /group-bookings/{code}/join Auth
+GET    /group-bookings/my-groups   Auth: own groups only
+DELETE /group-bookings/{id}/leave  Auth: ownership verified
+
+────────────────────────────────────────────────────────
+REPORTS (PHI — strict ownership)
+────────────────────────────────────────────────────────
+GET    /reports                    Auth: own + family only, filtered
+GET    /reports/{id}               Auth: ownership verified (user or family member)
+GET    /reports/{id}/parameters    Auth: ownership verified
+GET    /reports/{id}/diet-plan     Auth: ownership verified
+GET    /reports/{id}/download      Auth: ownership + signed URL (15min expiry)
+                                   Logged to audit_logs: user, report_id, IP, timestamp
+GET    /reports/{id}/share-link    Auth: ownership + public link (7-day expiry)
+POST   /reports/{id}/request-counselling   Auth: ownership
+POST   /reports/{id}/order-hard-copy      Auth: ownership
+GET    /reports/{id}/trend         Auth: ownership verified
+GET    /reports/{id}/supplement-recommendations  Auth: ownership
+
+POST   /admin/reports              [Requires: reports.upload]
+POST   /admin/reports/{id}/pdf     [Requires: reports.upload] — MIME validated
+PUT    /admin/reports/{id}/status  [Requires: reports.update]
+DELETE /admin/reports/{id}         [Requires: reports.delete] — soft delete only
+GET    /admin/reports/export       [Requires: reports.export] — PHI masked
+
+────────────────────────────────────────────────────────
+HEALTH SCORE & TRACKERS (own data only)
+────────────────────────────────────────────────────────
+GET    /health/score               Auth: own score
+GET    /health/score/history       Auth: own history
+GET    /health/score/breakdown     Auth
+POST   /health/lifestyle-log       Auth: score weight from config (not hardcoded)
+GET    /health/lifestyle-log       Auth
+POST   /health/vitals              Auth: source validated (manual/healthkit/health_connect)
+GET    /health/vitals/{type}       Auth: own vitals only
+DELETE /health/vitals/{id}         Auth: ownership verified
+POST   /health/steps               Auth
+GET    /health/steps               Auth
+GET    /health/reminders           Auth: own reminders only
+POST   /health/reminders/{id}/dismiss  Auth: ownership verified
+POST   /health/symptom-check       Auth or public (no PHI stored if unauthenticated)
+
+────────────────────────────────────────────────────────
+AI COPILOT (PHI — rate limited, logged)
+────────────────────────────────────────────────────────
+GET    /ai/sessions                Auth: own sessions only
+POST   /ai/sessions                Auth: rate limited 10/hour
+GET    /ai/sessions/{id}/messages  Auth: ownership verified
+POST   /ai/sessions/{id}/message   Auth: rate limited 20/hour per user
+                                   AI prompt from DB (not hardcoded)
+                                   Report context injected server-side (not from client)
+                                   Response logged (PHI-scrubbed)
+POST   /ai/sessions/{id}/quick-prompt  Auth
+DELETE /ai/sessions/{id}           Auth: ownership + PHI cleared
+
+GET    /admin/ai/prompts           [Requires: ai_prompts.view]
+POST   /admin/ai/prompts           [Requires: ai_prompts.create]
+PUT    /admin/ai/prompts/{id}/activate  [Requires: ai_prompts.activate]
+
+────────────────────────────────────────────────────────
+WALLET & REWARDS
+────────────────────────────────────────────────────────
+GET    /wallet                     Auth: own wallet only
+GET    /wallet/transactions        Auth: own transactions only
+GET    /wallet/tier-benefits       Public, cache 1h (from commerce.membership_tiers)
+POST   /wallet/redeem              Auth: cap enforced from config
+GET    /referrals/my-code          Auth
+GET    /referrals/history          Auth: own referrals only
+GET    /referrals/earnings         Auth
+
+GET    /admin/wallet               [Requires: wallet.view]
+PUT    /admin/wallet/{userId}/adjust  [Requires: wallet.adjust]
+                                      Logged to audit_logs with reason
+
+────────────────────────────────────────────────────────
+COUPONS
+────────────────────────────────────────────────────────
+POST   /coupons/validate           Auth: validation only, no side effects
+
+GET    /admin/coupons              [Requires: coupons.view]
+POST   /admin/coupons              [Requires: coupons.create]
+PUT    /admin/coupons/{id}         [Requires: coupons.update]
+DELETE /admin/coupons/{id}         [Requires: coupons.delete]
+
+────────────────────────────────────────────────────────
+CASHBACK
+────────────────────────────────────────────────────────
+GET    /cashback/active-offers     Public, cache 30m
+GET    /admin/cashback/offers      [Requires: cashback.view]
+POST   /admin/cashback/offers      [Requires: cashback.create]
+PUT    /admin/cashback/offers/{id} [Requires: cashback.update]
+
+────────────────────────────────────────────────────────
+NOTIFICATIONS
+────────────────────────────────────────────────────────
+GET    /notifications              Auth: own only
+PUT    /notifications/{id}/read    Auth: ownership verified
+PUT    /notifications/read-all     Auth: own only
+GET    /notifications/unread-count Auth: own only
+POST   /devices/register           Auth: own device only
+
+GET    /admin/notifications        [Requires: notifications.view]
+POST   /admin/notifications/broadcast  [Requires: notifications.broadcast]
+                                       Rate: 2/hour per admin, approval logged
+
+PUT    /admin/whatsapp-templates/{id}  [Requires: whatsapp_templates.update]
+
+────────────────────────────────────────────────────────
+SUPPORT
+────────────────────────────────────────────────────────
+POST   /support/tickets            Auth: own ticket
+GET    /support/tickets            Auth: own tickets only
+GET    /support/tickets/{id}/messages  Auth: ownership verified
+POST   /support/tickets/{id}/messages  Auth: ownership verified
+PUT    /support/tickets/{id}/close     Auth: ownership verified
+
+GET    /admin/support/tickets      [Requires: support.view]
+PUT    /admin/support/tickets/{id}/assign  [Requires: support.assign]
+PUT    /admin/support/tickets/{id}/status  [Requires: support.respond]
+POST   /admin/support/tickets/{id}/messages  [Requires: support.respond]
+
+────────────────────────────────────────────────────────
+CONTENT (ADMIN)
+────────────────────────────────────────────────────────
+GET    /banners                    Public, cache 30m
+GET    /articles                   Public
+GET    /articles/{slug}            Public (view count incremented)
+GET    /articles/featured          Public, cache 1h
+
+POST   /admin/banners              [Requires: banners.create]
+PUT    /admin/banners/{id}         [Requires: banners.update] — image SSRF validated
+DELETE /admin/banners/{id}         [Requires: banners.delete]
+POST   /admin/articles             [Requires: articles.create] — HTML sanitized
+PUT    /admin/articles/{id}        [Requires: articles.update]
+DELETE /admin/articles/{id}        [Requires: articles.delete]
+
+────────────────────────────────────────────────────────
+SECURITY MANAGEMENT (Admin)
+────────────────────────────────────────────────────────
+GET    /admin/security/events      [Requires: super_admin or admin]
+PUT    /admin/security/events/{id}/resolve  [Requires: super_admin or admin]
+GET    /admin/audit-logs           [Requires: audit_logs.view] — read-only
+GET    /admin/roles                [Requires: roles.view]
+POST   /admin/roles                [Requires: roles.create]
+PUT    /admin/roles/{id}           [Requires: roles.update]
+DELETE /admin/roles/{id}           [Requires: roles.delete — super_admin only]
+GET    /admin/permissions          [Requires: roles.view]
+PUT    /admin/roles/{id}/permissions  [Requires: roles.update]
+POST   /admin/users/{id}/roles     [Requires: roles.update]
+DELETE /admin/users/{id}/roles/{roleId}  [Requires: roles.update]
+
+────────────────────────────────────────────────────────
+PARTNER
+────────────────────────────────────────────────────────
+GET    /partner/dashboard          Auth: partner role, own data only
+GET    /partner/bookings           Auth: own created bookings only
+GET    /partner/commissions        Auth: own commissions only
+
+GET    /admin/partners             [Requires: partners.view]
+PUT    /admin/partners/{id}/verify [Requires: partners.verify]
+POST   /admin/partners/{id}/payout [Requires: partners.payout]
+
+────────────────────────────────────────────────────────
+ADMIN ANALYTICS
+────────────────────────────────────────────────────────
+GET    /admin/dashboard            [Requires: analytics.view]
+GET    /admin/analytics/revenue    [Requires: analytics.view]
+GET    /admin/analytics/popular-tests  [Requires: analytics.view]
+GET    /admin/analytics/city-wise  [Requires: analytics.view]
+GET    /admin/analytics/technician-performance  [Requires: analytics.view]
+GET    /admin/analytics/partner-commissions  [Requires: analytics.view]
+GET    /admin/analytics/conversion-funnel  [Requires: analytics.view]
+GET    /admin/analytics/export     [Requires: analytics.export] — PHI masked
+
+
+=================================================================================
+SECTION 8 — FLUTTER CUSTOMER APP
+=================================================================================
+
+SECURITY CHECKLIST (applied to every screen with PHI):
+  ✅ Token from flutter_secure_storage (never memory-only)
+  ✅ Certificate pinning on all API calls
+  ✅ Root/jailbreak detection run at app start
+  ✅ Screenshot prevention on report, AI, health score screens
+  ✅ Biometric auth before report detail / download
+  ✅ No PHI in logs or Crashlytics
+  ✅ PHI in Hive: encrypted with HiveAesCipher
+  ✅ Offline PHI cache: 24h TTL, cleared on logout
+  ✅ Deep link validation before routing
+  ✅ Code obfuscation in release builds
+
+PROVIDERS (Riverpod):
+  brandingProvider        app config from /config/branding
+  featureFlagsProvider    feature flags from /config/features
+  permissionsProvider     N/A for customer (API enforces)
+  authProvider            user + tokens
+  cartProvider
+  bookingFlowProvider
+  homeSectionsProvider    from /home/layout (dynamic)
+  quickActionsProvider    from /home/quick-actions
+  navItemsProvider        from /nav/bottom (dynamic)
+  securityProvider        root detection state, biometric availability
+
+NAVIGATION (GoRouter) — same routes as v2 plus:
+  /packages/custom/builder   Custom Package Builder
+  /support                   Support tickets
+  /cashback                  Active cashback offers
+
+BOTTOM NAV: Built dynamically from NavItemsProvider
+  Never hardcoded. Reads from /nav/bottom (DB-driven).
+  Default 5 tabs: Home, Care, Reports, Health, Profile.
+  Admin can rename, reorder, or add tabs from admin portal.
+
+HOME SCREEN: Dynamic section renderer
+  HomeSectionRenderer builds sections from /home/layout (DB-driven).
+  All section titles, configs, visibility from DB.
+  Quick actions grid from /home/quick-actions (DB-driven).
+  Banner carousel content from /banners (DB-driven).
+
+CUSTOM PACKAGE BUILDER SCREEN (/packages/custom/builder):
+  Filter tests by concern_tags, risk_tags, habit_tags.
+  Multi-select test list.
+  Live discount calculation (reads thresholds from config — not hardcoded).
+  "3 tests: X% off" labels read from custom_package_discount_3_tests config.
+  POST /packages/custom/build on confirm.
+
+ALL SCREENS: (see v2 Section 6 for full specifications)
+  All category/specialty filter tabs built from DB API (not hardcoded).
+  All section titles, counts, algorithms from section.config JSON.
+  All support FAB shows only if feature_live_support_chat config = true.
+  All AI FAB shows only if feature_ai_copilot config = true.
+
+
+=================================================================================
+SECTION 9 — FLUTTER TECHNICIAN APP
+=================================================================================
+
+PROJECT: vitalscan_technician/
+LOGIN: Employee ID + password (bcrypt verified by API)
+SECURITY:
+  Certificate pinning on all API calls.
+  Biometric auth to access booking details (PHI).
+  Root detection: warn + disable PHI access on compromised device.
+  All communication TLS 1.3.
+  Minimal permissions: can only update own assigned bookings.
+
+SCREENS: Today's bookings, Booking detail, Status update,
+         Barcode scanner (mobile_scanner), Photo capture, My stats.
+API: X-App-Source: technician header required.
+     All endpoints enforce technician role + own booking filter.
+
+
+=================================================================================
+SECTION 10 — FLUTTER PARTNER APP
+=================================================================================
+
+PROJECT: vitalscan_partner/
+LOGIN: Mobile OTP (role=partner enforced by API)
+SECURITY:
+  Certificate pinning.
+  Biometric for customer report access (PHI).
+  Partner sees only their own bookings + customers — enforced server-side.
+  KYC documents upload: MIME + size validated server-side.
+
+SCREENS: Dashboard, Create Booking, My Bookings, Customer Reports,
+         Commission Statement, KYC/Profile, Support.
+API: X-App-Source: partner header required.
+     All partner API endpoints enforce partner role + own data filter.
+
+
+=================================================================================
+SECTION 11 — ANGULAR ADMIN PORTAL
+=================================================================================
+
+PROJECT: vitalscan-admin/
+ALL PERMISSIONS: checked before rendering any component, button, or route.
+ALL ROLE NAMES: never hardcoded in Angular — always checked via permission codes.
+
+AUTH FLOW:
+  1. Login: email + password → POST /auth/admin/login
+  2. 2FA required: POST /auth/admin/2fa/verify
+  3. On success: store access token (memory only — NOT localStorage)
+                 store refresh token (sessionStorage — cleared on tab close)
+  4. Fetch permissions: GET /auth/me/permissions → store in NgRx
+  5. All routes: PermissionGuard('required.permission')
+  6. All buttons/menus: *appHasPermission="'permission.code'"
+  7. Idle timeout: 30-minute timer, warning at 25m, auto-logout
+
+SIDEBAR: Shows only modules user has view permission for.
+  Example: finance role → sees Commerce modules, not Content or Users.
+
+COMPLETE MODULE LIST WITH REQUIRED PERMISSIONS:
+  Dashboard               analytics.view
+  Users                   users.view
+  Bookings                bookings.view
+  Tests                   tests.view
+  Packages                packages.view
+  Categories              categories.view
+  Specialties             specialties.view
+  Centres                 centres.view
+  Doctors                 doctors.view
+  Supplements             supplements.view
+  Technicians             technicians.view
+  Partners                partners.view
+  Reports                 reports.view
+  Coupons                 coupons.view
+  Wallet                  wallet.view
+  Membership Tiers        membership.view
+  Cashback Offers         cashback.view
+  Refunds                 refunds.view
+  Home Layout             home_layout.view
+  Quick Actions           home_layout.view
+  Banners                 banners.view
+  Articles                articles.view
+  Onboarding Slides       onboarding.view
+  Nav Items               nav_items.view
+  AI Prompts              ai_prompts.view
+  WhatsApp Templates      whatsapp_templates.view
+  Notifications           notifications.view
+  Support Tickets         support.view
+  Analytics               analytics.view
+  App Config              config.view
+  Branding                config.view
+  Roles & Permissions     roles.view
+  Audit Logs              audit_logs.view
+  Security Events         admin role minimum
+
+BRANDING PAGE:
+  Logo upload → Azure Blob → update app_logo_url config.
+  Color picker → primary_color config.
+  App name, tagline form → app_config.
+  Live preview: phone frame mockup updates in real-time as values change.
+  Save → PUT /admin/config/{key} for each changed key.
+
+HOME LAYOUT PAGE:
+  Angular CDK DragDrop for section reorder.
+  Toggle visibility eye icon per section.
+  Section config editor modal (form fields per section_type).
+  Schedule valid_from/valid_until per section.
+  Add/remove sections dynamically.
+
+ROLES & PERMISSIONS PAGE:
+  Role list with permission count.
+  Edit role: checkbox matrix of all permissions grouped by module.
+  Assign role to user: user search + role dropdown.
+  Permission change: triggers Redis cache invalidation for affected users.
+  System roles (super_admin, admin): permissions locked (view only).
+
+AUDIT LOGS PAGE:
+  Read-only. No filter to hide entries. No export without analytics.export permission.
+  Search by: user, action, entity_type, date range.
+  All entries shown with user name, action, entity, old/new values, IP, timestamp.
+
+
+=================================================================================
+SECTION 12 — NOTIFICATION SYSTEM
+=================================================================================
+
+(Same as v2 Section 10, with security additions)
+
+TEMPLATE SECURITY:
+  Template names read from comms.whatsapp_templates (not hardcoded).
+  Variable substitution: sanitize all values before injection into templates.
+  No user-supplied content injected into templates without sanitization.
+
+BROADCAST SECURITY:
+  POST /admin/notifications/broadcast requires notifications.broadcast permission.
+  Rate limited: 2 broadcasts per admin per hour.
+  Every broadcast logged to audit_logs with: admin_id, content, recipient_count.
+  Require 2FA confirmation for broadcasts to >1000 users.
+
+NOTIFICATION TRIGGER MAP: (same as v2 Section 10)
+  All notification channels and events unchanged.
+  Report ready → auto-triggers counselling (counselling_status = 'auto_triggered').
+
+
+=================================================================================
+SECTION 13 — AI COPILOT (WELLIO)
+=================================================================================
+
+(Same as v2 Section 11, with security additions)
+
+SECURITY:
+  Claude API key: Azure Key Vault (never in code or config files).
+  API calls: backend proxy only (Flutter/Angular never call Anthropic directly).
+  Report context: injected server-side only (client cannot supply PHI).
+  Response: PHI-scrubbed before logging (no report values in Application Insights).
+  Rate limiting: 20 messages/hour per user (Redis-backed).
+  Session isolation: each user sees only their own sessions.
+  Prompt injection defense:
+    System prompt always prepended (cannot be overridden by user input).
+    User messages sanitized: strip "<system>", "Ignore previous instructions",
+    and other injection patterns before sending to Claude.
+  AI responses: never stored with PII linked in plain text — session_id only.
+
+
+=================================================================================
+SECTION 14 — COMPLETE TEST CASES
+=================================================================================
+
+────────────────────────────────────────────────────────
+SECURITY-SPECIFIC UNIT TESTS (.NET)
+────────────────────────────────────────────────────────
+
+AuthService Security:
+  ✅ VerifyOtp_MaxAttemptsExceeded_LockoutApplied
+  ✅ VerifyOtp_ProgressiveLockout_Tier1After3Failures
+  ✅ VerifyOtp_ProgressiveLockout_Tier3After10Failures
+  ✅ RefreshToken_RevokedTokenReused_RevokesAllTokens_AndLogsSecurityEvent
+  ✅ RefreshToken_DeviceMismatch_RequiresReAuth
+  ✅ GenerateJwt_RS256Algorithm_NotHS256
+  ✅ GenerateJwt_IncludesJtiClaim
+  ✅ GenerateJwt_PermissionsClaims_LoadedFromDb_NotHardcoded
+
+PermissionService:
+  ✅ HasPermission_ValidPermission_ReturnsTrue
+  ✅ HasPermission_MissingPermission_ReturnsFalse
+  ✅ HasPermission_RoleChanged_InvalidatesCache_FetchesFresh
+  ✅ GetPermissions_SuperAdmin_ReturnsAll
+  ✅ GetPermissions_SupportRole_DoesNotIncludeFinancePermissions
+
+OwnershipService:
+  ✅ CanAccessReport_OwnReport_ReturnsTrue
+  ✅ CanAccessReport_FamilyMemberReport_ReturnsTrue
+  ✅ CanAccessReport_OtherUserReport_ReturnsFalse
+  ✅ CanAccessBooking_OwnBooking_ReturnsTrue
+  ✅ CanAccessBooking_OtherUserBooking_ReturnsFalse
+  ✅ PartnerCanAccessBooking_OwnCreatedBooking_ReturnsTrue
+  ✅ PartnerCanAccessBooking_OtherPartnerBooking_ReturnsFalse
+  ✅ TechnicianCanUpdateStatus_AssignedBooking_ReturnsTrue
+  ✅ TechnicianCanUpdateStatus_NotAssignedBooking_ReturnsFalse
+
+RateLimitingService:
+  ✅ OtpSend_ExceedsPerMobileLimit_Returns429
+  ✅ OtpSend_ExceedsPerIpLimit_Returns429
+  ✅ AiMessage_ExceedsHourlyLimit_Returns429
+  ✅ BookingCreate_ExceedsPerUserLimit_Returns429
+  ✅ Webhook_FromAllowlistedIp_Passes
+  ✅ Webhook_FromUnknownIp_Returns403
+
+InputValidationService:
+  ✅ PhoneNumber_InvalidFormat_ThrowsValidation
+  ✅ FileUpload_WrongMimeType_ThrowsValidation
+  ✅ FileUpload_ExceedsMaxSize_ThrowsValidation
+  ✅ FileUpload_MagicBytesSpoof_ThrowsValidation
+  ✅ UserSuppliedUrl_NotInAllowlist_ThrowsValidation (SSRF)
+  ✅ HtmlInput_ContainsScript_Stripped
+  ✅ AiMessage_ContainsPromptInjection_PatternStripped
+
+DataMaskingService:
+  ✅ MaskPhone_ReturnsPartialNumber
+  ✅ SupportUserDto_PhoneMasked
+  ✅ AdminUserDto_PhoneUnmasked_WhenHasViewPiiPermission
+  ✅ ExportData_NoPiiInNonPiiExport
+
+SecurityEventService:
+  ✅ LogEvent_TokenReuse_CreatesCriticalEvent
+  ✅ LogEvent_OtpMaxAttempts_CreatesHighEvent
+  ✅ AlertAdmin_CriticalEvent_SendsNotification
+
+────────────────────────────────────────────────────────
+EXISTING UNIT TESTS (from v2 — all retained)
+────────────────────────────────────────────────────────
+
+ConfigService, HomeSectionService, AuthService (non-security),
+CartService, CustomPackageService, BookingService, ReportService,
+HealthScoreService, WalletService, RefundService, NotificationService,
+GroupBookingService — all test cases from v2 Section 12 retained.
+
+────────────────────────────────────────────────────────
+SECURITY INTEGRATION TESTS (Testcontainers)
+────────────────────────────────────────────────────────
+
+  ✅ GET /reports/{other_user_report_id} → 403 (not 404)
+  ✅ GET /bookings/{other_user_booking_id} → 403
+  ✅ PUT /bookings/{id}/status [technician, not assigned] → 403
+  ✅ GET /admin/users [customer JWT] → 403
+  ✅ GET /admin/users [support JWT without users.view_pii] → 200 with masked phone
+  ✅ GET /admin/users/{id}/pii [support JWT] → 403
+  ✅ POST /admin/notifications/broadcast [content JWT] → 403
+  ✅ DELETE /admin/roles/super_admin [admin JWT] → 403
+  ✅ POST /auth/otp/send [6th request same mobile in 10min] → 429
+  ✅ POST /bookings [missing HMAC signature] → 401
+  ✅ POST /payment/webhook [invalid HMAC] → 401
+  ✅ POST /ai/sessions/*/message [21st message in 1hr] → 429
+  ✅ POST /cart/wallet-points [exceed 10% cap] → 400
+  ✅ GET /bookings [partner JWT] → only partner's bookings returned
+  ✅ GET /bookings [technician JWT] → only technician's assigned bookings
+  ✅ File upload: PDF with wrong MIME type → 400
+  ✅ File upload: image exceeding size limit → 400
+  ✅ User-supplied URL not in allowlist → 400 (SSRF blocked)
+  ✅ JWT with altered role claim → 403 (signature invalid)
+  ✅ Refresh token reuse after rotation → 401 + all tokens revoked
+  ✅ Security headers present on all responses → verified
+
+────────────────────────────────────────────────────────
+FLUTTER SECURITY TESTS
+────────────────────────────────────────────────────────
+
+  ✅ CertPinningInterceptor_WrongCert_BlocksRequest
+  ✅ CertPinningInterceptor_CorrectCert_AllowsRequest
+  ✅ TokenStorage_UsesFlutterSecureStorage_NotSharedPrefs
+  ✅ RootDetection_CompromisedDevice_DisablesPHIScreens
+  ✅ BiometricGate_ReportDetail_RequiresAuth
+  ✅ ScreenshotPrevention_ReportScreen_FlagSecureSet
+  ✅ HiveCache_PHIData_Encrypted
+  ✅ Logout_ClearsAllPHIFromHive
+  ✅ DeepLink_UnverifiedSource_Rejected
+  ✅ AiChat_PHIContent_NotLoggedToCrashlytics
+
+────────────────────────────────────────────────────────
+ANGULAR SECURITY TESTS (Jest)
+────────────────────────────────────────────────────────
+
+  ✅ PermissionGuard_MissingPermission_RedirectsToUnauthorized
+  ✅ AppHasPermissionDirective_Hides_When_NoPermission
+  ✅ AppHasPermissionDirective_Shows_When_HasPermission
+  ✅ IdleTimeout_30Min_AutoLogout
+  ✅ TokenStorage_RefreshToken_InSessionStorage_NotLocalStorage
+  ✅ SriEnabled_CdnResources_HaveIntegrityAttribute
+  ✅ CspHeader_NoInlineScripts_InAngularBuild
+  ✅ PhoneMasking_SupportView_MasksPhone
+  ✅ PhoneReveal_RequiresViewPiiPermission
+  ✅ AuditLogPage_ReadOnly_NoEditControls
+  ✅ SuperAdminRole_CannotBeDeletedFromUI
+
+────────────────────────────────────────────────────────
+PLAYWRIGHT SECURITY E2E (Angular Admin)
+────────────────────────────────────────────────────────
+
+  ✅ admin_login_requires_2fa
+  ✅ admin_login_wrong_totp_shows_error
+  ✅ admin_idle_30min_auto_logout
+  ✅ admin_support_cannot_access_finance_module
+  ✅ admin_finance_cannot_access_content_module
+  ✅ admin_operations_cannot_see_delete_buttons
+  ✅ admin_assign_role_logged_in_audit
+  ✅ admin_config_change_logged_in_audit
+  ✅ admin_bulk_export_requires_export_permission
+
+────────────────────────────────────────────────────────
+OWASP ZAP AUTOMATED SCAN (CI pipeline)
+────────────────────────────────────────────────────────
+
+  Run against staging API after every deploy.
+  Fail pipeline on: HIGH or CRITICAL findings.
+  Alert team on: MEDIUM findings.
+  Report stored as CI artifact.
+
+  Must pass:
+  ✅ No SQL injection vulnerabilities
+  ✅ No XSS reflected vulnerabilities
+  ✅ No missing security headers
+  ✅ No insecure CORS configuration
+  ✅ No sensitive data in error responses
+  ✅ No directory traversal
+  ✅ No server-side request forgery endpoints
+  ✅ All authentication endpoints rate-limited
+
+────────────────────────────────────────────────────────
+LOAD TESTS (k6)
+────────────────────────────────────────────────────────
+
+  /config/branding    500 VUs, 5min — p95 < 100ms (cached)
+  /home/layout        500 VUs, 5min — p95 < 200ms (cached)
+  /tests/search       200 VUs, 3min — p95 < 300ms
+  /bookings (create)  50 VUs,  2min — p95 < 2000ms
+  /ai/sessions/msg    20 VUs,  2min — p95 < 5000ms
+  Rate limit test:    200 VUs hammer /auth/otp/send → verify 429 fires correctly
+
+
+=================================================================================
+SECTION 15 — CI/CD PIPELINE WITH SECURITY GATES
+=================================================================================
+
+FILE: .github/workflows/ci.yml
+
+SECURITY GATES (must all pass before deploy):
+
+  job: security-scan
+    - GitLeaks: scan for secrets in code
+    - dotnet list package --vulnerable: fail on HIGH+
+    - npm audit --audit-level=high: fail on HIGH+
+    - flutter pub audit: fail on HIGH+
+    - Semgrep: OWASP Top 10 patterns for .NET
+    - Container scan: Microsoft Defender (fail on CRITICAL)
+
+  job: test-dotnet (depends on security-scan)
+    - PostgreSQL 16 in Docker (Testcontainers)
+    - dotnet test --collect XPlat Code Coverage
+    - Newman: Postman API contract tests
+    - Coverage check: fail if < 80% on services
+
+  job: test-flutter (depends on security-scan)
+    - flutter analyze
+    - flutter test --coverage
+    - Coverage check: fail if < 70% on critical features
+
+  job: test-angular (depends on security-scan)
+    - npm run lint
+    - npm test -- --coverage
+    - Coverage check: fail if < 60%
+
+  job: build-staging (depends on all tests)
+    - .NET: docker build → Azure Container Registry → App Service staging slot
+    - Angular: ng build --prod → Azure Static Web Apps staging
+    - Flutter: flutter build → Firebase App Distribution
+    - Verify: Swagger returns 404 on production build (not staging)
+    - Verify: all secrets loaded from Key Vault (no env var secrets)
+
+  job: owasp-zap-scan (depends on build-staging)
+    - OWASP ZAP against staging API
+    - Fail pipeline on HIGH findings
+    - Archive ZAP report as artifact
+
+  job: e2e-tests (depends on owasp-zap-scan)
+    - Playwright against Angular staging
+    - Patrol against Flutter staging APK
+
+  job: pre-deploy-checklist (depends on e2e-tests)
+    - TLS verification on staging
+    - Security headers verification
+    - Swagger disabled check on production config
+    - CORS allowlist check
+    - Rate limiting smoke test
+    - All passing → manual approval gate
+
+  job: deploy-production (manual approval)
+    - Swap Azure staging → production slots
+    - k6 smoke test on production (10% load)
+    - Security headers spot check on production
+    - Notify team on Slack/WhatsApp
+
+  BRANCH PROTECTION:
+    main: requires 2 reviewer approvals + all CI jobs passing
+    All commits: signed (GPG signing required)
+    Force push: disabled on main
+
+
+=================================================================================
+SECTION 16 — .NET SOLUTION STRUCTURE
+=================================================================================
+
+VitalScan.sln
+├── src/
+│   ├── VitalScan.API/
+│   │   ├── Controllers/
+│   │   ├── Hubs/               (SignalR: NotificationHub, BookingTrackingHub)
+│   │   ├── Middleware/
+│   │   │   ├── ExceptionHandlingMiddleware.cs   (no stack traces in prod)
+│   │   │   ├── SecurityHeadersMiddleware.cs     (all OWASP headers)
+│   │   │   ├── RateLimitingMiddleware.cs        (distributed, Redis)
+│   │   │   ├── AuditLoggingMiddleware.cs        (logs sensitive actions)
+│   │   │   ├── CorrelationIdMiddleware.cs       (X-Correlation-ID)
+│   │   │   └── AppSourceMiddleware.cs           (X-App-Source validation)
+│   │   └── Program.cs
+│   │
+│   ├── VitalScan.Application/
+│   │   ├── Services/
+│   │   │   ├── AuthService.cs             (OTP, JWT RS256, refresh token rotation)
+│   │   │   ├── PermissionService.cs       (loads from DB, Redis cache)
+│   │   │   ├── OwnershipService.cs        (resource ownership verification)
+│   │   │   ├── RateLimitService.cs        (distributed Redis rate limiting)
+│   │   │   ├── SecurityEventService.cs    (logs security events, alerts)
+│   │   │   ├── DataMaskingService.cs      (PHI masking per role)
+│   │   │   ├── InputSanitizationService.cs (HTML strip, SSRF check, MIME validate)
+│   │   │   ├── HomeSectionService.cs      (dynamic home layout)
+│   │   │   ├── ConfigService.cs           (app_config reads, Redis cache)
+│   │   │   ├── CartService.cs
+│   │   │   ├── BookingService.cs
+│   │   │   ├── ReportService.cs           (auto-trigger counselling on ready)
+│   │   │   ├── HealthScoreService.cs      (weights from config)
+│   │   │   ├── WalletService.cs           (tier multipliers from DB)
+│   │   │   ├── RefundService.cs           (Razorpay + NEFT flow)
+│   │   │   ├── CashbackService.cs         (offer matching + credit)
+│   │   │   ├── AiCopilotService.cs        (prompt from DB, prompt injection guard)
+│   │   │   ├── GroupBookingService.cs
+│   │   │   ├── SubscriptionService.cs
+│   │   │   └── CustomPackageService.cs    (discounts from config)
+│   │   ├── Authorization/
+│   │   │   ├── PermissionRequirement.cs
+│   │   │   ├── PermissionAuthorizationHandler.cs
+│   │   │   └── RequirePermissionAttribute.cs
+│   │   ├── DTOs/
+│   │   ├── Validators/            (FluentValidation — all inputs)
+│   │   └── Mappings/
+│   │       ├── AdminProfile.cs    (full data)
+│   │       ├── SupportProfile.cs  (masked PHI)
+│   │       ├── PublicProfile.cs   (minimal data)
+│   │       └── PartnerProfile.cs  (own data only)
+│   │
+│   ├── VitalScan.Domain/
+│   │   ├── Entities/
+│   │   ├── Enums/
+│   │   └── Events/
+│   │
+│   ├── VitalScan.Infrastructure/
+│   │   ├── Data/
+│   │   │   ├── AppDbContext.cs
+│   │   │   ├── Configurations/
+│   │   │   └── Migrations/
+│   │   ├── Security/
+│   │   │   ├── JwtService.cs          (RS256, Key Vault signing key)
+│   │   │   ├── PhiEncryptionService.cs (AES-256-GCM for PII fields)
+│   │   │   ├── TotpService.cs         (admin 2FA)
+│   │   │   └── KeyVaultService.cs     (Azure Key Vault client)
+│   │   ├── Notifications/
+│   │   │   ├── WhatsAppNotificationService.cs  (template name from DB)
+│   │   │   ├── FcmNotificationService.cs
+│   │   │   ├── SmsNotificationService.cs
+│   │   │   ├── EmailNotificationService.cs
+│   │   │   └── NotificationOrchestrator.cs
+│   │   ├── Payments/
+│   │   │   └── RazorpayService.cs     (HMAC verification)
+│   │   ├── Storage/
+│   │   │   └── AzureBlobService.cs    (private containers + signed URLs)
+│   │   ├── AI/
+│   │   │   └── ClaudeAiService.cs     (prompt from DB, prompt injection guard)
+│   │   ├── Caching/
+│   │   │   └── RedisCacheService.cs
+│   │   └── BackgroundJobs/
+│   │       ├── SubscriptionReminderJob.cs
+│   │       ├── RetestReminderJob.cs
+│   │       ├── HealthScoreRecalcJob.cs
+│   │       ├── CashbackCreditJob.cs
+│   │       ├── SlaMonitorJob.cs
+│   │       ├── GroupBookingExpiryJob.cs
+│   │       ├── ExpiredTokenCleanupJob.cs    (delete expired refresh tokens)
+│   │       └── SecurityAuditJob.cs          (weekly security event summary to admin)
+│   │
+│   └── VitalScan.Shared/
+│
+└── tests/
+    ├── VitalScan.UnitTests/
+    ├── VitalScan.IntegrationTests/
+    └── VitalScan.LoadTests/
+
+
+=================================================================================
+SECTION 17 — COMPLETE SEED DATA
+=================================================================================
+
+(Full seed from v2 Section 16 retained — all tests, packages, reports, etc.)
+
+ADDITIONAL SECURITY SEED:
+
+core.app_config — additional security config keys:
+  admin_session_timeout_minutes    = "30"
+  admin_ip_allowlist_enabled       = "false"
+  otp_max_attempts                 = "5"
+  otp_lockout_tier1_minutes        = "2"
+  otp_lockout_tier2_minutes        = "15"
+  otp_lockout_tier3_hours          = "24"
+  otp_expiry_minutes               = "5"
+  jwt_access_token_minutes         = "15"
+  jwt_refresh_token_days           = "30"
+  jwt_admin_refresh_hours          = "8"
+  rate_limit_ai_hourly             = "20"
+  rate_limit_otp_per_mobile_10min  = "3"
+  rate_limit_booking_per_min       = "10"
+  signed_url_expiry_minutes        = "15"
+  phi_cache_ttl_hours              = "24"
+  security_alert_email             = "security@bit2sky.com"
+  pentest_next_date                = "2026-01-01"
+
+admin.roles seed (system roles):
+  super_admin  is_system=true  ALL permissions
+  admin        is_system=true  all except delete + role management
+  operations   is_system=false as per Section 3B
+  finance      is_system=false
+  lab          is_system=false
+  content      is_system=false
+  support      is_system=false
+
+admin.permissions seed:
+  All 60+ permission codes from Section 3A
+
+
+=================================================================================
+SECTION 18 — DESIGN SYSTEM
+=================================================================================
+
+(Same as v2 Section 17 — all colors from app_config, dynamic Flutter ThemeData,
+Inter font, 4px grid, animations unchanged)
+
+SECURITY DESIGN NOTES:
+  Error messages: generic, no technical details
+  Loading states: skeleton loaders (no flickering of unauthorized content)
+  Permission denied: consistent "Access denied" screen (not 404 or blank)
+  Sensitive data: masked by default, explicit "reveal" action required
+  Session expiry: friendly "Your session has expired, please log in" message
+  Security events: "Unusual activity detected" banner for compromised devices
+
+
+=================================================================================
+SECTION 19 — DEVELOPMENT PHASE PLAN
+=================================================================================
+
+PHASE 1 — SECURE CORE MVP (Weeks 1–8)
+  Security MUST be in from day 1 (not Phase 4):
+  ✅ RS256 JWT with Key Vault signing key
+  ✅ Refresh token rotation + reuse detection
+  ✅ RBAC system: permissions table + role_permissions + API enforcement
+  ✅ Resource ownership verification on all endpoints
+  ✅ Security headers middleware
+  ✅ Rate limiting (Redis-backed)
+  ✅ Certificate pinning in Flutter
+  ✅ flutter_secure_storage for tokens
+  ✅ OWASP ZAP in CI pipeline
+  ✅ Dependabot + secret scanning in GitHub
+  ✅ Azure Key Vault for all secrets
+  ✅ PHI encryption for phone + DOB
+  ✅ Audit logging table active
+  Then: Auth, Config/Branding, Home Layout, Catalogue, Cart, Booking, Payment, Reports
+  Admin: Login (with 2FA), Dashboard, Users, Bookings, Tests, Packages,
+         Branding, Home Layout, App Config, Roles & Permissions, Audit Logs
+
+PHASE 2 — ENGAGEMENT (Weeks 9–14)
+  Health Score, AI Copilot (prompt injection guard, Key Vault key),
+  Smart Reports + Diet Plan, Free Consultation, Wallet, Subscriptions,
+  Reminders, Symptom Checker, Articles, Cashback,
+  Root detection + biometric auth in Flutter (PHI screens),
+  Screenshot prevention on report + AI screens,
+  Admin: Reports, Coupons, Wallet, Articles, Analytics, AI Prompts,
+         WhatsApp Templates, Cashback, Membership Tiers, Security Events page
+
+PHASE 3 — VALUE ADD (Weeks 15–20)
+  Doctor Consultation, MRI & Scans, Family Vault, Group Booking,
+  Hard Copy, Refunds, Support Tickets, SLA Monitor, Partner commission,
+  Technician App (full), Partner App (full),
+  Offline PHI encryption (HiveAesCipher),
+  Annual pentest scheduled and executed
+
+PHASE 4 — EXPANSION (Weeks 21–28)
+  Govt Panel, Genetic Testing, Surgery Care, Corporate Wellness,
+  HealthKit + Health Connect integration,
+  Security: WAF custom rules tuning, IP allowlist for super_admin,
+  Dependency audit + quarterly security review
+
+PHASE 5 — INTELLIGENCE (Weeks 29+)
+  Predictive ML, Wearable data, Trend analysis, Multi-language,
+  Offline-first with encrypted sync,
+  Annual pentest #2, HIPAA formal risk assessment,
+  BAA review with all vendors
+
+
+=================================================================================
+FINAL SUMMARY & ZERO HARDCODING CHECKLIST
+=================================================================================
+
+Document:         VitalScan Master Development Prompt v3.0
+Prepared by:      Bit2Sky India Private Limited
+Version:          3.0 — Final (RBAC + Security + All Gaps Fixed)
+
+TOTAL COUNTS:
+  Database Tables:         55+
+  API Endpoints:           120+
+  Permission Codes:        60+
+  Default Roles:           7
+  Flutter Screens:         33+ (Customer) + 6 (Technician) + 7 (Partner)
+  Admin Portal Modules:    22+
+  Unit Test Cases:         150+
+  Integration Tests:       45+
+  E2E Tests:               25+
+  Security Tests:          40+
+  App Config Keys:         55+
+  Background Jobs:         8
+  Notification Events:     15+
+  WhatsApp Templates:      12+
+
+ZERO HARDCODING FINAL CHECKLIST:
+  ✅ App name, logo, tagline, colors       → core.app_config
+  ✅ Home section order + visibility       → content.home_sections
+  ✅ Quick action tiles                    → content.quick_actions
+  ✅ Onboarding slides                     → content.onboarding_slides
+  ✅ Bottom navigation tabs               → content.nav_items
+  ✅ All business rules (50+ values)      → core.app_config
+  ✅ Health score calculation weights     → core.app_config
+  ✅ Wallet redemption cap                → core.app_config
+  ✅ Membership tier rules + benefits     → commerce.membership_tiers
+  ✅ AI system prompt                     → content.ai_prompts (versioned)
+  ✅ WhatsApp template names              → comms.whatsapp_templates
+  ✅ Cancellation + reschedule windows    → core.app_config
+  ✅ Report SLA hours                     → core.app_config
+  ✅ Category filter tabs                 → catalogue.categories
+  ✅ Doctor specialty filters             → catalogue.specialties
+  ✅ Scan type tabs                       → catalogue.categories (type=scan)
+  ✅ Custom package discounts             → core.app_config
+  ✅ Feature flags                        → core.app_config
+  ✅ Rate limit values                    → core.app_config
+  ✅ OTP lockout tiers                    → core.app_config
+  ✅ JWT token TTLs                       → core.app_config
+  ✅ Session timeout                      → core.app_config
+  ✅ Admin security settings              → core.app_config
+
+SECURITY FINAL CHECKLIST:
+  ✅ RS256 JWT (not HS256)
+  ✅ JWT signing key in Azure Key Vault
+  ✅ Refresh token rotation + reuse detection
+  ✅ Permission-based RBAC (not role-name based)
+  ✅ Resource ownership verified on every endpoint
+  ✅ Progressive OTP lockout
+  ✅ Admin 2FA (TOTP mandatory)
+  ✅ Rate limiting (distributed Redis, sliding window)
+  ✅ Security headers on all responses
+  ✅ CORS explicit allowlist (no wildcard)
+  ✅ Flutter certificate pinning
+  ✅ Flutter token in secure storage
+  ✅ Flutter code obfuscation in release builds
+  ✅ Flutter root/jailbreak detection
+  ✅ Biometric auth for PHI screens
+  ✅ Screenshot prevention on sensitive screens
+  ✅ Angular 2FA mandatory for admin
+  ✅ Angular permission guards on all routes + buttons
+  ✅ Angular idle session timeout
+  ✅ CSP headers on Angular build
+  ✅ SRI on Angular CDN resources
+  ✅ PHI encrypted at rest (AES-256)
+  ✅ All secrets in Azure Key Vault
+  ✅ PHI-scrubbed logging
+  ✅ Immutable audit logs
+  ✅ OWASP ZAP in CI pipeline
+  ✅ Dependabot + secret scanning
+  ✅ SSRF protection (URL allowlist)
+  ✅ File upload MIME + magic bytes validation
+  ✅ Prompt injection guards (AI copilot)
+  ✅ Azure Front Door WAF
+  ✅ No Swagger on production
+  ✅ Annual penetration test scheduled
+  ✅ HIPAA PHI identification + safeguards
+  ✅ Security event logging + alerting
+
+=================================================================================
+END OF DOCUMENT — VitalScan Master Development Prompt v3.0
+=================================================================================

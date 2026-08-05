@@ -1,0 +1,110 @@
+name: ci
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_VERSION: "10.0.x"
+
+jobs:
+  # ── Security gates (must pass before tests) — Section 15 ────────────────────
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: GitLeaks (secret scanning)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore backend/Bit2sky.slnx
+
+      - name: Vulnerable NuGet packages (fail on High+)
+        run: |
+          dotnet list backend/Bit2sky.slnx package --vulnerable --include-transitive 2>&1 | tee vuln.txt
+          if grep -E "High|Critical" vuln.txt; then
+            echo "::error::High/Critical vulnerable packages found"; exit 1; fi
+
+      - name: Semgrep (OWASP Top 10 for .NET)
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: p/csharp
+
+  # ── .NET build, analyzers, tests, coverage ──────────────────────────────────
+  test-dotnet:
+    needs: security-scan
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bit2sky_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 10s
+          --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Build (treat warnings as errors)
+        run: dotnet build backend/Bit2sky.slnx -warnaserror
+
+      - name: Unit + integration tests with coverage
+        env:
+          ConnectionStrings__Postgres: "Host=localhost;Database=bit2sky_test;Username=postgres;Password=postgres"
+        run: dotnet test backend/Bit2sky.slnx --collect "XPlat Code Coverage" --logger "trx"
+
+  # ── Build staging artifacts + production-config assertions ──────────────────
+  build-staging:
+    needs: test-dotnet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Publish API
+        run: dotnet publish backend/src/Bit2sky.API -c Release -o ./publish
+      - name: Assert no appsettings secrets committed
+        run: |
+          if grep -RInE "(KeySecret|ApiKey|Password=|PrivateKey)" backend/src/Bit2sky.API/appsettings*.json; then
+            echo "::error::Secrets must live in Key Vault, not appsettings"; exit 1; fi
+
+  # ── OWASP ZAP against staging (fail on HIGH) ────────────────────────────────
+  owasp-zap-scan:
+    needs: build-staging
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: ZAP baseline scan
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          target: ${{ secrets.STAGING_API_URL }}
+          fail_action: true
+
+  # ── Pre-deploy checklist + manual approval gate ─────────────────────────────
+  pre-deploy-checklist:
+    needs: owasp-zap-scan
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - run: echo "TLS, security headers, Swagger-disabled, CORS allowlist, rate-limit smoke checks"

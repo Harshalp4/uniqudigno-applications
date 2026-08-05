@@ -1,0 +1,1852 @@
+
+╔══════════════════════════════════════════════════════════════════════════════════╗
+║         VITALSCAN — COMPLETE VISUAL DESIGN SYSTEM                             ║
+║         Screen-by-Screen UI Specification                                      ║
+║         Inspired by Healthians · Elevated to International Standard            ║
+║         For Flutter Developers + Angular Admin Developers                      ║
+╚══════════════════════════════════════════════════════════════════════════════════╝
+
+This document is the visual bible for VitalScan. Every screen, every component,
+every spacing rule, every animation, every color usage is specified here.
+A developer must be able to build any screen from this document alone —
+without guessing, without defaults, without "making it look nice".
+
+Read all of this before writing a single widget.
+
+
+=================================================================================
+PART 1 — DESIGN PHILOSOPHY
+=================================================================================
+
+FEEL:
+  Clinically trustworthy. Not playful. Not generic SaaS.
+  Like a premium private clinic — clean, white, professional,
+  with confident teal as the single brand color.
+
+  Think: Apollo 24|7 meets Zocdoc meets a premium fintech app.
+  Not: a hospital website. Not a fitness app. Not a generic dashboard.
+
+PERSONALITY WORDS:
+  Trustworthy · Calm · Modern · Premium · Accessible · Intelligent
+
+WHAT MAKES IT VISUALLY DISTINCTIVE:
+  1. Generous white space — breathing room everywhere
+  2. One primary color (teal) used sparingly — never gradient soup
+  3. Cards feel physical — soft shadow, 16px radius, never flat
+  4. Information is scannable — strong type hierarchy, not walls of text
+  5. Health data feels reassuring — green/orange/red used precisely, not alarming
+
+WHAT TO AVOID:
+  ❌ Dark mode (this is a healthcare app — white = clinical trust)
+  ❌ Heavy gradients on every element
+  ❌ Multiple accent colors competing
+  ❌ Small tap targets (min 48x48dp for all interactive elements)
+  ❌ Text below 12sp anywhere
+  ❌ Cards without shadow (they flatten the hierarchy)
+  ❌ Centered text blocks (use left-align for body content)
+  ❌ Icons without labels in the main navigation
+  ❌ Animations that delay the user (150ms max for transitions)
+
+
+=================================================================================
+PART 2 — COLOR SYSTEM
+=================================================================================
+
+PRIMARY PALETTE
+  Teal 700 (Brand Primary):    #00897B    Use: CTAs, active states, icons, progress
+  Teal 800 (Primary Dark):     #00695C    Use: pressed states, headers on dark bg
+  Teal 50  (Primary Light):    #E0F2F1    Use: chip backgrounds, light badges, input focus bg
+  Teal 100 (Primary Lighter):  #B2DFDB    Use: skeleton loaders, divider accents
+
+STATUS COLORS (use precisely — not decoratively)
+  Success Green:               #43A047    Use: normal parameters, confirmed bookings
+  Success Light:               #E8F5E9    Use: success badge backgrounds
+  Warning Orange:              #FB8C00    Use: borderline parameters, warnings
+  Warning Light:               #FFF3E0    Use: warning badge backgrounds
+  Error Red:                   #E53935    Use: abnormal parameters, errors, critical
+  Error Light:                 #FFEBEE    Use: error badge backgrounds
+
+ACCENT
+  Blue Accent:                 #2979FF    Use: links, info badges, secondary actions
+  Blue Light:                  #E3F2FD    Use: info badge backgrounds
+
+NEUTRAL PALETTE
+  Background:                  #F8FAFB    Use: screen backgrounds, page fill
+  Surface:                     #FFFFFF    Use: cards, modals, inputs
+  Surface Raised:              #F4F6F8    Use: input fields, disabled states
+  Border Default:              #E5E7EB    Use: card borders, dividers, input borders
+  Border Strong:               #D1D5DB    Use: selected states, prominent dividers
+  Text Primary:                #1A1A2E    Use: headings, primary content
+  Text Secondary:              #6B7280    Use: labels, metadata, subtitles
+  Text Disabled:               #9CA3AF    Use: placeholder text, disabled elements
+  Text Inverse:                #FFFFFF    Use: text on teal/dark backgrounds
+
+GRADIENT (use ONLY on hero banners and splash — nowhere else)
+  Banner overlay: linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,105,92,0.85) 100%)
+  Splash radial:  radial-gradient(circle at 50% 40%, #00897B 0%, #E0F2F1 70%, #F8FAFB 100%)
+
+COLOR USAGE RULES:
+  - Teal on white: always works ✅
+  - White on teal: always works ✅
+  - Teal on teal light (#E0F2F1): works for chips only ✅
+  - Red/orange/green: ONLY for health status, never for decoration
+  - Never use more than 3 colors in a single card
+  - Background (#F8FAFB) with Surface (#FFFFFF) cards = primary layout pattern
+
+
+=================================================================================
+PART 3 — TYPOGRAPHY
+=================================================================================
+
+FONT FAMILY:  Inter (Google Fonts)
+  Import: https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap
+
+TYPE SCALE:
+
+  Display Large    32sp  Weight 800   Line height 1.2   Letter spacing -0.5px
+    Use: Health score number, large stat display
+
+  Display          28sp  Weight 700   Line height 1.25  Letter spacing -0.3px
+    Use: Splash logo text, onboarding headlines
+
+  H1               24sp  Weight 700   Line height 1.3   Letter spacing -0.2px
+    Use: Screen titles (Home, Reports, Health Score)
+
+  H2               20sp  Weight 700   Line height 1.35  Letter spacing -0.1px
+    Use: Section headings, card titles (Popular Packages)
+
+  H3               18sp  Weight 600   Line height 1.4   Letter spacing 0px
+    Use: Card headings, package names, doctor names
+
+  H4               16sp  Weight 600   Line height 1.4   Letter spacing 0px
+    Use: Test names, parameter names, item titles
+
+  Body Large       16sp  Weight 400   Line height 1.6   Letter spacing 0px
+    Use: Main body text, descriptions
+
+  Body             14sp  Weight 400   Line height 1.6   Letter spacing 0px
+    Use: Card body text, form labels, secondary content
+
+  Body Small       13sp  Weight 400   Line height 1.5   Letter spacing 0px
+    Use: Metadata, timestamps, location text
+
+  Caption          12sp  Weight 400   Line height 1.5   Letter spacing 0.2px
+    Use: Image captions, legal text, footnotes
+
+  Label            12sp  Weight 600   Line height 1.3   Letter spacing 0.4px
+    Use: Status badges, filter chips, tab labels
+
+  Button Large     16sp  Weight 600   Line height 1.0   Letter spacing 0.1px
+    Use: Primary CTA buttons
+
+  Button           14sp  Weight 600   Line height 1.0   Letter spacing 0.1px
+    Use: Secondary buttons, card CTAs
+
+  Price Large      22sp  Weight 700   Line height 1.0   Letter spacing -0.2px
+    Use: Package/test discounted price (main price)
+
+  Price Strikethrough 14sp  Weight 400   Color: Text Secondary  text-decoration: line-through
+    Use: MRP before discount
+
+FLUTTER TextStyle CONSTANTS:
+  static const displayLarge = TextStyle(fontSize:32, fontWeight:FontWeight.w800, height:1.2, letterSpacing:-0.5, fontFamily:'Inter');
+  static const h1 = TextStyle(fontSize:24, fontWeight:FontWeight.w700, height:1.3, letterSpacing:-0.2, fontFamily:'Inter');
+  static const h2 = TextStyle(fontSize:20, fontWeight:FontWeight.w700, height:1.35, fontFamily:'Inter');
+  static const h3 = TextStyle(fontSize:18, fontWeight:FontWeight.w600, height:1.4, fontFamily:'Inter');
+  static const h4 = TextStyle(fontSize:16, fontWeight:FontWeight.w600, height:1.4, fontFamily:'Inter');
+  static const bodyLarge = TextStyle(fontSize:16, fontWeight:FontWeight.w400, height:1.6, fontFamily:'Inter');
+  static const body = TextStyle(fontSize:14, fontWeight:FontWeight.w400, height:1.6, fontFamily:'Inter');
+  static const bodySmall = TextStyle(fontSize:13, fontWeight:FontWeight.w400, height:1.5, fontFamily:'Inter');
+  static const caption = TextStyle(fontSize:12, fontWeight:FontWeight.w400, height:1.5, letterSpacing:0.2, fontFamily:'Inter');
+  static const label = TextStyle(fontSize:12, fontWeight:FontWeight.w600, height:1.3, letterSpacing:0.4, fontFamily:'Inter');
+  static const buttonLarge = TextStyle(fontSize:16, fontWeight:FontWeight.w600, height:1.0, letterSpacing:0.1, fontFamily:'Inter');
+  static const button = TextStyle(fontSize:14, fontWeight:FontWeight.w600, height:1.0, letterSpacing:0.1, fontFamily:'Inter');
+  static const priceLarge = TextStyle(fontSize:22, fontWeight:FontWeight.w700, height:1.0, letterSpacing:-0.2, fontFamily:'Inter', color:Color(0xFF1A1A2E));
+
+
+=================================================================================
+PART 4 — SPACING & LAYOUT
+=================================================================================
+
+SPACING SCALE (4px grid — strictly followed):
+  space2:   2px   Use: Internal component micro-gaps
+  space4:   4px   Use: Icon-to-label gap, chip internal padding
+  space6:   6px   Use: Badge padding
+  space8:   8px   Use: Card internal row gaps, small padding
+  space12:  12px  Use: Input internal padding, list item gaps
+  space16:  16px  Use: Standard card padding, section gaps
+  space20:  20px  Use: Card padding (generous cards)
+  space24:  24px  Use: Section title margin, large card gaps
+  space32:  32px  Use: Between major sections
+  space48:  48px  Use: Screen top padding (below status bar)
+
+BORDER RADIUS SCALE:
+  radius4:   4px   Badges, small tags
+  radius8:   8px   Filter chips, small buttons, image corners
+  radius12:  12px  Inputs, secondary buttons
+  radius16:  16px  Standard cards (ALL cards use this)
+  radius20:  20px  Large feature cards, bottom sheets
+  radius24:  24px  Banners, hero cards
+  radius100: 100px Pill buttons, FABs, avatar chips
+
+SHADOW SCALE:
+  shadow0:  none                                         Flat (for chips, badges)
+  shadow1:  0 1px 3px rgba(0,0,0,0.08)                  Subtle (for list items)
+  shadow2:  0 2px 8px rgba(0,0,0,0.08)                  Standard card shadow
+  shadow3:  0 4px 16px rgba(0,0,0,0.10)                 Elevated card, modal
+  shadow4:  0 8px 32px rgba(0,0,0,0.12)                 FAB, floating elements
+  shadowTeal: 0 4px 20px rgba(0,137,123,0.35)           Teal FAB glow
+
+SCREEN LAYOUT:
+  Screen width:         390px (iPhone 14 reference, scales up)
+  Status bar height:    44px (iOS) / 24px (Android)
+  Bottom safe area:     34px (iOS) / 0px (Android)
+  Bottom nav height:    64px
+  Header height:        56px (standard) / 100px (expanded home header)
+  Content horizontal:   16px padding left+right (standard)
+  Content horizontal:   20px padding left+right (premium cards)
+
+GRID:
+  Columns:  4 columns with 16px gutters
+  Quick action grid: 4 columns, 8px gap, equal width cells
+  Doctor/package cards: 2 columns on some screens, 1 column on others (specified per screen)
+
+
+=================================================================================
+PART 5 — COMPONENT LIBRARY
+=================================================================================
+
+Each component below is specified with exact dimensions, colors, radius, shadow,
+typography, and states. Build these once, reuse everywhere.
+
+────────────────────────────────────────────────────────
+C1. PRIMARY BUTTON
+────────────────────────────────────────────────────────
+Height:         52px (large) / 44px (standard)
+Width:          full-width (layout) or fit-content (inline)
+Background:     #00897B
+Border radius:  12px
+Padding:        16px horizontal (standard), 20px (large)
+Label:          buttonLarge style, color #FFFFFF
+Icon:           optional, 20px, left of label, 4px gap
+Shadow:         0 4px 16px rgba(0,137,123,0.30)
+States:
+  Default:  bg #00897B
+  Pressed:  bg #00695C, scale 0.97, 100ms ease
+  Disabled: bg #E5E7EB, label color #9CA3AF, no shadow
+  Loading:  circular progress 20px white, label hidden
+Animation:  scale 1 → 0.97 on press, 100ms ease-out
+
+USAGE: "Book Now", "Add to Cart", "Confirm & Pay", "Send OTP"
+
+────────────────────────────────────────────────────────
+C2. SECONDARY BUTTON (Outlined)
+────────────────────────────────────────────────────────
+Height:         52px (large) / 44px (standard)
+Background:     #FFFFFF
+Border:         1.5px solid #00897B
+Border radius:  12px
+Label:          buttonLarge style, color #00897B
+States:
+  Default:  border #00897B, label #00897B
+  Pressed:  bg #E0F2F1, scale 0.97
+  Disabled: border #E5E7EB, label #9CA3AF
+
+USAGE: "View Details", "Compare", "View Sample Report"
+
+────────────────────────────────────────────────────────
+C3. TEXT BUTTON
+────────────────────────────────────────────────────────
+Height:         40px min
+Label:          button style, color #00897B
+Underline:      none (only on hover in web)
+States:
+  Default:  color #00897B
+  Pressed:  color #00695C, bg #E0F2F1 (8px radius)
+
+USAGE: "Browse as Guest", "Skip", "+ Add more tests", "View all"
+
+────────────────────────────────────────────────────────
+C4. FLOATING ACTION BUTTON (FAB)
+────────────────────────────────────────────────────────
+Shape:          Pill (extended) or Circle
+Pill size:      48px height, auto width (16px padding each side)
+Circle size:    56px × 56px
+Background:     #00897B
+Shadow:         shadowTeal (0 4px 20px rgba(0,137,123,0.35))
+Label:          button style, #FFFFFF
+Icon:           24px white
+Pulse animation (Call FAB):
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(0,137,123,0.4) }
+    70%  { box-shadow: 0 0 0 12px rgba(0,137,123,0) }
+    100% { box-shadow: 0 0 0 0 rgba(0,137,123,0) }
+  }
+  animation: pulse 2s infinite
+
+USAGE:
+  "📞 Call to Book" — pill shape, bottom-right, 16px from edges
+  "🤖 Wellio" — circle, bottom-right, above Call FAB with 12px gap
+
+────────────────────────────────────────────────────────
+C5. CARD (Base)
+────────────────────────────────────────────────────────
+Background:     #FFFFFF
+Border radius:  16px
+Shadow:         shadow2 (0 2px 8px rgba(0,0,0,0.08))
+Border:         none (shadow provides separation)
+Padding:        16px (standard) / 20px (generous)
+States:
+  Default:  shadow2
+  Pressed:  shadow1, scale 0.985, 100ms
+
+All cards are built on this base. Variations below.
+
+────────────────────────────────────────────────────────
+C6. TEST CARD
+────────────────────────────────────────────────────────
+Width:          Full width - 32px (fills content area)
+Height:         Auto (min 80px)
+Layout (left to right):
+  [Category Icon 40×40 teal bg radius8]
+  [Content column flex-1]
+    [H4 test name, color Text Primary]
+    [body small: "18 parameters · Report in 6h"]
+  [Right column]
+    [Price Large ₹299, color Text Primary]
+    [Price Strikethrough ₹599]
+    [Discount badge: "-50%" label, bg #FFF3E0, color #FB8C00, radius4]
+    [Add button 32×32: border 1.5px teal, radius8, + icon teal 16px]
+    → on tap: button fills teal, shows ✓ checkmark, scale 0.95 animation
+
+STATES:
+  Default:  white card, shadow2
+  Added:    left border 3px teal, bg #FAFFFE (very slight teal tint)
+  Pressed:  scale 0.985, shadow1
+
+────────────────────────────────────────────────────────
+C7. PACKAGE CARD
+────────────────────────────────────────────────────────
+Width:          Full width - 32px
+Height:         Auto (min 160px)
+Layout:
+  TOP SECTION (height 100px):
+    Background: linear-gradient(135deg, #00897B 0%, #00695C 100%)
+    Border radius: 16px 16px 0 0
+    Left:  Package name H3 white, "58 tests" body white 80% opacity
+    Right: Badge pill "Most Popular" bg white 20%, label white label style
+    Bottom overlay: subtle wave SVG or just gradient
+
+  BOTTOM SECTION (white, padding 16px):
+    Row 1: Tags row (horizontal scroll)
+      Each tag: bg #E0F2F1, color #00897B, label style, radius4, 8px padding
+      Examples: "CBC", "Lipid Profile", "HbA1c", "Thyroid"
+    Row 2:
+      Left:  Price Large ₹599, then body small strikethrough ₹2499
+             Green label "You save ₹1900" color #43A047
+      Right: Two buttons side by side
+             "Details" — secondary button 36px height
+             "Book" — primary button 36px height
+
+Compare mode:
+  Checkbox top-right corner of card, 20px, teal when selected
+  When 2 selected: sticky "Compare 2 Packages →" bar appears at bottom of screen
+
+────────────────────────────────────────────────────────
+C8. BANNER CAROUSEL CARD
+────────────────────────────────────────────────────────
+Width:          Full screen width (no horizontal margin)
+Height:         180px
+Image:          CachedNetworkImage, object-fit cover, full bleed
+Overlay:        linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 60%)
+  → gradient on LEFT side so text is legible
+Content (left side, 20px from left, vertically centered):
+  Eyebrow: label style, white, "UP TO 79% OFF"
+  Headline: H3, white, "Full Body Checkup at ₹599"
+  Sub: body small, white 80%, "Free home collection"
+  CTA: pill button 32px height, bg white, label teal, "Book Now"
+      → positioned 16px from bottom of card
+Dots indicator: bottom center, 8px each, active = 20px wide pill, teal
+Auto-scroll: 4 seconds, CSS translateX transition 400ms ease
+
+────────────────────────────────────────────────────────
+C9. QUICK ACTION TILE
+────────────────────────────────────────────────────────
+Width:          (screen width - 32px - 24px gap) / 4  ≈ 76px
+Height:         Auto (icon + label)
+Layout: Column, centered
+  [Icon container: 48×48, border radius 12px, bg from quick_actions.bg_color]
+    [Icon: 24px, color from quick_actions.icon_color]
+  [Label: caption style 11sp, color Text Primary, textAlign center, maxLines 2]
+  [Optional badge: 16×16 circle top-right of icon, bg #E53935, label white 9sp]
+Gap between icon and label: 6px
+Tap animation: scale 0.90 → 1.0, 120ms spring
+
+────────────────────────────────────────────────────────
+C10. HEALTH SCORE WIDGET (Home)
+────────────────────────────────────────────────────────
+Card: full width - 32px, padding 20px, radius 16px, shadow2
+Layout: Row
+  Left: Column
+    [H2 "72" animated count-up, color Text Primary]
+    [body small "/ 100" color Text Secondary inline]
+    [Label "Your Health Score" color Text Secondary]
+    [H4 "Good" color #43A047]  ← varies by score range
+    [Body small "Last updated: 10 Jan 2025"]
+  Right: Circular gauge 100×100
+    Outer ring: 8px stroke, bg #E5E7EB (empty track)
+    Progress: 8px stroke, color #00897B, cap round
+    Animation: stroke-dashoffset from 0 to score value, 1500ms ease-out
+    Center: nothing (score shown in left column)
+
+Score label by range:
+  0–39:   "Poor"       color #E53935
+  40–59:  "Average"    color #FB8C00
+  60–74:  "Good"       color #43A047
+  75–89:  "Very Good"  color #00897B
+  90–100: "Excellent"  color #00695C
+
+Bottom: "View full breakdown →" text button right-aligned
+
+────────────────────────────────────────────────────────
+C11. CIRCULAR GAUGE (Full Screen - Health Score Screen)
+────────────────────────────────────────────────────────
+Size: 220×220px, centered
+Outer ring: 16px stroke, bg #E5E7EB
+Progress: 16px stroke, color #00897B, strokeCap round
+Arc: 270 degrees (starts at 135°, ends at 45°)
+Center content:
+  [Display Large "72" color Text Primary, animated count-up]
+  [body small "out of 100" color Text Secondary]
+  [H3 "Good" color #43A047]
+Animation: 1500ms ease-out on screen enter
+Glow effect (subtle): drop-shadow(0 0 12px rgba(0,137,123,0.25)) on progress arc
+
+────────────────────────────────────────────────────────
+C12. PARAMETER ROW (Report Detail)
+────────────────────────────────────────────────────────
+Height: 56px
+Layout: Row, verticalAlign center, 16px horizontal padding
+  [Left column flex-2]
+    [H4 parameter name, Text Primary]
+    [caption ref range, Text Secondary]
+  [Center column flex-1]
+    [H4 value + unit, Text Primary, textAlign center]
+  [Right: Status badge]
+    Normal:     bg #E8F5E9, color #43A047, "Normal"   label style
+    Borderline: bg #FFF3E0, color #FB8C00, "High"     label style
+    Low:        bg #FFEBEE, color #E53935, "Low"       label style
+    High:       bg #FFEBEE, color #E53935, "High"      label style
+    Critical:   bg #FFEBEE, color #E53935, blinking 1s alternate
+
+Divider: 1px #E5E7EB between rows
+Stagger animation: translateX(-20px) opacity 0 → translateX(0) opacity 1
+  Each row: 40ms delay after previous
+
+Abnormal rows: left border 3px #E53935, bg #FFFAFA (very subtle red tint)
+  Pulse: box-shadow 0 0 0 0 → 0 0 0 4px rgba(229,57,53,0.15) → 0, 2s infinite
+
+────────────────────────────────────────────────────────
+C13. DOCTOR CARD
+────────────────────────────────────────────────────────
+Width: Full width - 32px
+Height: Auto (min 120px)
+Padding: 16px
+Layout: Row
+  [Avatar: 64×64, radius 32px (circle), CachedNetworkImage]
+    onerror: placeholder circle with initials, bg #E0F2F1, teal initial
+  [Content column: flex-1, marginLeft 12px]
+    [H3 doctor name, Text Primary]
+    [body small specialty, color #00897B]
+    [body small experience + languages]
+    [Row: ⭐ 4.8 body small Text Secondary | "Next: Tomorrow 10 AM" body small]
+    [Consultation mode buttons row]:
+      Three pill buttons 28px height, spacing 6px:
+        "🎥 Video ₹499"   bg #E0F2F1 color #00897B border 1px #00897B
+        "🎙 Audio ₹299"   same
+        "💬 Chat ₹129"    same
+      Active/selected: bg #00897B color white
+
+────────────────────────────────────────────────────────
+C14. BOOKING STATUS TRACKER (6 stages)
+────────────────────────────────────────────────────────
+Layout: Vertical timeline (left-side icons, right-side content)
+Each stage: 56px min height, 16px padding
+  [Left: 32×32 circle icon]
+    Completed: bg #43A047, icon white checkmark 16px
+    Current:   bg #00897B, icon white current-state icon 16px, pulse ring
+    Pending:   bg #E5E7EB, icon #9CA3AF
+  [Connector line: 2px, color #E5E7EB for pending, #43A047 for completed]
+  [Right content: marginLeft 16px]
+    [H4 stage name, Text Primary if current, Text Secondary if pending]
+    [body small: timestamp if completed, ETA if current, empty if pending]
+
+Stages (icons):
+  Booking Confirmed       ✅  check_circle
+  Technician Assigned     👤  person
+  On The Way              🚴  directions_bike
+  Sample Collected        🩸  water_drop
+  Processing              🔬  science
+  Report Ready            📋  description
+
+Current stage: pulsing ring
+  @keyframes trackPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(0,137,123,0.5) }
+    100% { box-shadow: 0 0 0 8px rgba(0,137,123,0) }
+  }
+  animation: trackPulse 1.5s infinite
+
+────────────────────────────────────────────────────────
+C15. BOTTOM NAVIGATION BAR
+────────────────────────────────────────────────────────
+Height:         64px + bottom safe area
+Background:     #FFFFFF
+Top border:     1px #E5E7EB
+Shadow:         0 -2px 12px rgba(0,0,0,0.06)
+
+Each tab item (equal width, 5 items):
+  [Icon: 24px]
+  [Label: label style 11sp, marginTop 2px]
+  Active:   icon color #00897B, label color #00897B
+  Inactive: icon color #9CA3AF, label color #9CA3AF
+  Active indicator: 3×16px teal rounded rect above icon
+
+Tap animation:
+  Icon: scale 1 → 1.2 → 1.0, 180ms spring
+  Label: slides up 2px simultaneously
+
+Notification badge on tab:
+  Circle 16px, bg #E53935, label white 9sp
+  Position: top-right of icon, offset (-4px, -4px)
+
+────────────────────────────────────────────────────────
+C16. FILTER CHIP / TAB
+────────────────────────────────────────────────────────
+Height:         34px
+Padding:        0 14px
+Border radius:  100px (pill)
+States:
+  Default:  bg #F8FAFB, border 1px #E5E7EB, label color Text Secondary
+  Active:   bg #00897B, no border, label color #FFFFFF, shadow2
+  Pressed:  scale 0.95
+
+Horizontal scroll row: no padding on scroll, -16px margin to bleed to edges,
+add 16px padding-left to first item, 16px padding-right to last item.
+Gap between chips: 8px
+
+────────────────────────────────────────────────────────
+C17. SEARCH BAR
+────────────────────────────────────────────────────────
+Height:         48px
+Background:     #FFFFFF
+Border:         1.5px solid #E5E7EB
+Border radius:  12px
+Shadow:         shadow1
+Padding:        0 16px
+Left icon:      search, 20px, color #9CA3AF
+Placeholder:    "Search tests, packages, symptoms..." body style, color #9CA3AF
+Right icon:     mic, 20px, color #9CA3AF (for voice search)
+Focus state:    border 1.5px #00897B, bg #FAFFFE (very subtle teal tint)
+Animation on focus: scale 1.01, 150ms ease
+
+────────────────────────────────────────────────────────
+C18. INPUT FIELD
+────────────────────────────────────────────────────────
+Height:         52px
+Background:     #F4F6F8 (surface raised)
+Border:         1.5px solid transparent
+Border radius:  12px
+Padding:        0 16px
+Label (above):  caption style, color Text Secondary, marginBottom 4px
+Placeholder:    body style, color Text Disabled
+Focus:          border 1.5px #00897B, bg #FFFFFF, label color #00897B
+Error:          border 1.5px #E53935, label color #E53935
+Error message:  caption style, color #E53935, marginTop 4px
+Success:        border 1.5px #43A047
+
+────────────────────────────────────────────────────────
+C19. OTP INPUT (6 boxes)
+────────────────────────────────────────────────────────
+Each box: 48×56px, radius 12px, bg #F4F6F8, border 1.5px transparent
+Gap between boxes: 8px
+Active box: border 1.5px #00897B, bg #FFFFFF
+Filled box: border 1.5px #00897B, bg #E0F2F1, content H3 teal
+Error box: border 1.5px #E53935, shake animation
+Auto-advance: on digit entry, focus moves to next box
+
+Shake animation (on wrong OTP):
+  @keyframes shake {
+    0%, 100% { transform: translateX(0) }
+    20%      { transform: translateX(-4px) }
+    40%      { transform: translateX(4px) }
+    60%      { transform: translateX(-4px) }
+    80%      { transform: translateX(2px) }
+  }
+  animation: shake 0.4s ease
+
+────────────────────────────────────────────────────────
+C20. STATUS BADGE / PILL
+────────────────────────────────────────────────────────
+Height:     22px
+Padding:    0 8px
+Radius:     4px
+Font:       label style
+
+Types (bg / text color):
+  Normal:     #E8F5E9 / #43A047
+  Borderline: #FFF3E0 / #FB8C00
+  Low/High:   #FFEBEE / #E53935
+  Critical:   #FFEBEE / #E53935 + blink
+  Ready:      #E8F5E9 / #43A047
+  Processing: #E3F2FD / #2979FF
+  Pending:    #F4F6F8 / #6B7280
+  Confirmed:  #E0F2F1 / #00897B
+  Cancelled:  #FFEBEE / #E53935
+  NABL:       #FFF8E1 / #F57F17
+
+────────────────────────────────────────────────────────
+C21. AI CHAT BUBBLE
+────────────────────────────────────────────────────────
+User bubble (right side):
+  Max width: 75% of screen
+  Align: right, marginRight 16px
+  Background: #00897B
+  Text: body style, color white
+  Border radius: 16px 16px 4px 16px (sharp bottom-right)
+  Padding: 12px 16px
+  Timestamp: caption style, white 70%, marginTop 4px, textAlign right
+
+AI bubble (left side):
+  Max width: 85% of screen
+  Align: left, marginLeft 16px
+  Background: #FFFFFF
+  Border: 1px #E5E7EB
+  Border radius: 16px 16px 16px 4px (sharp bottom-left)
+  Shadow: shadow1
+  Padding: 12px 16px
+  Content: body style, Text Primary
+
+AI RESPONSE CARD (extends AI bubble):
+  Extra sections below text:
+    Risk pill badge: status badge (LOW/MODERATE/HIGH/CRITICAL)
+    Divider: 1px #E5E7EB
+    Recommended action: body small, Text Secondary, icon 💡
+    "Book Suggested Test →": text button teal, right aligned
+
+Bubble animation:
+  From: opacity 0, translateY(8px)
+  To:   opacity 1, translateY(0)
+  Duration: 200ms ease-out
+  Delay: stagger each bubble by 60ms
+
+────────────────────────────────────────────────────────
+C22. TYPING INDICATOR
+────────────────────────────────────────────────────────
+Container: same as AI bubble, width 56px fixed
+Three dots: 8×8px circles, bg #9CA3AF, spacing 4px
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0) }
+  30%           { transform: translateY(-6px) }
+}
+Dot 1: animation: typingBounce 1.0s 0ms infinite
+Dot 2: animation: typingBounce 1.0s 150ms infinite
+Dot 3: animation: typingBounce 1.0s 300ms infinite
+Show for ai_typing_delay_ms (from config, default 800ms) before response
+
+────────────────────────────────────────────────────────
+C23. SKELETON LOADER
+────────────────────────────────────────────────────────
+Color: #E5E7EB → #F4F6F8 → #E5E7EB (shimmer)
+@keyframes shimmer {
+  0%   { background-position: -300px 0 }
+  100% { background-position: 300px 0 }
+}
+background: linear-gradient(90deg, #E5E7EB 25%, #F4F6F8 50%, #E5E7EB 75%)
+background-size: 600px 100%
+animation: shimmer 1.5s infinite linear
+
+Skeleton variants:
+  Text line:  height 14px, radius 4px, various widths (60%, 80%, 40%)
+  Card:       same dimensions as actual card, filled with shimmer divs
+  Avatar:     circular, 48×48 or 64×64
+  Banner:     180px height, full width, radius 0
+
+────────────────────────────────────────────────────────
+C24. EMPTY STATE
+────────────────────────────────────────────────────────
+Container: centered, padding 48px 32px
+  [Illustration: SVG or Lottie, 160×160, teal + grey tones]
+  [H3 title, Text Primary, textAlign center, marginTop 24px]
+  [body description, Text Secondary, textAlign center, marginTop 8px]
+  [Primary button if action available, marginTop 24px]
+
+Examples:
+  No reports:   📋 icon large, "No reports yet", "Book your first test to see results here", "Book a Test"
+  No bookings:  📅 icon large, "No bookings", "Your booking history will appear here", "Book Now"
+  Empty search: 🔍 icon large, "No results found", "Try a different search term or browse categories"
+
+────────────────────────────────────────────────────────
+C25. SECTION HEADER ROW
+────────────────────────────────────────────────────────
+Layout: Row, space-between, 16px horizontal, 24px top margin
+  [Left: H2 title, Text Primary]
+  [Right: "View all →" text button teal]
+MarginBottom: 12px (before section content)
+
+────────────────────────────────────────────────────────
+C26. COUPON / OFFER CARD
+────────────────────────────────────────────────────────
+Width: Full width - 32px
+Height: 64px
+Padding: 0 16px
+Background: #FFFFFF
+Border: 1.5px dashed #00897B (dashed to suggest coupon)
+Border radius: 12px
+Layout: Row
+  [Left: Scissors icon 20px teal, rotated 90°]
+  [Content: flex-1, marginLeft 12px]
+    [H4 "HEALTH20" code, color #00897B]
+    [body small "20% off on all tests · Max ₹200"]
+  [Right: "Apply" text button teal / "Applied ✓" green]
+
+Applied state:
+  Border: 1.5px solid #43A047
+  Right: "Applied ✓" label style color #43A047
+
+────────────────────────────────────────────────────────
+C27. FAMILY MEMBER AVATAR ROW
+────────────────────────────────────────────────────────
+Horizontal scroll row
+Each avatar item: Column, centered, 64px min width
+  [Circle 48×48: CachedNetworkImage or initials placeholder]
+    Active: 2px solid #00897B ring with 2px gap (total outline at 4px offset)
+    Inactive: 2px solid transparent
+  [Caption name, Text Primary, maxWidth 60px, overflow ellipsis]
+  [Health score badge: 18px height, radius 100px]
+    bg based on score, label "72" label style 9sp white
+
+Health score badge position: bottom-right of avatar, overlapping 4px
+
+────────────────────────────────────────────────────────
+C28. TRUST BADGE ROW (Login screen)
+────────────────────────────────────────────────────────
+Horizontal row, centered, gap 16px
+Each badge: Row, gap 4px
+  [Icon 14px, color Text Secondary]
+  [caption "Encrypted" / "NABL Certified" / "4.8★ Rated", Text Secondary]
+Divider: "·" between badges, color Text Disabled
+Full row: marginTop 24px, paddingBottom 8px
+
+────────────────────────────────────────────────────────
+C29. BOOKING STEP PROGRESS BAR
+────────────────────────────────────────────────────────
+Container: full width, height 4px, bg #E5E7EB, radius 2px
+Progress: height 4px, bg #00897B, radius 2px
+  Width animates: 0% → 20% → 40% → 60% → 80% → 100% per step
+  Animation: width change, 300ms ease-out
+
+Below bar: "Step 2 of 5" caption style, Text Secondary, marginTop 8px, center
+
+────────────────────────────────────────────────────────
+C30. CONFIRMATION CHECKMARK ANIMATION
+────────────────────────────────────────────────────────
+Circle: 80×80, bg #E8F5E9, radius 40px
+Checkmark SVG: animated stroke-dashoffset
+  Initial:   stroke-dashoffset = stroke-dasharray (hidden)
+  Animated:  stroke-dashoffset = 0 (drawn), 600ms ease-in-out
+  Then: circle scales 1.0 → 1.08 → 1.0, 200ms spring (bounce)
+
+  <!-- SVG spec -->
+  <svg viewBox="0 0 80 80" width="80" height="80">
+    <circle cx="40" cy="40" r="36" fill="#E8F5E9"/>
+    <path d="M24 40 L35 51 L56 29"
+          stroke="#43A047" stroke-width="3.5"
+          stroke-linecap="round" stroke-linejoin="round"
+          fill="none"
+          stroke-dasharray="45"
+          stroke-dashoffset="45">
+      <animate attributeName="stroke-dashoffset"
+               from="45" to="0" dur="0.6s" fill="freeze"
+               calcMode="spline" keySplines="0.25 0.46 0.45 0.94"/>
+    </path>
+  </svg>
+
+  Flutter equivalent: use CustomPainter with AnimatedBuilder
+
+
+=================================================================================
+PART 6 — SCREEN-BY-SCREEN VISUAL SPECIFICATION
+=================================================================================
+
+Each screen is described as an exact layout. Follow this precisely.
+
+────────────────────────────────────────────────────────
+SCREEN 1: SPLASH
+────────────────────────────────────────────────────────
+Background: radial gradient (from PART 2 GRADIENT section)
+  Center of gradient: 50% x, 35% y
+
+Content (centered in screen):
+  ┌─────────────────────────────────┐
+  │                                 │
+  │                                 │
+  │     [Pulse ring — 160×160]      │
+  │     [Logo 120×40 centered]      │
+  │         VitalScan               │  ← H1 white, marginTop 16px
+  │   Your health, intelligently    │  ← body white 80%, marginTop 8px
+  │         managed                 │
+  │                                 │
+  │                                 │
+  │                    v1.0.0       │  ← caption white 50%, absolute bottom-right 16px
+  └─────────────────────────────────┘
+
+Pulse ring:
+  Position: absolute, centered behind logo
+  3 rings: opacity 0.4, 0.25, 0.12; scale 1.0, 1.25, 1.5
+  All white, border 1px
+  @keyframes splashPulse { 0%{transform:scale(1);opacity:0.4} 100%{transform:scale(2);opacity:0} }
+  animation stagger: 0ms, 600ms, 1200ms, 2s delay between cycles
+
+Logo animation: scale 0.5 → 1.0, opacity 0 → 1, 600ms ease-out, starts after 200ms
+Tagline animation: translateY(20px) → 0, opacity 0 → 1, 400ms ease-out, starts after 600ms
+
+────────────────────────────────────────────────────────
+SCREEN 2: ONBOARDING (each slide)
+────────────────────────────────────────────────────────
+Full screen: 390×844px
+
+  ┌─────────────────────────────────┐
+  │  Skip                    2/3   │  ← 44px safe area + status, "Skip" text left,
+  │                                 │     "2/3" caption right, both white
+  │  ┌───────────────────────────┐  │
+  │  │                           │  │  ← Full-width image, height 480px
+  │  │   [Unsplash real image]   │  │     objectFit: cover
+  │  │                           │  │
+  │  │                           │  │
+  │  └───────────────────────────┘  │
+  │  ╔═══════════════════════════╗  │  ← White bottom panel, radius 24px 24px 0 0
+  │  ║                           ║  │     overlaps image by 24px (negative margin)
+  │  ║  Book lab tests from      ║  │  ← H1 Text Primary, 24px padding, marginTop 32px
+  │  ║  your doorstep            ║  │
+  │  ║                           ║  │
+  │  ║  Free home sample         ║  │  ← body Text Secondary, marginTop 12px
+  │  ║  collection in 60 min     ║  │
+  │  ║                           ║  │
+  │  ║  ●●○          [Next →]   ║  │  ← dots left, primary button right
+  │  ╚═══════════════════════════╝  │     bottom panel height 280px
+  └─────────────────────────────────┘
+
+Image float animation: translateY(-8px) ↔ translateY(0), 3s ease-in-out infinite
+Panel slide in: translateY(280px) → 0, 400ms ease-out
+Dot indicators:
+  Inactive: 8×8 circle, bg #E5E7EB
+  Active: 20×8 pill, bg #00897B
+  Transition: width 8px → 20px, 200ms ease
+
+────────────────────────────────────────────────────────
+SCREEN 3: LOGIN
+────────────────────────────────────────────────────────
+Background: #F8FAFB
+
+  ┌─────────────────────────────────┐
+  │ [Status bar 44px]               │
+  │                                 │
+  │  [Logo centered, 120×40]        │  ← marginTop 48px
+  │                                 │
+  │  Welcome back 👋               │  ← H1, Text Primary, marginTop 32px, 24px left
+  │  Enter your mobile to continue  │  ← body, Text Secondary, marginTop 8px, 24px left
+  │                                 │
+  │  ╔═══════════════════════════╗  │  ← White card, radius 20px, shadow3
+  │  ║ Mobile Number             ║  │     marginTop 32px, 16px margin left/right
+  │  ║ ┌─────────────────────┐   ║  │
+  │  ║ │🇮🇳 +91 │ 9876543210 │   ║  │  ← Input field 52px, border splits flag+num
+  │  ║ └─────────────────────┘   ║  │
+  │  ║                           ║  │
+  │  ║ [Send OTP] ←────────────  ║  │  ← Primary button, full width, 52px
+  │  ║                           ║  │
+  │  ║ ─────────── OR ─────────  ║  │  ← Divider with "OR" caption center
+  │  ║                           ║  │
+  │  ║ [G Continue with Google]  ║  │  ← White outlined button, Google SVG 20px
+  │  ║                           ║  │
+  │  ╚═══════════════════════════╝  │
+  │                                 │
+  │    Browse as Guest →            │  ← Text button, teal, centered
+  │                                 │
+  │  🔒 Encrypted · NABL · ⭐4.8   │  ← Trust badge row (C28), marginTop 24px
+  └─────────────────────────────────┘
+
+────────────────────────────────────────────────────────
+SCREEN 4: HOME (the flagship screen)
+────────────────────────────────────────────────────────
+This is the most important screen. Every detail matters.
+
+HEADER (not scrollable, fixed):
+  ┌─────────────────────────────────┐
+  │ [Status bar 44px teal bg]       │
+  │                                 │
+  │  Good morning, Harshal 👋  🔔  │  ← H3 white, bell icon white with red dot
+  │  📍 Vashi, Navi Mumbai    ▼    │  ← body small white 80%, location pill
+  │                                 │
+  │  ┌───────────────────────────┐  │  ← Search bar (C17), 16px margin, bg white
+  │  │ 🔍 Search tests...    🎙  │  │     marginBottom 16px
+  │  └───────────────────────────┘  │
+  └─────────────────────────────────┘  ← Header bg: #00897B, total height ≈ 140px
+
+SCROLL CONTENT (bg #F8FAFB):
+
+  [1. Banner Carousel — C8]
+    marginTop 0 (connects to header)
+    Width: full bleed
+    Height: 180px
+    Auto-scroll 4s
+
+  [2. Quick Actions Grid — C9]
+    marginTop 16px, 16px padding horizontal
+    4×2 grid, 8px gap (if 8 items)
+    Section: white card, padding 16px, radius 16px, shadow2
+
+  [3. Last Booking Card] (if exists)
+    marginTop 16px, 16px horizontal margin
+    Card: white, padding 16px, radius 16px, shadow2
+    Left: 🔵 "In Progress" pill, package name H4, date body small
+    Right: mini 6-dot stepper (filled dots for completed stages)
+    "Track →" text button bottom right
+
+  [4. Health Score Widget — C10]
+    marginTop 16px, 16px horizontal margin
+
+  [5. Popular Packages]
+    Section header row (C25) — "Popular Packages" / "View all"
+    marginTop 16px
+    Horizontal scroll, -16px bleed both sides
+    paddingLeft 16px first card, paddingRight 16px last card
+    Package cards C7, width 280px each, gap 12px
+
+  [6. Recommended For You]
+    Section header row (C25)
+    Vertical list of test cards (C6)
+    16px horizontal margin
+
+  [7. Family Health]
+    Section header row (C25)
+    Avatar row (C27), 16px padding horizontal
+
+  [8. Articles]
+    Section header row (C25)
+    Horizontal scroll cards: 160×200px each
+    Image top 100px, title body style below, read time caption
+
+  [9. Offers Strip]
+    Horizontal coupon strip, 16px margin
+    "🏷️ Use HEALTH20 — 20% off your next booking" → teal bg, white text
+
+FLOATING ELEMENTS (above bottom nav):
+  Position: fixed, above bottom nav + 16px
+  Right: 16px
+  Stack (bottom to top):
+    ① "📞 Call to Book" pill FAB (C4) — teal, pulse animation
+    ② "🤖 Wellio" circle FAB (C4) — teal, 12px above ①
+
+BOTTOM NAV (C15)
+
+────────────────────────────────────────────────────────
+SCREEN 5: TEST DETAIL
+────────────────────────────────────────────────────────
+  ┌─────────────────────────────────┐
+  │ ← Back          [Share] [Cart🛒]│  ← Sticky header, white bg, shadow1
+  │                                 │
+  │  ┌───────────────────────────┐  │  ← Hero image 200px, full width, no radius
+  │  │  [Lab photo Unsplash]     │  │
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  Complete Blood Count           │  ← H2, 16px padding
+  │  18 parameters · Report in 6h  │  ← body small, Text Secondary
+  │                                 │
+  │  ₹299          ~~₹599~~         │  ← priceLarge left, strikethrough right
+  │  [You save ₹300 🟢]            │  ← green badge, "You save ₹300"
+  │                                 │
+  │  ┌──────────────────────────┐   │  ← TabBar: Overview|Parameters|Prep|FAQs|Reviews
+  │  │ Overview│Params│Prep│FAQ │   │     active: teal indicator 2px bottom
+  │  └──────────────────────────┘   │
+  │                                 │
+  │  [Tab content scrolls here]     │
+  │                                 │
+  │  [Sample Report blurred card]   │  ← blurred thumbnail, "View Sample" overlay
+  │                                 │
+  │──────────────────────────────── │  ← Sticky bottom bar
+  │  ₹299           [Add to Cart]   │
+  └─────────────────────────────────┘
+
+────────────────────────────────────────────────────────
+SCREEN 6: CART
+────────────────────────────────────────────────────────
+  ┌─────────────────────────────────┐
+  │ ← My Cart              (3 items)│
+  │                                 │
+  │  [Cart Item Card]               │  ← Card per item
+  │  ┌───────────────────────────┐  │
+  │  │ Complete Blood Count    🗑│  │
+  │  │ For: Harshal Patil        │  │  ← family member name
+  │  │ [Priya][Self][Dad]         │  │  ← member chips to reassign
+  │  │                   ₹299   │  │
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  + Add more tests               │  ← text button, teal
+  │                                 │
+  │  ╔ Coupon ════════════════════╗  │
+  │  ║ [HEALTH20        ] [Apply] ║  │
+  │  ║ ✅ Saved ₹150               ║  │  ← green success state
+  │  ╚════════════════════════════╝  │
+  │                                 │
+  │  ┌─── Price Breakup ─────────┐  │
+  │  │ MRP                 ₹1,197 │  │
+  │  │ Test Discount        -₹598 │  │
+  │  │ Coupon (HEALTH20)    -₹150 │  │
+  │  │ Home Collection         ₹0 │  │  ← Free (above threshold)
+  │  │ ─────────────────────────  │  │
+  │  │ Total                ₹449  │  │  ← H3, Text Primary
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  [Proceed to Book →]            │  ← Primary button full width
+  └─────────────────────────────────┘
+
+────────────────────────────────────────────────────────
+SCREEN 7: BOOKING FLOW (Step 3 — Date)
+────────────────────────────────────────────────────────
+  ┌─────────────────────────────────┐
+  │ ← Select Date                   │
+  │                                 │
+  │  ════════════════════  3 of 5   │  ← Progress bar (C29), "Step 3 of 5"
+  │                                 │
+  │  Select collection date         │  ← H2, 16px padding, marginTop 24px
+  │  Sample collection is free      │  ← body small, Text Secondary
+  │                                 │
+  │  ◄ January 2025  ►             │  ← Month navigator, optional
+  │                                 │
+  │  ┌─────────────────────────┐    │  ← Horizontal date scroller
+  │  │ Mon  Tue  Wed  Thu  Fri │    │
+  │  │  13   14   15   16   17 │    │
+  │  │           ●             │    │  ← selected = teal circle
+  │  └─────────────────────────┘    │
+  │                                 │
+  │  Today      Tomorrow   +2 days  │  ← individual pill cards
+  │  ┌───┐      ┌───┐      ┌───┐   │     inactive: white border #E5E7EB
+  │  │Mon│      │Tue│      │Wed│   │     active: teal bg
+  │  │13 │      │14 │      │15 │   │
+  │  └───┘      └───┘      └───┘   │
+  │                                 │
+  │                   [Continue →]  │  ← Primary button, bottom of screen
+  └─────────────────────────────────┘
+
+Date card per day:
+  Width: (screen - 32px - 4×8px gap) / 5 ≈ 62px
+  Height: 70px
+  Radius: 12px
+  Content: day name caption top, day number H3 center
+  Active: bg #00897B, all text white, shadow2
+  Today: border 1.5px #00897B (if not selected)
+  Past:  bg #F4F6F8, text #9CA3AF, not tappable
+
+────────────────────────────────────────────────────────
+SCREEN 8: HEALTH SCORE (Full)
+────────────────────────────────────────────────────────
+  ┌─────────────────────────────────┐
+  │ ← Health Score                  │
+  │                                 │
+  │  ┌───────────────────────────┐  │  ← White card, padding 24px
+  │  │                           │  │
+  │  │      [Gauge 220×220]      │  │  ← C11
+  │  │         "72"              │  │
+  │  │       out of 100          │  │
+  │  │          Good             │  │
+  │  │                           │  │
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  Your health scores             │  ← H2, marginTop 24px
+  │                                 │
+  │  ┌─────────┐ ┌─────────┐        │  ← 2-column grid of sub-score cards
+  │  │🥗 68    │ │🏃 74    │        │
+  │  │Nutrition│ │Fitness  │        │
+  │  │████░░░  │ │█████░░  │        │  ← progress bar in each card
+  │  └─────────┘ └─────────┘        │
+  │  ┌─────────┐ ┌─────────┐        │
+  │  │😴 61    │ │🌟 70    │        │
+  │  │Sleep    │ │Lifestyle│        │
+  │  └─────────┘ └─────────┘        │
+
+Sub-score card:
+  Width: (screen - 32px - 12px gap) / 2 ≈ 169px
+  Height: 100px
+  Padding: 16px
+  Top: Icon 24px left, Score H2 right
+  Middle: Label body small, Text Secondary
+  Bottom: Progress bar 4px height, bg #E5E7EB, fill per score color
+  Score bar color: same as score range (green/orange/red)
+  Animation: bar width 0 → score%, 1000ms, 100ms stagger between cards
+
+────────────────────────────────────────────────────────
+SCREEN 9: AI COPILOT (Wellio)
+────────────────────────────────────────────────────────
+  ┌─────────────────────────────────┐
+  │ ← 🤖 Wellio — Health Copilot   │  ← Header: white bg, H3 left, teal icon
+  │    Powered by AI                │  ← caption, Text Secondary
+  │                                 │
+  │  ═══════════════════════════    │  ← 2px teal gradient divider below header
+  │                                 │
+  │  ┌───────────────────────────┐  │  ← AI welcome bubble (C21 AI style)
+  │  │ Hi Harshal! I've reviewed │  │
+  │  │ your CBC report. Your     │  │
+  │  │ Haemoglobin is low. Ask   │  │
+  │  │ me anything. 💬           │  │
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  Quick questions:               │  ← caption, Text Secondary
+  │  [Explain my CBC] [Am I at risk]│  ← Filter chips (C16), horizontal scroll
+  │  [What to eat]    [Tests due]   │
+  │                                 │
+  │     Why is my Haemoglobin low?  │  ← User bubble (C21 User style), right
+  │                                 │
+  │  ┌───────────────────────────┐  │  ← AI response card bubble
+  │  │ Your Hb at 11.2 g/dL is  │  │
+  │  │ below 13.0-17.0 for males.│  │
+  │  │ ─────────────────────     │  │
+  │  │ ⚠️ Risk: MODERATE         │  │  ← Badge
+  │  │ ─────────────────────     │  │
+  │  │ 💡 Book Iron Studies test │  │
+  │  │ [Book Iron Studies →]     │  │  ← inline CTA button, text teal
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  ┌───────────────────────────┐  │  ← typing indicator (C22), then disappears
+  │  │   •  •  •                │  │
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  ═══════════════════════════    │  ← Divider above input
+  │  ┌─────────────────────────┐[→]│  ← Input bar, send icon teal circle
+  │  │ Ask Wellio anything...  │   │
+  │  └─────────────────────────┘   │
+  └─────────────────────────────────┘
+
+────────────────────────────────────────────────────────
+SCREEN 10: REPORT DETAIL
+────────────────────────────────────────────────────────
+  ┌─────────────────────────────────┐
+  │ ← CBC Report     [⬇️] [🔗]     │  ← Sticky header with download + share
+  │                                 │
+  │  ┌─── Report Info ───────────┐  │  ← White card, 16px padding
+  │  │ Complete Blood Count      │  │
+  │  │ 10 Jan 2025               │  │  ← body small, Text Secondary
+  │  │ Metropolis Diagnostics    │  │
+  │  │ [NABL ✅] [CAP ✅]        │  │  ← trust badges (C20 style, gold #F57F17)
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  ┌─── AI Summary Banner ─────┐  │  ← Teal bg card, tap to open AI
+  │  │ 🤖 AI found 3 abnormal    │  │
+  │  │ parameters in your report  │  │
+  │  │ Ask Wellio to explain →   │  │
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  Parameters (14)                │  ← Section header, H2
+  │  ┌─── Parameter Table ───────┐  │
+  │  │ Haemoglobin  11.2  🔴Low  │  │  ← C12, left border red, pale red bg
+  │  │ WBC          7800  ✅Norm  │  │
+  │  │ Platelets    2.1L  ✅Norm  │  │
+  │  │ MCV          72    ⚠️Low   │  │
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  Trend (last 3 reports)         │
+  │  [Sparkline chart - fl_chart]   │  ← 80px height, teal line, dots at data points
+  │                                 │
+  │  Diet Recommendations           │
+  │  [Diet plan card - green border]│
+  └─────────────────────────────────┘
+
+────────────────────────────────────────────────────────
+SCREEN 11: BOOKING CONFIRMATION
+────────────────────────────────────────────────────────
+Background: #F8FAFB
+
+  ┌─────────────────────────────────┐
+  │ [Status bar 44px]               │
+  │                                 │
+  │      [Checkmark circle 80px]    │  ← C30, centered, marginTop 48px
+  │                                 │
+  │    Booking Confirmed! 🎉        │  ← H1, Text Primary, center, marginTop 24px
+  │  Your sample will be collected  │  ← body, Text Secondary, center
+  │  today between 9–11 AM          │
+  │                                 │
+  │  ┌───────────────────────────┐  │  ← White card, shadow2, 16px margin
+  │  │ Booking ID: VS-2025-0001  │  │
+  │  │ ─────────────────────     │  │
+  │  │ [Avatar 40px] Rajesh K.   │  │  ← technician photo + name
+  │  │ ⭐ 4.8 · Phlebotomist     │  │
+  │  │ ETA: 45 minutes           │  │
+  │  │ ─────────────────────     │  │
+  │  │ [6-stage tracker — C14]   │  │
+  │  └───────────────────────────┘  │
+  │                                 │
+  │  [Track Technician] ←── teal   │  ← Primary button, 16px margin
+  │  [Add to Calendar]  ←── outlined│  ← Secondary button, marginTop 12px
+  └─────────────────────────────────┘
+
+
+=================================================================================
+PART 7 — ANIMATIONS MASTER LIST
+=================================================================================
+
+Every animation in the app. No animation outside this list.
+If you're thinking of adding an animation, check here first.
+
+A01. Screen Enter (all screens)
+  Properties: opacity 0→1, translateY 10→0
+  Duration:   250ms
+  Easing:     ease-out
+  Trigger:    On screen mount
+
+A02. Screen Exit
+  Properties: opacity 1→0
+  Duration:   150ms
+  Easing:     ease-in
+
+A03. Logo Scale (Splash)
+  Properties: scale 0.5→1, opacity 0→1
+  Duration:   600ms
+  Easing:     ease-out
+  Delay:      200ms
+
+A04. Tagline Fade Up (Splash)
+  Properties: translateY 20→0, opacity 0→1
+  Duration:   400ms
+  Delay:      600ms after logo starts
+
+A05. Pulse Ring (Splash, Call FAB)
+  Type:       Infinite
+  Properties: scale 1→2, opacity 0.4→0
+  Duration:   2000ms
+  Stagger:    3 rings: 0ms, 600ms, 1200ms
+
+A06. Image Float (Onboarding)
+  Type:       Infinite alternating
+  Properties: translateY -8→0→-8
+  Duration:   3000ms
+  Easing:     ease-in-out
+
+A07. Onboarding Slide (between slides)
+  Properties: translateX 100%→0 (next) or -100%→0 (back)
+  Duration:   350ms
+  Easing:     cubic-bezier(0.25, 0.46, 0.45, 0.94)
+
+A08. Banner Carousel
+  Properties: translateX (auto-advance)
+  Duration:   400ms
+  Easing:     ease-in-out
+  Interval:   4000ms (from config auto_scroll_seconds)
+
+A09. Score Gauge Draw
+  Properties: stroke-dashoffset full→score
+  Duration:   1500ms
+  Easing:     ease-out
+  Trigger:    Screen enter
+
+A10. Score Count-Up
+  Properties: number 0→score (integer steps)
+  Duration:   1200ms
+  Easing:     ease-out (fast at start, slows at end)
+  Sync with:  A09 gauge draw
+
+A11. Sub-Score Bar Fill
+  Properties: width 0%→score%
+  Duration:   800ms per bar
+  Easing:     ease-out
+  Stagger:    100ms between each bar
+
+A12. Card Stagger Reveal (list screens)
+  Properties: opacity 0→1, translateY 20→0
+  Duration:   250ms per card
+  Stagger:    60ms between each card
+  Trigger:    Screen enter
+
+A13. Quick Actions Grid Stagger
+  Properties: opacity 0→1, scale 0.8→1
+  Duration:   200ms per item
+  Stagger:    40ms between each
+  Trigger:    Screen enter
+
+A14. Parameter Row Stagger (Report Detail)
+  Properties: translateX -20→0, opacity 0→1
+  Duration:   200ms per row
+  Stagger:    40ms between rows
+  Trigger:    Screen enter
+
+A15. Abnormal Parameter Pulse
+  Type:       Infinite (subtle, 2 cycles only then stops)
+  Properties: box-shadow 0→0 0 0 4px rgba(229,57,53,0.15)→0
+  Duration:   2000ms × 2 cycles
+
+A16. Booking Tracker Stage
+  Properties: Check icon draws in, connector line fills
+  Duration:   400ms per stage
+  Stagger:    200ms between stages
+
+A17. Confirmation Checkmark
+  Properties: SVG stroke-dashoffset full→0
+  Duration:   600ms
+  Easing:     cubic-bezier(0.25, 0.46, 0.45, 0.94)
+  Then:       circle scale 1→1.08→1, 200ms spring
+
+A18. Progress Bar Step
+  Properties: width 0%→step%
+  Duration:   300ms
+  Easing:     ease-out
+  Trigger:    Step advance
+
+A19. Slot Pill Pop-In
+  Properties: scale 0→1, opacity 0→1
+  Duration:   180ms
+  Stagger:    20ms per slot
+
+A20. Chat Bubble Appear
+  Properties: opacity 0→1, translateY 8→0
+  Duration:   200ms
+  Easing:     ease-out
+  Stagger:    60ms between bubbles
+
+A21. Typing Dots Bounce
+  Properties: translateY 0→-6→0
+  Duration:   600ms per dot cycle
+  Stagger:    150ms: dot1=0ms, dot2=150ms, dot3=300ms
+  Type:       Infinite until response arrives
+
+A22. Add to Cart Button
+  Properties: bg white→teal, icon +→✓, scale 0.95→1
+  Duration:   200ms
+  Easing:     spring
+
+A23. Coupon Applied
+  Properties: border color grey→green, icon appears ✅, text changes
+  Duration:   300ms ease
+
+A24. Button Press
+  Properties: scale 1→0.97
+  Duration:   100ms ease-out
+  Reverse:    100ms ease-in on release
+
+A25. Bottom Nav Tab
+  Properties: icon scale 1→1.2→1, label slides up 2px
+  Duration:   180ms spring
+
+A26. Search Bar Focus
+  Properties: scale 1→1.01, border color grey→teal
+  Duration:   150ms ease
+
+A27. Filter Chip Select
+  Properties: bg transparent→teal, text dark→white
+  Duration:   150ms ease
+
+A28. OTP Auto-Advance
+  Properties: focus ring moves to next box, 80ms
+  On error:   shake animation 400ms (A in C19)
+
+A29. FAB Entrance
+  Properties: scale 0→1, opacity 0→1
+  Duration:   300ms spring
+  Delay:      500ms after screen loads
+
+A30. Health Score Screen Enter
+  Sequence:
+    1. Gauge ring appears (stroke from 0): A09 immediately
+    2. Count-up starts: A10 synchronized
+    3. "Good" label fades in: opacity 0→1, 300ms, delay 1000ms
+    4. Sub-score cards stagger: A12, delay 1200ms
+    5. Sub-score bars fill: A11, delay 1400ms
+
+RULES FOR ANIMATIONS:
+  - Never animate color alone (pair with transform for GPU acceleration)
+  - Never have more than 3 concurrent animations on screen
+  - Respect system reduced motion:
+      if (MediaQuery.of(context).disableAnimations) skip to final state
+  - No animation should take more than 600ms (except gauges)
+  - All animations use either ease-out or spring (no linear)
+
+
+=================================================================================
+PART 8 — ICON SYSTEM
+=================================================================================
+
+ICON LIBRARY: Material Icons (built into Flutter, no package needed)
+ICON SIZES:
+  Nav icons:        24px
+  Card icons:       20px
+  Quick action:     24px in 48px container
+  Input icons:      20px
+  Button icons:     20px
+  Status icons:     16px
+  Micro icons:      16px (badges, inline)
+
+ICON COLOR RULES:
+  Primary action: #00897B
+  Inactive nav:   #9CA3AF
+  Status normal:  #43A047
+  Status warning: #FB8C00
+  Status error:   #E53935
+  Info:           #2979FF
+  On teal bg:     #FFFFFF
+  Decorative:     #9CA3AF or category color
+
+QUICK ACTION ICONS (with bg colors):
+  Blood Tests:         local_hospital        bg #FFF3E0, icon #FB8C00
+  Full Body Packages:  health_and_safety     bg #E0F2F1, icon #00897B
+  MRI & Scans:         document_scanner      bg #E8EAF6, icon #3F51B5
+  Doctor Consult:      medical_services      bg #FCE4EC, icon #E91E63
+  Diet Consult:        restaurant_menu       bg #F3E5F5, icon #9C27B0
+  Vaccination:         vaccines              bg #E8F5E9, icon #43A047
+  Reports:             assignment            bg #E3F2FD, icon #2196F3
+  Corporate:           business_center       bg #FFF8E1, icon #FF8F00
+  Allergy Tests:       science               bg #F1F8E9, icon #689F38
+  Genetic Tests:       biotech               bg #E8EAF6, icon #5C6BC0
+
+────────────────────────────────────────────────────────
+No custom SVG icons in Phase 1. Material Icons only.
+In Phase 2+: Add custom VitalScan icon set for brand differentiation.
+
+
+=================================================================================
+PART 9 — FLUTTER THEME CONFIGURATION
+=================================================================================
+
+Complete ThemeData that implements this design system.
+This reads colors from BrandingProvider (not hardcoded).
+
+// AppTheme.dart
+class AppTheme {
+  static ThemeData buildTheme(BrandingConfig branding) {
+    final primary = Color(int.parse(
+      branding.primaryColor.replaceFirst('#', '0xFF')
+    ));
+
+    return ThemeData(
+      useMaterial3: true,
+      fontFamily: 'Inter',
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: primary,
+        brightness: Brightness.light,
+        primary: primary,
+        surface: const Color(0xFFFFFFFF),
+        background: const Color(0xFFF8FAFB),
+        error: const Color(0xFFE53935),
+      ),
+
+      // AppBar
+      appBarTheme: AppBarTheme(
+        backgroundColor: primary,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: false,
+        titleTextStyle: VitalTextStyles.h3.copyWith(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white, size: 24),
+      ),
+
+      // Cards
+      cardTheme: CardTheme(
+        elevation: 0,
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        margin: EdgeInsets.zero,
+        shadowColor: Colors.black.withOpacity(0.08),
+      ),
+
+      // Elevated Button (Primary)
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primary,
+          foregroundColor: Colors.white,
+          minimumSize: const Size(double.infinity, 52),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          textStyle: VitalTextStyles.buttonLarge,
+          elevation: 0,
+        ),
+      ),
+
+      // Outlined Button (Secondary)
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: primary,
+          minimumSize: const Size(double.infinity, 52),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          side: BorderSide(color: primary, width: 1.5),
+          textStyle: VitalTextStyles.buttonLarge,
+        ),
+      ),
+
+      // Text Button
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: primary,
+          textStyle: VitalTextStyles.button,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+
+      // Input Decoration
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: const Color(0xFFF4F6F8),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.transparent, width: 1.5),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: primary, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFE53935), width: 1.5),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        hintStyle: VitalTextStyles.body.copyWith(color: const Color(0xFF9CA3AF)),
+        labelStyle: VitalTextStyles.caption.copyWith(color: const Color(0xFF6B7280)),
+      ),
+
+      // Bottom Navigation
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: Colors.white,
+        selectedItemColor: primary,
+        unselectedItemColor: const Color(0xFF9CA3AF),
+        selectedLabelStyle: VitalTextStyles.label,
+        unselectedLabelStyle: VitalTextStyles.label,
+        elevation: 0,
+        type: BottomNavigationBarType.fixed,
+      ),
+
+      // Chip (filter chips)
+      chipTheme: ChipThemeData(
+        backgroundColor: const Color(0xFFF8FAFB),
+        selectedColor: primary,
+        labelStyle: VitalTextStyles.label,
+        side: const BorderSide(color: Color(0xFFE5E7EB)),
+        shape: const StadiumBorder(),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
+      ),
+
+      // Divider
+      dividerTheme: const DividerThemeData(
+        color: Color(0xFFE5E7EB),
+        thickness: 1,
+        space: 0,
+      ),
+
+      // Scaffold
+      scaffoldBackgroundColor: const Color(0xFFF8FAFB),
+    );
+  }
+}
+
+
+=================================================================================
+PART 10 — ANGULAR ADMIN VISUAL SPECIFICATION
+=================================================================================
+
+The admin portal is a separate design system — desktop-first, data-dense,
+enterprise-grade. Not the same visual language as the mobile app.
+
+ADMIN PALETTE:
+  Sidebar bg:       #1A1A2E   (dark navy — authority and clarity)
+  Sidebar text:     #E5E7EB
+  Sidebar active:   #00897B (teal highlight on active item)
+  Sidebar hover:    rgba(255,255,255,0.06)
+  Main bg:          #F4F6F8
+  Surface:          #FFFFFF
+  Border:           #E5E7EB
+  Text primary:     #1A1A2E
+  Text secondary:   #6B7280
+  Teal:             #00897B (same as app)
+
+ADMIN TYPOGRAPHY:
+  Font: Inter (same)
+  Page title:    24px 700
+  Section title: 18px 600
+  Table header:  12px 600, letter-spacing 0.5px, uppercase
+  Table body:    14px 400
+  Stat number:   32px 700
+  Stat label:    12px 500, Text Secondary
+
+ADMIN LAYOUT:
+  Sidebar width:    240px (expanded) / 64px (collapsed)
+  Main content:     calc(100% - 240px)
+  Content padding:  32px
+  Card radius:      12px (smaller than mobile — desktop density)
+  Card shadow:      0 1px 4px rgba(0,0,0,0.06)
+
+ADMIN KPI CARD:
+  Width:       (content / 4) - gaps
+  Height:      100px
+  Padding:     20px
+  Left:        Stat number (32px 700) + label (caption)
+  Right:       Icon 40×40, bg teal light, radius 10px
+  Bottom:      "↑ 12% vs yesterday" caption, teal or red
+
+ADMIN DATA TABLE (AG Grid):
+  Header: bg #F4F6F8, text uppercase label style
+  Row height: 48px
+  Alternate rows: white / #FAFAFA
+  Hover row: bg #F0FDFB (very light teal)
+  Status badges: same as mobile (C20)
+
+ADMIN SIDEBAR ITEM:
+  Height: 44px
+  Padding: 0 16px
+  Icon: 18px, marginRight 12px
+  Label: body style (14px 500)
+  Active: left border 3px teal, bg rgba(0,137,123,0.08), text teal, icon teal
+  Hover: bg rgba(255,255,255,0.06)
+
+BRANDING PREVIEW PANEL (Admin → Settings → Branding):
+  Shows a 240px wide phone frame on the right side of settings form.
+  Phone frame: dark border, renders actual splash + home header mockup
+  Updates in real-time as admin changes colors/logo/name.
+  This gives admin visual confidence before saving.
+
+
+=================================================================================
+PART 11 — REAL IMAGE REFERENCE URLS
+=================================================================================
+
+Every image tag must have: onerror="this.src='https://picsum.photos/seed/health/400/300'"
+
+DEFAULT LOGO:
+  https://bit2sky.com/wp-content/uploads/2023/01/bit2sky-logo.png
+  Fallback: https://picsum.photos/seed/bit2sky/200/60
+
+BANNER CAROUSEL (hero images):
+  Banner 1 (Full Body Checkup offer):
+    https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80
+  Banner 2 (Lab test at home):
+    https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80
+  Banner 3 (Family health):
+    https://images.unsplash.com/photo-1511174511562-5f7f18b874f8?w=800&q=80
+
+ONBOARDING IMAGES:
+  Slide 1 (home collection):
+    https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=600&q=80
+  Slide 2 (digital reports):
+    https://images.unsplash.com/photo-1576671081837-49000212a370?w=600&q=80
+  Slide 3 (family health):
+    https://images.unsplash.com/photo-1511174511562-5f7f18b874f8?w=600&q=80
+
+DOCTOR PHOTOS:
+  Dr. Priya Sharma (Cardiologist):
+    https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=200&q=80
+  Dr. Arjun Mehta (Endocrinologist):
+    https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200&q=80
+  Dr. Sneha Kulkarni (Dermatologist):
+    https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&q=80
+  Dr. Rahul Verma (General Physician):
+    https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=200&q=80
+
+TECHNICIAN / SAMPLE COLLECTION:
+  https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&q=80
+
+LAB / DIAGNOSTIC:
+  https://images.unsplash.com/photo-1579154204601-01588f351e67?w=400&q=80
+  https://images.unsplash.com/photo-1530026405186-ed1f139313f3?w=400&q=80
+
+TEST/PACKAGE HERO IMAGES (use in Test Detail screen):
+  https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80
+  https://images.unsplash.com/photo-1579154204601-01588f351e67?w=600&q=80
+
+FAMILY MEMBER AVATARS:
+  Male young:   https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80
+  Female young: https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80
+  Male senior:  https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80
+  Female senior:https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80
+
+SUPPLEMENT PRODUCT IMAGES:
+  Product 1: https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=200&q=80
+  Product 2: https://images.unsplash.com/photo-1559181567-c3190958d3ab?w=200&q=80
+
+PLACEHOLDER GENERATION:
+  If a specific image category is needed and no URL is listed:
+  Use: https://picsum.photos/seed/{category_name}/{width}/{height}
+  Examples:
+    https://picsum.photos/seed/bloodtest/400/200
+    https://picsum.photos/seed/package/400/200
+    https://picsum.photos/seed/vitamins/100/100
+
+
+=================================================================================
+PART 12 — WIREFRAME-TO-SCREEN REFERENCE TABLE
+=================================================================================
+
+This table maps every screen from the wireframe prototype to its
+visual specification in this document.
+
+Screen Name              | Key Components Used
+─────────────────────────|────────────────────────────────────────────────────
+Splash                   | Part 6/Screen1, A03 A04 A05
+Onboarding               | Part 6/Screen2, A06 A07, real images Part 11
+Login                    | Part 6/Screen3, C18 C28
+OTP                      | C19, A28
+Home                     | Part 6/Screen4, C8 C9 C10 C25 C26 C27, A08 A09 A13
+Search                   | C17, C16 (chips), A26
+Tests Listing            | C6, C16 (category tabs), A12
+Test Detail              | Part 6/Screen5, C16 (tabs), C12 (params), A14
+Packages Listing         | C7, C16, compare mode
+Package Detail           | Same as test detail
+Custom Package Builder   | C6 (multi-select), C29 (progress), live pricing
+Cart                     | Part 6/Screen6, C26, C24 (empty state)
+Booking - Date           | Part 6/Screen7, C29, date pills
+Booking - Slot           | C16 (tabs), slot pills, A19
+Booking - Payment        | Price breakup card, C29
+Confirmation             | Part 6/Screen11, C14, C30, A17
+Tracking                 | Map placeholder, C14, technician C13 variant
+Reports                  | C25, report cards (C5 variant), C24 (empty)
+Report Detail            | Part 6/Screen10, C12, C21 AI banner, sparkline
+Health Score             | Part 6/Screen8, C11, sub-score cards, A30
+AI Copilot               | Part 6/Screen9, C21 C22, A20 A21
+Doctors                  | C13, C16 (specialty chips)
+Scans                    | C16 (scan tabs), centre cards
+Family Vault             | C27, document rows, accordion sections
+Wallet                   | Gradient wallet card, C20 tier badge, transactions
+Profile                  | Avatar header, menu rows with chevrons
+Notifications            | Timeline list, type-based icons
+Support                  | Chat-style UI (similar to C21)
+Admin Dashboard          | Part 10, KPI cards, AG Grid table, charts
+Admin Home Layout        | Drag-drop list, CDK DragDrop handles
+Admin Branding           | Form + phone frame preview panel
+
+
+=================================================================================
+PART 13 — RESPONSIVE BEHAVIOR
+=================================================================================
+
+FLUTTER (Mobile):
+  320px:  All layouts tested. Text wraps gracefully. No overflow.
+  390px:  Primary design target (iPhone 14).
+  430px:  Slightly more padding. Cards expand to fill.
+  Tablet: Not in scope for v1. Scale up with larger padding (32px) and
+          2-column grids for test/package cards.
+
+ANGULAR ADMIN (Desktop):
+  1280px:  Minimum supported width. Sidebar + content side by side.
+  1440px:  Optimal. KPI cards in 4-column row.
+  1920px:  Max content width 1400px, centered.
+  < 1280px: Sidebar collapses to icon-only mode (64px).
+  Mobile:  Admin portal not supported on mobile. Show "Please use desktop."
+
+
+=================================================================================
+PART 14 — ACCESSIBILITY
+=================================================================================
+
+CONTRAST RATIOS (WCAG AA minimum):
+  Teal #00897B on white #FFFFFF:     4.6:1  ✅ AA
+  White #FFFFFF on teal #00897B:     4.6:1  ✅ AA
+  Text Primary #1A1A2E on white:     16.1:1 ✅ AAA
+  Text Secondary #6B7280 on white:   4.6:1  ✅ AA (just meets AA)
+  Error #E53935 on white:            4.5:1  ✅ AA
+  Success #43A047 on white:          4.5:1  ✅ AA (verify on final)
+
+TAP TARGETS:
+  Minimum: 48×48dp for all interactive elements
+  Bottom nav items: full tab width × 64px height ✅
+  Quick action tiles: 76px minimum ✅
+  Add to cart button: 32×32px — needs 8px invisible padding to meet 48dp
+
+SCREEN READER:
+  All images: meaningful semanticLabel in Flutter
+  Icons without labels: Semantics widget with label
+  Status badges: "Haemoglobin status: Low" not just "Low"
+  Progress indicators: "Step 3 of 5, Select date" as semantic label
+
+REDUCED MOTION:
+  Check: MediaQuery.of(context).disableAnimations
+  If true: skip all non-essential animations
+           Health score gauge: render at final value immediately
+           Carousel: disable auto-scroll
+           Page transitions: instant switch
+
+FONT SCALING:
+  All text sizes in sp (scales with system font size)
+  Layouts tested at font scale 1.5x (accessibility setting)
+  Max lines set where overflow would break layout
+
+
+=================================================================================
+PART 15 — WHAT TO BUILD IN WHICH ORDER
+=================================================================================
+
+Visual components build order (recommended):
+
+Week 1:  Design tokens, TextStyles, colors, ThemeData (Part 3, 9)
+Week 1:  Base Card (C5), Primary Button (C1), Secondary Button (C2)
+Week 1:  Bottom Navigation (C15), Screen transitions (A01, A02)
+Week 2:  Search Bar (C17), Filter Chip (C16), Status Badge (C20)
+Week 2:  Test Card (C6), Package Card (C7), Section Header (C25)
+Week 2:  Skeleton Loader (C23), Empty State (C24)
+Week 3:  Banner Carousel (C8), Quick Actions Grid (C9)
+Week 3:  Home Screen (Part 6/Screen4) — all sections
+Week 4:  Health Score gauge (C11), Sub-score cards (A30)
+Week 4:  OTP input (C19), Chat bubbles (C21), Typing indicator (C22)
+Week 5:  Parameter row (C12), Booking tracker (C14), Confirmation (C30)
+Week 5:  All remaining screens
+
+Admin portal order:
+Week 1:  Sidebar (Part 10), layout shell, KPI cards
+Week 2:  AG Grid table, status badges, data forms
+Week 3:  Charts (ApexCharts), drag-drop home layout editor
+Week 4:  Branding preview panel, all remaining admin modules
+
+
+=================================================================================
+FINAL CHECKLIST FOR DEVELOPERS
+=================================================================================
+
+Before shipping any screen, verify:
+
+Visual:
+  ✅ Background is #F8FAFB (not white, not grey)
+  ✅ All cards are white with shadow2 and radius 16px
+  ✅ Teal color matches #00897B exactly
+  ✅ All text uses Inter font
+  ✅ Type scale matches specifications in Part 3
+  ✅ All spacing is multiples of 4px
+  ✅ Status colors used only for health/booking status (not decoration)
+  ✅ No more than 3 colors in any single card
+
+Animation:
+  ✅ Screen enters with A01 (opacity + translateY)
+  ✅ List items have stagger (A12)
+  ✅ No animation runs longer than 600ms (except gauges)
+  ✅ All buttons have press scale A24
+  ✅ Reduced motion respected
+
+Images:
+  ✅ All images use CachedNetworkImage
+  ✅ All images have onerror fallback to Picsum
+  ✅ No grey placeholder boxes visible during load (skeleton instead)
+
+Content:
+  ✅ All text is real healthcare content (no Lorem Ipsum)
+  ✅ All prices, test names, parameters are from the seed data
+  ✅ All labels are from DB (not hardcoded strings)
+
+Accessibility:
+  ✅ All tap targets minimum 48×48dp
+  ✅ All images have semanticLabel
+  ✅ Contrast ratios verified (Part 14)
+
+=================================================================================
+END OF VISUAL DESIGN SYSTEM — VitalScan v1.0
+=================================================================================

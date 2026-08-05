@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Test details without a new screen</title>
+<style>
+  :root{
+    --cream:#FAF3E8; --ink:#1E2A38; --sub:#75808D; --blue:#3E7FBE; --blue-d:#2C5F94;
+    --teal:#CDEAEA; --green:#2A9C54; --green-bg:#E9F8EE; --line:#EDE4D3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{background:#232830;display:flex;gap:48px;justify-content:center;align-items:flex-start;padding:44px 20px;flex-wrap:wrap}
+  .stage{text-align:center}
+  .stage h2{color:#fff;font-size:14px;margin-bottom:5px;font-weight:800}
+  .stage p{color:#9aa5b1;font-size:11px;margin-bottom:14px;max-width:360px}
+  .phone{width:360px;height:760px;background:var(--cream);border-radius:42px;border:9px solid #0d0f12;
+    overflow:hidden;position:relative;box-shadow:0 26px 60px rgba(0,0,0,.5);text-align:left}
+  .card{background:#fff;border-radius:16px;box-shadow:0 5px 16px rgba(0,0,0,.05)}
+  .dash{border-top:1.5px dashed var(--line)}
+  .trow{display:flex;justify-content:space-between;align-items:center;padding:10px 14px}
+  .trow b{font-size:13px;color:var(--ink);display:block}
+  .trow small{font-size:10.5px;color:var(--blue);font-weight:800}
+  .plus{width:28px;height:28px;border-radius:50%;background:linear-gradient(140deg,var(--blue),var(--blue-d));
+    color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800}
+  .chip{display:inline-block;background:#F7F1E6;border-radius:100px;font-size:9px;font-weight:750;color:var(--sub);padding:3px 8px}
+  .cta{background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;
+    text-align:center;padding:13px 0;font-size:13.5px;font-weight:800;position:relative;overflow:hidden}
+  .cta:after{content:'';position:absolute;top:0;bottom:0;width:44%;left:-50%;transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-50%}55%{left:130%}100%{left:130%}}
+  .top{display:flex;align-items:center;gap:10px;padding:48px 15px 8px}
+  .circ{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:15px;color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.07)}
+  .top b{font-size:16px;font-weight:850;color:var(--ink)}
+</style>
+</head>
+<body>
+
+<!-- A · inline expand -->
+<div class="stage">
+  <h2>A · Row expands in place</h2>
+  <p>Tap a test → the row unfolds right there (description, chips, Add). No navigation at all; tap again to collapse. Works in All Tests, search, categories.</p>
+  <div class="phone">
+    <div class="top"><div class="circ">←</div><b>All Blood Tests</b></div>
+    <div class="card" style="margin:8px 15px">
+      <div class="trow"><div><b>ACE</b><small>₹1400</small></div><div class="plus">+</div></div>
+    </div>
+    <!-- expanded row -->
+    <div class="card" style="margin:0 15px 8px;border:1.8px solid var(--blue)">
+      <div class="trow" style="padding-bottom:6px"><div><b>C.B.C.</b><small>₹300</small></div><span style="color:var(--blue);font-weight:800">⌃</span></div>
+      <div style="padding:0 14px 12px">
+        <div style="font-size:11.5px;color:var(--sub);line-height:1.45">Complete blood count — screens infection, anemia and immunity. 20+ readings from one sample.</div>
+        <div style="display:flex;gap:5px;margin:8px 0 10px">
+          <span class="chip">1 param</span><span class="chip" style="background:#EDF4FB;color:#2C5F94">⏱ 6 hours</span>
+          <span class="chip" style="background:var(--green-bg);color:var(--green)">🏠 Home collection</span>
+        </div>
+        <div class="cta">Add to Cart · ₹300</div>
+      </div>
+    </div>
+    <div class="card" style="margin:0 15px 8px">
+      <div class="trow"><div><b>C.B.C + ESR</b><small>₹400</small></div><div class="plus">+</div></div>
+    </div>
+    <div class="card" style="margin:0 15px 8px">
+      <div class="trow"><div><b>Ferritin</b><small>₹800</small></div><div class="plus">+</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- B · quick-view sheet -->
+<div class="stage">
+  <h2>B · Quick-view sheet</h2>
+  <p>Tap a test → compact sheet slides over the list: full details + Add. One tap to dismiss. List stays behind; scroll position never lost.</p>
+  <div class="phone">
+    <div style="filter:blur(1.5px);opacity:.5">
+      <div class="top"><div class="circ">←</div><b>All Blood Tests</b></div>
+      <div class="card" style="margin:8px 15px"><div class="trow"><div><b>ACE</b><small>₹1400</small></div><div class="plus">+</div></div></div>
+      <div class="card" style="margin:0 15px 8px"><div class="trow"><div><b>C.B.C.</b><small>₹300</small></div><div class="plus">+</div></div></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;background:var(--cream);border-radius:24px 24px 0 0;
+      box-shadow:0 -12px 40px rgba(0,0,0,.25);padding:10px 16px 22px">
+      <div style="width:42px;height:4.5px;border-radius:3px;background:#D8CDBA;margin:0 auto 12px"></div>
+      <div style="display:flex;gap:11px;align-items:center">
+        <div style="width:44px;height:44px;border-radius:13px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:20px">🧪</div>
+        <div style="flex:1">
+          <b style="font-size:16px;color:var(--ink);font-weight:850">C.B.C.</b>
+          <div style="font-size:11px;color:var(--sub)">Complete Blood Count · 1 parameter</div>
+        </div>
+        <div style="text-align:right">
+          <b style="font-size:18px;color:var(--blue);font-weight:850">₹300</b>
+        </div>
+      </div>
+      <div style="font-size:11.5px;color:var(--sub);line-height:1.5;margin:10px 0">Screens infection, anemia and immunity — 20+ readings from a single sample. No fasting needed.</div>
+      <div style="display:flex;gap:5px;margin-bottom:12px">
+        <span class="chip">✔ Certified labs</span><span class="chip" style="background:#EDF4FB;color:#2C5F94">⏱ Report in 6 hrs</span>
+        <span class="chip" style="background:var(--green-bg);color:var(--green)">🏠 Free collection</span>
+      </div>
+      <div class="cta">Add to Cart · ₹300</div>
+    </div>
+  </div>
+</div>
+
+<!-- C · quick-view + member in ONE sheet -->
+<div class="stage">
+  <h2>C · Quick-view + who-for in ONE sheet ⭐</h2>
+  <p>The click-killer: same sheet also carries the member avatars, so details + "who is it for" + add collapse into a single surface. Row tap → pick avatar → Add. Two taps total (today it's four screens).</p>
+  <div class="phone">
+    <div style="filter:blur(1.5px);opacity:.5">
+      <div class="top"><div class="circ">←</div><b>All Blood Tests</b></div>
+      <div class="card" style="margin:8px 15px"><div class="trow"><div><b>ACE</b><small>₹1400</small></div><div class="plus">+</div></div></div>
+      <div class="card" style="margin:0 15px 8px"><div class="trow"><div><b>C.B.C.</b><small>₹300</small></div><div class="plus">+</div></div></div>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;background:var(--cream);border-radius:24px 24px 0 0;
+      box-shadow:0 -12px 40px rgba(0,0,0,.25);padding:10px 16px 22px">
+      <div style="width:42px;height:4.5px;border-radius:3px;background:#D8CDBA;margin:0 auto 12px"></div>
+      <div style="display:flex;gap:11px;align-items:center">
+        <div style="width:44px;height:44px;border-radius:13px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:20px">🧪</div>
+        <div style="flex:1">
+          <b style="font-size:16px;color:var(--ink);font-weight:850">C.B.C.</b>
+          <div style="font-size:11px;color:var(--sub)">1 parameter · no fasting</div>
+        </div>
+        <b style="font-size:18px;color:var(--blue);font-weight:850">₹300</b>
+      </div>
+      <div style="display:flex;gap:5px;margin:9px 0 12px">
+        <span class="chip" style="background:#EDF4FB;color:#2C5F94">⏱ 6 hrs</span>
+        <span class="chip" style="background:var(--green-bg);color:var(--green)">🏠 Free collection</span>
+        <span class="chip">✔ NABL</span>
+      </div>
+      <div style="font-size:11.5px;font-weight:850;color:var(--ink);margin-bottom:8px">Who is this for?</div>
+      <div style="display:flex;gap:12px;margin-bottom:14px">
+        <div style="text-align:center">
+          <div style="width:50px;height:50px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:22px;
+            border:3px solid var(--green);position:relative">👤<div style="position:absolute;bottom:-3px;right:-3px;width:18px;height:18px;border-radius:50%;
+            background:var(--green);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:800">✓</div></div>
+          <div style="font-size:10px;font-weight:750;color:var(--ink);margin-top:4px">Me</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:50px;height:50px;border-radius:50%;background:#F8DCD4;display:flex;align-items:center;justify-content:center;font-size:22px;border:3px solid transparent">👩</div>
+          <div style="font-size:10px;font-weight:650;color:var(--sub);margin-top:4px">Priya</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:50px;height:50px;border-radius:50%;background:#fff;border:2px dashed #C9BFA9;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--blue)">＋</div>
+          <div style="font-size:10px;font-weight:650;color:var(--blue);margin-top:4px">Add</div>
+        </div>
+      </div>
+      <div class="cta">Add for Me · ₹300</div>
+      <div style="text-align:center;margin-top:9px;font-size:11px;color:var(--blue);font-weight:800">Full details ›</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

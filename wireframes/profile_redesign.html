@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Profile & sub-screens — warm redesign</title>
+<style>
+  :root{
+    --cream:#FAF3E8; --ink:#1E2A38; --sub:#75808D; --blue:#3E7FBE; --blue-d:#2C5F94;
+    --teal:#CDEAEA; --green:#2A9C54; --green-bg:#E9F8EE; --line:#EDE4D3; --orange:#F58B44;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{background:#232830;display:flex;gap:44px;justify-content:center;align-items:flex-start;padding:44px 20px;flex-wrap:wrap}
+  .stage{text-align:center}
+  .stage h2{color:#fff;font-size:14px;margin-bottom:5px;font-weight:800}
+  .stage p{color:#9aa5b1;font-size:11px;margin-bottom:14px;max-width:360px}
+  .phone{width:360px;height:760px;background:var(--cream);border-radius:42px;border:9px solid #0d0f12;
+    overflow:hidden;position:relative;box-shadow:0 26px 60px rgba(0,0,0,.5);text-align:left}
+  .scroll{height:100%;overflow-y:auto;padding-bottom:90px}
+  .scroll::-webkit-scrollbar{display:none}
+  .pad{padding:0 15px}
+  .top{display:flex;align-items:center;gap:10px;padding:48px 15px 8px}
+  .circ{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:15px;color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.07)}
+  .top b{font-size:16px;font-weight:850;color:var(--ink)}
+  .sq{display:block;width:100px;height:8px;margin:2px 0 0}
+  .card{background:#fff;border-radius:16px;box-shadow:0 5px 16px rgba(0,0,0,.05)}
+  .dash{border-top:1.5px dashed var(--line)}
+  .cta{background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;
+    text-align:center;padding:12px 0;font-size:13px;font-weight:800;position:relative;overflow:hidden}
+  .cta:after{content:'';position:absolute;top:0;bottom:0;width:44%;left:-50%;transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-50%}55%{left:130%}100%{left:130%}}
+  .pill{display:inline-block;border-radius:100px;font-size:9.5px;font-weight:800;padding:3px 8px}
+  .row{display:flex;align-items:center;gap:11px;padding:11px 14px}
+  .row .ico{width:34px;height:34px;border-radius:11px;background:#EDF4FB;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .row b{font-size:13px;color:var(--ink);display:block}
+  .row small{font-size:10.5px;color:var(--sub)}
+  .row .arr{margin-left:auto;color:#B9C6D2;font-weight:800}
+</style>
+</head>
+<body>
+
+<!-- ── 1 · PROFILE HUB ── -->
+<div class="stage">
+  <h2>1 · Profile hub</h2>
+  <p>Gradient identity card with avatar ring + wallet chip, warm quick tiles, grouped lists with dashed dividers and squiggle titles, referral banner, soft logout.</p>
+  <div class="phone"><div class="scroll">
+    <div style="margin:52px 15px 0;background:linear-gradient(120deg,var(--blue),var(--blue-d));border-radius:20px;padding:16px;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-10px;top:-14px;font-size:90px;opacity:.12">🩺</div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="width:56px;height:56px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;
+          font-size:22px;font-weight:850;color:var(--blue);border:3px solid #9CC3E8">H</div>
+        <div style="flex:1">
+          <b style="color:#fff;font-size:16.5px;font-weight:850">Harshal Patil</b>
+          <small style="display:block;color:#CFE2F3;font-size:11px">harshal.rpatil5@gmail.com · +91 98765 43210</small>
+        </div>
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center">✏️</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <div style="flex:1;background:rgba(255,255,255,.15);border-radius:12px;padding:8px;text-align:center">
+          <b style="color:#fff;font-size:14px">₹430</b><small style="display:block;color:#CFE2F3;font-size:9.5px">Wallet</small></div>
+        <div style="flex:1;background:rgba(255,255,255,.15);border-radius:12px;padding:8px;text-align:center">
+          <b style="color:#fff;font-size:14px">3</b><small style="display:block;color:#CFE2F3;font-size:9.5px">Bookings</small></div>
+        <div style="flex:1;background:rgba(255,255,255,.15);border-radius:12px;padding:8px;text-align:center">
+          <b style="color:#fff;font-size:14px">2</b><small style="display:block;color:#CFE2F3;font-size:9.5px">Reports</small></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin:14px 15px 0">
+      <div class="card" style="flex:1;text-align:center;padding:12px 4px"><span style="font-size:20px">🧾</span>
+        <b style="display:block;font-size:11px;margin-top:3px;color:var(--ink)">Bookings</b></div>
+      <div class="card" style="flex:1;text-align:center;padding:12px 4px"><span style="font-size:20px">📄</span>
+        <b style="display:block;font-size:11px;margin-top:3px;color:var(--ink)">Reports</b></div>
+      <div class="card" style="flex:1;text-align:center;padding:12px 4px"><span style="font-size:20px">👨‍👩‍👧</span>
+        <b style="display:block;font-size:11px;margin-top:3px;color:var(--ink)">Family</b></div>
+      <div class="card" style="flex:1;text-align:center;padding:12px 4px"><span style="font-size:20px">📍</span>
+        <b style="display:block;font-size:11px;margin-top:3px;color:var(--ink)">Addresses</b></div>
+    </div>
+
+    <div style="margin:16px 15px 6px;font-size:14px;font-weight:850;color:var(--ink)">Account
+      <svg class="sq" viewBox="0 0 100 10"><polyline points="0,7 22,7 29,2 36,8 42,7 100,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </div>
+    <div class="card" style="margin:0 15px">
+      <div class="row"><div class="ico">💳</div><div><b>My Wallet</b><small>₹430 · earn on every booking</small></div><span class="arr">›</span></div>
+      <div class="dash" style="margin:0 14px"></div>
+      <div class="row"><div class="ico">🔄</div><div><b>Subscriptions</b><small>Care plans & memberships</small></div><span class="arr">›</span></div>
+      <div class="dash" style="margin:0 14px"></div>
+      <div class="row"><div class="ico">🏢</div><div><b>Corporate Verification</b><small>Unlock company benefits</small></div><span class="arr">›</span></div>
+    </div>
+
+    <div style="margin:14px 15px 0;background:linear-gradient(120deg,#2A9C54,#1F7A42);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:22px">🎁</span>
+      <div style="flex:1"><b style="color:#fff;font-size:12.5px">Refer & Earn ₹200</b>
+        <small style="display:block;color:#D7F5E2;font-size:10px">Friends get tested, you get rewarded</small></div>
+      <span style="background:#fff;color:#1F7A42;border-radius:100px;font-size:10.5px;font-weight:850;padding:6px 11px">Invite</span>
+    </div>
+
+    <div style="margin:16px 15px 6px;font-size:14px;font-weight:850;color:var(--ink)">More
+      <svg class="sq" viewBox="0 0 100 10"><polyline points="0,7 22,7 29,2 36,8 42,7 100,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </div>
+    <div class="card" style="margin:0 15px">
+      <div class="row"><div class="ico">🎧</div><div><b>Help & Support</b></div><span class="arr">›</span></div>
+      <div class="dash" style="margin:0 14px"></div>
+      <div class="row"><div class="ico">🛡</div><div><b>Privacy Policy</b></div><span class="arr">›</span></div>
+      <div class="dash" style="margin:0 14px"></div>
+      <div class="row"><div class="ico" style="background:#FDECEA">🚪</div><div><b style="color:#D64541">Log out</b></div></div>
+    </div>
+    <div style="text-align:center;color:#B9AF9C;font-size:10px;margin-top:14px">Unique Diagnostic Centre · v1.0.0</div>
+  </div></div>
+</div>
+
+<!-- ── 2 · BOOKINGS ── -->
+<div class="stage">
+  <h2>2 · Bookings (My Orders)</h2>
+  <p>Each booking is a mini ticket: status pill, package + member, slot, inline 5-step progress dots, and actions. Active on top, history below.</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div><b>My Bookings</b></div>
+    <div style="display:flex;gap:7px;margin:6px 15px 12px">
+      <span class="pill" style="background:#EDF4FB;border:1.4px solid var(--blue);color:var(--blue-d);padding:6px 13px;font-size:11px">Active</span>
+      <span class="pill" style="background:#fff;color:var(--sub);padding:6px 13px;font-size:11px">Completed</span>
+      <span class="pill" style="background:#fff;color:var(--sub);padding:6px 13px;font-size:11px">Cancelled</span>
+    </div>
+    <div class="card" style="margin:0 15px 12px;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:linear-gradient(100deg,var(--blue),var(--blue-d))">
+        <b style="color:#fff;font-size:12.5px">#UDC-2481</b>
+        <span class="pill" style="background:rgba(255,255,255,.25);color:#fff">CONFIRMED</span>
+      </div>
+      <div style="padding:11px 14px">
+        <b style="font-size:13.5px;color:var(--ink)">Cardiac Profile</b>
+        <small style="display:block;font-size:11px;color:var(--sub);margin-top:1px">👤 Harshal · 📅 Sat 1 Aug, 07:00 · 🏠 Home</small>
+        <div style="display:flex;align-items:center;gap:4px;margin-top:10px">
+          <div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center">✓</div>
+          <div style="flex:1;height:2.5px;background:var(--green)"></div>
+          <div style="width:22px;height:22px;border-radius:50%;background:#EDF4FB;border:2px solid var(--blue);font-size:9px;display:flex;align-items:center;justify-content:center">🚗</div>
+          <div style="flex:1;height:2.5px;background:#E7DFD2"></div>
+          <div style="width:22px;height:22px;border-radius:50%;background:#F1EBDE;font-size:9px;display:flex;align-items:center;justify-content:center">💉</div>
+          <div style="flex:1;height:2.5px;background:#E7DFD2"></div>
+          <div style="width:22px;height:22px;border-radius:50%;background:#F1EBDE;font-size:9px;display:flex;align-items:center;justify-content:center">🧪</div>
+          <div style="flex:1;height:2.5px;background:#E7DFD2"></div>
+          <div style="width:22px;height:22px;border-radius:50%;background:#F1EBDE;font-size:9px;display:flex;align-items:center;justify-content:center">📄</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <span style="flex:1;text-align:center;border:1.6px solid var(--blue);color:var(--blue);border-radius:100px;font-size:11px;font-weight:800;padding:8px 0">Reschedule</span>
+          <span class="cta" style="flex:1;font-size:11px;padding:9px 0">Track live →</span>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin:0 15px 12px">
+      <div class="row"><div class="ico" style="background:var(--green-bg)">✓</div>
+        <div><b>Diabetes Profile</b><small>#UDC-2412 · 28 Jul · Report ready</small></div>
+        <span class="pill" style="background:var(--green-bg);color:var(--green)">COMPLETED</span></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ── 3 · REPORTS ── -->
+<div class="stage">
+  <h2>3 · Reports</h2>
+  <p>Report cards echo the login "report" slide: white doc with blue accent bar, key values with Normal pills, big Download + Ask Wellio actions.</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div><b>My Reports</b></div>
+    <div style="display:flex;gap:7px;margin:6px 15px 12px">
+      <span class="pill" style="background:#EDF4FB;border:1.4px solid var(--blue);color:var(--blue-d);padding:6px 13px;font-size:11px">All</span>
+      <span class="pill" style="background:#fff;color:var(--sub);padding:6px 13px;font-size:11px">Harshal</span>
+      <span class="pill" style="background:#fff;color:var(--sub);padding:6px 13px;font-size:11px">Priya</span>
+    </div>
+    <div class="card" style="margin:0 15px 12px;overflow:hidden;border-left:4px solid var(--blue)">
+      <div style="padding:12px 14px">
+        <div style="display:flex;justify-content:space-between">
+          <b style="font-size:13.5px;color:var(--ink)">Diabetes Profile</b>
+          <span class="pill" style="background:var(--green-bg);color:var(--green)">NORMAL</span>
+        </div>
+        <small style="font-size:10.5px;color:var(--sub)">Harshal · 28 Jul 2026 · 35 parameters</small>
+        <div style="display:flex;gap:6px;margin-top:9px">
+          <span style="background:#F7F1E6;border-radius:9px;font-size:9.5px;font-weight:750;color:var(--ink);padding:4px 8px">HbA1c 5.4% <b style="color:var(--green)">●</b></span>
+          <span style="background:#F7F1E6;border-radius:9px;font-size:9.5px;font-weight:750;color:var(--ink);padding:4px 8px">FBS 92 <b style="color:var(--green)">●</b></span>
+          <span style="background:#F7F1E6;border-radius:9px;font-size:9.5px;font-weight:750;color:var(--ink);padding:4px 8px">+33 more</span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:11px">
+          <span class="cta" style="flex:1;font-size:11px;padding:9px 0">⬇ Download PDF</span>
+          <span style="flex:1;text-align:center;border:1.6px solid var(--blue);color:var(--blue);border-radius:100px;font-size:11px;font-weight:800;padding:8px 0">🤖 Ask Wellio</span>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin:0 15px 12px;border-left:4px solid var(--orange)">
+      <div style="padding:12px 14px">
+        <div style="display:flex;justify-content:space-between">
+          <b style="font-size:13.5px;color:var(--ink)">Lipid Profile</b>
+          <span class="pill" style="background:#FDF3E7;color:#C97716">2 ATTENTION</span>
+        </div>
+        <small style="font-size:10.5px;color:var(--sub)">Harshal · 12 Jul 2026 · 8 parameters</small>
+      </div>
+    </div>
+    <div style="margin:4px 15px;text-align:center;font-size:10.5px;color:var(--sub)">Reports auto-appear here ~6 hrs after collection</div>
+  </div></div>
+</div>
+
+<!-- ── 4 · FAMILY ── -->
+<div class="stage">
+  <h2>4 · Family members</h2>
+  <p>Avatar cards with relationship + age chips, per-member shortcuts (book/reports), and the same add-member sheet used in booking.</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div><b>My Family</b></div>
+    <div style="margin:4px 15px 12px;background:var(--green-bg);border:1.4px solid #BFE8CC;border-radius:12px;padding:8px;text-align:center;font-size:11px;font-weight:750;color:#1F7A42">
+      👨‍👩‍👧 Book for 2+ members together — save up to 25% each</div>
+    <div class="card" style="margin:0 15px 10px">
+      <div class="row">
+        <div style="width:42px;height:42px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:19px">👤</div>
+        <div><b>Harshal Patil</b><small>Self · Male · 28 yrs</small></div>
+        <span class="pill" style="background:#EDF4FB;color:var(--blue-d);margin-left:auto">YOU</span>
+      </div>
+    </div>
+    <div class="card" style="margin:0 15px 10px">
+      <div class="row">
+        <div style="width:42px;height:42px;border-radius:50%;background:#F8DCD4;display:flex;align-items:center;justify-content:center;font-size:19px">👩</div>
+        <div><b>Priya Patil</b><small>Spouse · Female · 34 yrs</small></div>
+        <span class="arr" style="margin-left:auto">›</span>
+      </div>
+      <div class="dash" style="margin:0 14px"></div>
+      <div style="display:flex;gap:8px;padding:9px 14px">
+        <span style="flex:1;text-align:center;background:#F7F1E6;border-radius:100px;font-size:10.5px;font-weight:750;color:var(--ink);padding:7px 0">🧪 Book a test</span>
+        <span style="flex:1;text-align:center;background:#F7F1E6;border-radius:100px;font-size:10.5px;font-weight:750;color:var(--ink);padding:7px 0">📄 Reports (1)</span>
+      </div>
+    </div>
+    <div style="margin:12px 15px 0;border:1.8px dashed #B9C6D2;border-radius:14px;text-align:center;padding:12px;color:var(--blue);font-size:12.5px;font-weight:800">
+      + Add family member</div>
+  </div></div>
+</div>
+
+<!-- ── 5 · ADDRESSES ── -->
+<div class="stage">
+  <h2>5 · Addresses</h2>
+  <p>Type-icon cards with default badge, edit/delete swipe actions, dashed add-new. Map pin preview strip optional later.</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div><b>My Addresses</b></div>
+    <div class="card" style="margin:6px 15px 10px">
+      <div class="row">
+        <div class="ico" style="width:38px;height:38px;font-size:17px">🏠</div>
+        <div><b>Home <span class="pill" style="background:var(--green-bg);color:var(--green);margin-left:4px">DEFAULT</span></b>
+          <small>12 Test Lane, Andheri West, Mumbai, MH 400001</small></div>
+        <span class="arr">✏️</span>
+      </div>
+    </div>
+    <div class="card" style="margin:0 15px 10px">
+      <div class="row">
+        <div class="ico" style="width:38px;height:38px;font-size:17px">🏢</div>
+        <div><b>Office</b><small>4th Floor, One BKC, Mumbai, MH 400051</small></div>
+        <span class="arr">✏️</span>
+      </div>
+    </div>
+    <div style="margin:12px 15px 0;border:1.8px dashed #B9C6D2;border-radius:14px;text-align:center;padding:12px;color:var(--blue);font-size:12.5px;font-weight:800">
+      + Add a new address</div>
+  </div></div>
+</div>
+
+<!-- ── 6 · WALLET ── -->
+<div class="stage">
+  <h2>6 · My Wallet</h2>
+  <p>Gradient balance hero with coin sparkle, how-to-earn strip, transactions as dashed receipt lines (credit green / debit ink).</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div><b>My Wallet</b></div>
+    <div style="margin:6px 15px 0;background:linear-gradient(120deg,var(--blue),var(--blue-d));border-radius:20px;padding:18px;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-6px;top:-12px;font-size:84px;opacity:.14">🪙</div>
+      <small style="color:#CFE2F3;font-size:11px;font-weight:700">WALLET BALANCE</small>
+      <b style="display:block;color:#fff;font-size:32px;font-weight:850;margin-top:2px">₹430</b>
+      <small style="color:#CFE2F3;font-size:10.5px">Use up to 10% of any booking value</small>
+    </div>
+    <div style="display:flex;gap:8px;margin:12px 15px 0">
+      <div class="card" style="flex:1;text-align:center;padding:10px 4px;font-size:10px;font-weight:750;color:#3B5A77">🧪<br>Earn 2% per booking</div>
+      <div class="card" style="flex:1;text-align:center;padding:10px 4px;font-size:10px;font-weight:750;color:#3B5A77">🎁<br>₹200 per referral</div>
+      <div class="card" style="flex:1;text-align:center;padding:10px 4px;font-size:10px;font-weight:750;color:#3B5A77">👨‍👩‍👧<br>Family bonus</div>
+    </div>
+    <div style="margin:16px 15px 6px;font-size:14px;font-weight:850;color:var(--ink)">Transactions
+      <svg class="sq" viewBox="0 0 100 10"><polyline points="0,7 22,7 29,2 36,8 42,7 100,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </div>
+    <div class="card" style="margin:0 15px;padding:4px 14px">
+      <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:12px"><span>🎉 Welcome bonus</span><b style="color:var(--green)">+ ₹200</b></div>
+      <div class="dash"></div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:12px"><span>🧪 Booking #UDC-2412 cashback</span><b style="color:var(--green)">+ ₹230</b></div>
+      <div class="dash"></div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:12px;color:var(--sub)"><span>Used on #UDC-2440</span><b style="color:var(--ink)">− ₹0</b></div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ── 7 · SEARCH (replaces "Book a Test" duplication) ── -->
+<div class="stage">
+  <h2>7 · Search — pure (fixes the duplicate screen)</h2>
+  <p>The old "Book a Test" page duplicated the landing. Proposal: it becomes a pure search surface — autofocused field, recent + trending chips, then live results. Browsing lives ONLY on the Blood Tests landing.</p>
+  <div class="phone"><div class="scroll">
+    <div class="top"><div class="circ">←</div>
+      <div style="flex:1;background:#fff;border-radius:100px;box-shadow:0 4px 12px rgba(0,0,0,.06);padding:10px 14px;display:flex;gap:8px;align-items:center">
+        <span style="color:#B9C6D2">🔍</span><span style="font-size:13px;color:var(--ink)">lft<span style="border-left:2px solid var(--blue);margin-left:1px;animation:blink 1s infinite"></span></span>
+      </div>
+      <style>@keyframes blink{50%{opacity:0}}</style>
+    </div>
+    <div style="margin:10px 15px 4px;font-size:11px;font-weight:800;color:var(--sub)">TRENDING</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 15px">
+      <span class="pill" style="background:#fff;color:#3B5A77;padding:6px 11px;font-size:10.5px">CBC</span>
+      <span class="pill" style="background:#fff;color:#3B5A77;padding:6px 11px;font-size:10.5px">Thyroid</span>
+      <span class="pill" style="background:#fff;color:#3B5A77;padding:6px 11px;font-size:10.5px">Vitamin D</span>
+      <span class="pill" style="background:#fff;color:#3B5A77;padding:6px 11px;font-size:10.5px">HbA1c</span>
+    </div>
+    <div style="margin:14px 15px 6px;font-size:11px;font-weight:800;color:var(--sub)">RESULTS FOR "LFT"</div>
+    <div class="card" style="margin:0 15px 10px">
+      <div class="row"><div class="ico">🧪</div>
+        <div><b>Liver Profile (LFT)</b><small>11 parameters · report in 6 hrs</small></div>
+        <div style="margin-left:auto;text-align:right"><b style="font-size:13px;color:var(--blue)">₹600</b>
+          <span style="display:block;border:1.6px solid var(--blue);color:var(--blue);border-radius:100px;font-size:10px;font-weight:800;padding:3px 10px;margin-top:3px">+ Add</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin:0 15px 10px">
+      <div class="row"><div class="ico">📦</div>
+        <div><b>Full Health Checkup</b><small>Includes LFT · 89 tests</small></div>
+        <div style="margin-left:auto;text-align:right"><b style="font-size:13px;color:var(--blue)">₹1999</b>
+          <span style="display:block;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;font-size:10px;font-weight:800;padding:4px 10px;margin-top:3px">Book</span></div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+</body>
+</html>

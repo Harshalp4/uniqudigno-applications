@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Package Detail + Member Sheet — Wireframes</title>
+<style>
+  :root{
+    --cream:#FAF3E8; --card:#FFFFFF; --ink:#1E2A38; --sub:#75808D;
+    --blue:#3E7FBE; --blue-d:#2C5F94; --teal:#CDEAEA; --green:#2A9C54;
+    --green-bg:#E9F8EE; --orange:#F58B44; --line:#EDE4D3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{background:#232830;display:flex;gap:56px;justify-content:center;align-items:flex-start;padding:44px 20px;flex-wrap:wrap}
+  .stage{text-align:center}
+  .stage h2{color:#fff;font-size:15px;margin-bottom:6px;font-weight:800}
+  .stage p{color:#9aa5b1;font-size:11.5px;margin-bottom:16px;max-width:390px}
+  .phone{width:390px;height:820px;background:var(--cream);border-radius:46px;border:10px solid #0d0f12;
+    overflow:hidden;position:relative;box-shadow:0 30px 70px rgba(0,0,0,.5);text-align:left}
+  .scroll{height:100%;overflow-y:auto;padding-bottom:110px}
+  .scroll::-webkit-scrollbar{display:none}
+
+  /* ── top bar ── */
+  .top{display:flex;align-items:center;justify-content:space-between;padding:54px 16px 6px}
+  .circ{width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:16px;color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.07);position:relative}
+  .badge{position:absolute;top:-4px;right:-4px;background:var(--orange);color:#fff;font-size:9.5px;font-weight:800;
+    min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+  /* ── hero card ── */
+  .hero{margin:10px 16px 0;background:#fff;border-radius:22px;padding:18px 18px 16px;position:relative;overflow:hidden;
+    box-shadow:0 10px 26px rgba(0,0,0,.08)}
+  .ribbon{position:absolute;top:16px;right:-34px;transform:rotate(45deg);background:var(--orange);color:#fff;
+    font-size:10px;font-weight:800;padding:4px 0;width:130px;text-align:center;letter-spacing:.5px}
+  .pkg-ico{width:46px;height:46px;border-radius:14px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:22px}
+  .hero h1{font-size:21px;font-weight:850;color:var(--ink);margin-top:10px}
+  .hero .meta{font-size:12.5px;color:var(--sub);margin-top:3px}
+  .price-row{display:flex;align-items:baseline;gap:8px;margin-top:12px}
+  .price{font-size:26px;font-weight:850;color:var(--blue)}
+  .mrp{font-size:14px;color:#A7B0BA;text-decoration:line-through}
+  .save{background:var(--green-bg);color:var(--green);font-size:10.5px;font-weight:800;border-radius:8px;padding:3px 8px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+  .chip{background:#F2F6FA;border-radius:100px;font-size:10.5px;font-weight:700;color:#3B5A77;padding:5px 10px}
+
+  /* ── section title w/ ECG squiggle ── */
+  .sect{margin:22px 16px 10px;font-size:16.5px;font-weight:850;color:var(--ink)}
+  .sq{display:block;width:120px;height:8px;margin-top:3px}
+
+  /* ── info card ── */
+  .card{background:#fff;border-radius:18px;margin:0 16px;padding:14px 16px;box-shadow:0 6px 18px rgba(0,0,0,.05)}
+  .fast{display:flex;gap:10px;align-items:center;font-size:13px;font-weight:700;color:var(--ink)}
+  .fast small{display:block;font-weight:500;color:var(--sub);font-size:11.5px;margin-top:2px}
+
+  .test-row{display:flex;align-items:center;gap:10px;padding:11px 0;font-size:13.5px;font-weight:600;color:var(--ink)}
+  .test-row + .test-row{border-top:1.5px dashed var(--line)}
+  .tick{width:20px;height:20px;border-radius:50%;background:var(--green-bg);color:var(--green);font-size:11px;
+    display:flex;align-items:center;justify-content:center;font-weight:800}
+  .test-row span:last-child{margin-left:auto;color:#A7B0BA;font-size:11px;font-weight:600}
+  .more{color:var(--blue);font-size:12px;font-weight:800;text-align:center;padding:10px 0 2px}
+
+  /* ── sticky bottom bar ── */
+  .bar{position:absolute;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #F0E9DC;padding:12px 16px 26px;
+    display:flex;align-items:center;gap:14px}
+  .bar .p{font-size:20px;font-weight:850;color:var(--blue)}
+  .bar .p small{display:block;font-size:10.5px;color:var(--sub);font-weight:600}
+  .cta{flex:1;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;
+    text-align:center;padding:15px 0;font-size:14.5px;font-weight:800;position:relative;overflow:hidden}
+  .cta:after{content:'';position:absolute;top:0;bottom:0;width:44%;left:-50%;transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-50%}55%{left:130%}100%{left:130%}}
+
+  /* ── SHEET (frame B) ── */
+  .dim{position:absolute;inset:0;background:rgba(20,26,34,.45);animation:fade .3s}
+  @keyframes fade{from{opacity:0}}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--cream);border-radius:26px 26px 0 0;
+    padding:10px 16px 24px;animation:up .35s cubic-bezier(.2,.9,.3,1);box-shadow:0 -12px 40px rgba(0,0,0,.25)}
+  @keyframes up{from{transform:translateY(60%)}}
+  .grab{width:44px;height:4.5px;border-radius:3px;background:#D8CDBA;margin:2px auto 12px}
+  .sh-head{background:linear-gradient(100deg,var(--blue),var(--blue-d));border-radius:18px;color:#fff;padding:14px 16px;
+    display:flex;justify-content:space-between;align-items:center}
+  .sh-head b{font-size:15.5px;font-weight:850;display:block}
+  .sh-head small{font-size:11px;opacity:.85}
+  .sh-price{text-align:right;font-size:19px;font-weight:850}
+  .sh-price small{display:block;font-size:10.5px;opacity:.75;text-decoration:line-through;font-weight:600}
+  .nudge{margin:10px 0;background:var(--green-bg);border:1.5px solid #BFE8CC;color:#1F7A42;border-radius:12px;
+    font-size:11.5px;font-weight:750;text-align:center;padding:8px;animation:pulse 2.2s infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
+  .tiers{display:flex;gap:7px}
+  .tier{flex:1;background:#fff;border-radius:13px;text-align:center;padding:9px 2px;border:1.5px solid transparent}
+  .tier b{display:block;font-size:12.5px;font-weight:850;color:var(--ink)}
+  .tier span{font-size:9px;color:var(--sub);font-weight:650}
+  .tier em{display:block;font-style:normal;font-size:9.5px;color:var(--green);font-weight:800;margin-top:1px}
+  .tier.on{border-color:var(--blue);background:#EDF4FB}
+  .sh-label{font-size:12.5px;font-weight:850;color:var(--ink);margin:13px 0 7px}
+  .mem{background:#fff;border-radius:15px;overflow:hidden}
+  .m-row{display:flex;align-items:center;gap:11px;padding:11px 14px}
+  .m-row + .m-row{border-top:1.5px dashed var(--line)}
+  .avat{width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:15px}
+  .m-row b{font-size:13.5px;color:var(--ink);display:block}
+  .m-row small{font-size:10.5px;color:var(--sub)}
+  .ck{margin-left:auto;width:22px;height:22px;border-radius:7px;border:2px solid #C9D4DE}
+  .ck.on{background:var(--green);border-color:var(--green);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .addm{color:var(--blue);font-weight:800;font-size:13px}
+  .sh-cta{margin-top:14px;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;
+    text-align:center;padding:15px 0;font-size:14.5px;font-weight:800;position:relative;overflow:hidden}
+  .sh-cta:after{content:'';position:absolute;top:0;bottom:0;width:44%;left:-50%;transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);animation:sheen 2.8s infinite}
+</style>
+</head>
+<body>
+
+<!-- ─────────── FRAME A: package detail, new warm design ─────────── -->
+<div class="stage">
+  <h2>A · Package Detail — new warm design</h2>
+  <p>Cream canvas + white cards (same language as landing/checkout). Corner ribbon, price-first hero, dashed test list, sticky Add-to-Cart with sheen. No blue full-bleed header.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="top">
+        <div class="circ">←</div>
+        <div class="circ">🛒<div class="badge">1</div></div>
+      </div>
+
+      <div class="hero">
+        <div class="ribbon">52% OFF</div>
+        <div class="pkg-ico">🧪</div>
+        <h1>Cardiac Profile</h1>
+        <div class="meta">35 tests · 35 parameters</div>
+        <div class="price-row">
+          <span class="price">₹3200</span><span class="mrp">₹6700</span><span class="save">SAVE ₹3500</span>
+        </div>
+        <div class="chips">
+          <span class="chip">✔ Certified labs</span><span class="chip">⏱ Report in 6 hrs</span><span class="chip">🏠 Free home collection</span>
+        </div>
+      </div>
+
+      <div style="margin:14px 16px 0">
+        <div class="card fast">🚫🍽
+          <div>12–14 hrs fasting required
+            <small>Heart health screening with HsCRP and vitamins</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="sect">What's included
+        <svg class="sq" viewBox="0 0 120 10"><polyline points="0,7 28,7 36,2 44,8 52,7 120,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="card" style="padding:4px 16px">
+        <div class="test-row"><span class="tick">✓</span>C.B.C.<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>HbA1c<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>HsCRP<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>Liver Profile (LFT)<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>Renal Profile (RFT)<span>1 param</span></div>
+        <div class="more">Show all 35 tests ⌄</div>
+      </div>
+
+      <div class="sect">About this package
+        <svg class="sq" viewBox="0 0 120 10"><polyline points="0,7 28,7 36,2 44,8 52,7 120,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="card" style="font-size:12.5px;color:var(--sub);line-height:1.55">
+        Includes CBC, Lipid Profile, HsCRP, Kidney Profile, Liver Profile, HbA1c, Vitamin D3 &amp; B12 — a complete heart-risk snapshot.
+      </div>
+      <div style="height:30px"></div>
+    </div>
+
+    <div class="bar">
+      <div class="p">₹3200<small>52% off · ₹6700</small></div>
+      <div class="cta">Add to Cart</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── FRAME B: member sheet over the SAME screen ─────────── -->
+<div class="stage">
+  <h2>B · Add to Cart → member sheet (same screen)</h2>
+  <p>No navigation. Sheet slides over the detail: package + live total, group-discount tiers, member checklist, one Continue. Confirm → sheet closes, badge updates, you're still here.</p>
+  <div class="phone">
+    <div class="scroll" style="filter:blur(1px)">
+      <div class="top">
+        <div class="circ">←</div>
+        <div class="circ">🛒<div class="badge">1</div></div>
+      </div>
+      <div class="hero">
+        <div class="ribbon">52% OFF</div>
+        <div class="pkg-ico">🧪</div>
+        <h1>Cardiac Profile</h1>
+        <div class="meta">35 tests · 35 parameters</div>
+        <div class="price-row">
+          <span class="price">₹3200</span><span class="mrp">₹6700</span><span class="save">SAVE ₹3500</span>
+        </div>
+        <div class="chips">
+          <span class="chip">✔ Certified labs</span><span class="chip">⏱ Report in 6 hrs</span>
+        </div>
+      </div>
+      <div style="margin:14px 16px 0">
+        <div class="card fast">🚫🍽 <div>12–14 hrs fasting required</div></div>
+      </div>
+    </div>
+
+    <div class="dim"></div>
+    <div class="sheet">
+      <div class="grab"></div>
+      <div class="sh-head">
+        <div><b>Cardiac Profile</b><small>35 tests · for 2 members</small></div>
+        <div class="sh-price">₹5440<small>₹13400</small></div>
+      </div>
+
+      <div class="nudge">🎉 2 members selected — you save ₹960 extra!</div>
+
+      <div class="tiers">
+        <div class="tier"><b>1</b><span>member</span><em>₹3200</em></div>
+        <div class="tier on"><b>2</b><span>members</span><em>₹2720 each</em></div>
+        <div class="tier"><b>3</b><span>members</span><em>₹2560 each</em></div>
+        <div class="tier"><b>4</b><span>members</span><em>₹2400 each</em></div>
+      </div>
+
+      <div class="sh-label">Who is this for?</div>
+      <div class="mem">
+        <div class="m-row"><div class="avat">👤</div><div><b>Harshal</b><small>Self</small></div><div class="ck on">✓</div></div>
+        <div class="m-row"><div class="avat">👩</div><div><b>Priya</b><small>Spouse · 34F</small></div><div class="ck on">✓</div></div>
+        <div class="m-row"><div class="avat">👴</div><div><b>Ramesh</b><small>Father · 62M</small></div><div class="ck"></div></div>
+        <div class="m-row"><div class="avat">＋</div><div class="addm">Add new member<br><small style="color:var(--sub);font-weight:500">Name, age &amp; gender — 30 seconds</small></div></div>
+      </div>
+
+      <div class="sh-cta">Add to Cart · 2 members · ₹5440</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── FRAME C: soft teal hero band ─────────── -->
+<div class="stage">
+  <h2>C · Detail — soft teal hero band</h2>
+  <p>Keeps a colored header, but in the warm palette: soft teal band with a big watermark icon, white content sheet overlapping it. Feels closer to the current app, fully re-skinned.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div style="background:linear-gradient(160deg,#CDEAEA,#B7E0DE);padding:54px 16px 64px;position:relative">
+        <div style="display:flex;justify-content:space-between">
+          <div class="circ">←</div><div class="circ">🛒<div class="badge">1</div></div>
+        </div>
+        <div style="position:absolute;right:6px;bottom:10px;font-size:96px;opacity:.18">🫀</div>
+        <h1 style="font-size:22px;font-weight:850;color:#1E2A38;margin-top:18px">Cardiac Profile</h1>
+        <div style="font-size:12.5px;color:#3B6663;margin-top:4px;font-weight:650">35 tests · Report in 6 hrs · Home collection</div>
+        <div class="price-row" style="margin-top:10px">
+          <span class="price" style="color:#1E2A38">₹3200</span><span class="mrp">₹6700</span><span class="save">52% OFF</span>
+        </div>
+      </div>
+      <div style="background:var(--cream);border-radius:26px 26px 0 0;margin-top:-26px;padding-top:8px;position:relative">
+        <div class="grab"></div>
+        <div style="margin:8px 16px 0"><div class="card fast">🚫🍽 <div>12–14 hrs fasting required<small>Heart health screening with HsCRP and vitamins</small></div></div></div>
+        <div class="sect">What's included
+          <svg class="sq" viewBox="0 0 120 10"><polyline points="0,7 28,7 36,2 44,8 52,7 120,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="card" style="padding:4px 16px">
+          <div class="test-row"><span class="tick">✓</span>C.B.C.<span>1 param</span></div>
+          <div class="test-row"><span class="tick">✓</span>HbA1c<span>1 param</span></div>
+          <div class="test-row"><span class="tick">✓</span>HsCRP<span>1 param</span></div>
+          <div class="test-row"><span class="tick">✓</span>Liver Profile (LFT)<span>1 param</span></div>
+          <div class="more">Show all 35 tests ⌄</div>
+        </div>
+        <div style="height:40px"></div>
+      </div>
+    </div>
+    <div class="bar">
+      <div class="p">₹3200<small>52% off · ₹6700</small></div>
+      <div class="cta">Add to Cart</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── FRAME D: segmented tabs, price pinned ─────────── -->
+<div class="stage">
+  <h2>D · Detail — compact top, segmented tabs</h2>
+  <p>Everything above the fold: compact white header card with price, then Tests / Prep / About segmented control — the test list doesn't push About pages down. Best for long packages (89 tests).</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="top">
+        <div class="circ">←</div>
+        <div style="font-weight:850;color:var(--ink);font-size:15px;align-self:center">Package</div>
+        <div class="circ">🛒<div class="badge">1</div></div>
+      </div>
+      <div class="hero" style="padding:16px">
+        <div class="ribbon">52% OFF</div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="pkg-ico">🫀</div>
+          <div>
+            <h1 style="font-size:17px;margin:0">Cardiac Profile</h1>
+            <div class="meta">35 tests · Report in 6 hrs</div>
+          </div>
+        </div>
+        <div class="price-row" style="margin-top:10px">
+          <span class="price" style="font-size:22px">₹3200</span><span class="mrp">₹6700</span><span class="save">SAVE ₹3500</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin:14px 16px 0;background:#F1E9DA;border-radius:100px;padding:4px">
+        <div style="flex:1;background:#fff;border-radius:100px;text-align:center;padding:8px 0;font-size:12px;font-weight:800;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.08)">Tests (35)</div>
+        <div style="flex:1;text-align:center;padding:8px 0;font-size:12px;font-weight:700;color:var(--sub)">Prep</div>
+        <div style="flex:1;text-align:center;padding:8px 0;font-size:12px;font-weight:700;color:var(--sub)">About</div>
+      </div>
+      <div class="card" style="margin-top:12px;padding:4px 16px">
+        <div class="test-row"><span class="tick">✓</span>C.B.C.<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>HbA1c<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>HsCRP<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>Liver Profile (LFT)<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>Renal Profile (RFT)<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>Vitamin B12<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>Vitamin D3<span>1 param</span></div>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+    <div class="bar">
+      <div class="p">₹3200<small>52% off · ₹6700</small></div>
+      <div class="cta">Add to Cart</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── FRAME E: lab-report ticket ─────────── -->
+<div class="stage">
+  <h2>E · Detail — lab-report ticket</h2>
+  <p>Diagnostic-themed: the package is presented like a lab report / receipt — perforated ticket card, stamped discount, tests as report lines. Most unique, matches the login Report slide.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="top">
+        <div class="circ">←</div>
+        <div class="circ">🛒<div class="badge">1</div></div>
+      </div>
+      <div style="margin:10px 16px 0;background:#fff;border-radius:6px 6px 18px 18px;box-shadow:0 10px 26px rgba(0,0,0,.08);overflow:hidden;position:relative">
+        <div style="height:8px;background:linear-gradient(100deg,var(--blue),var(--blue-d))"></div>
+        <div style="padding:16px 18px 6px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <h1 style="font-size:20px;font-weight:850;color:var(--ink)">Cardiac Profile</h1>
+              <div class="meta" style="font-size:12px;color:var(--sub)">35 tests · 35 parameters · fasting 12–14 hrs</div>
+            </div>
+            <div style="border:2.5px solid var(--green);color:var(--green);border-radius:10px;font-size:11px;font-weight:850;
+              padding:5px 9px;transform:rotate(8deg);letter-spacing:.5px">52% OFF</div>
+          </div>
+          <div class="price-row" style="margin-top:10px">
+            <span class="price">₹3200</span><span class="mrp">₹6700</span><span class="save">SAVE ₹3500</span>
+          </div>
+        </div>
+        <div style="border-top:2px dashed var(--line);margin:10px 0 0;position:relative">
+          <div style="position:absolute;left:-9px;top:-9px;width:18px;height:18px;border-radius:50%;background:var(--cream)"></div>
+          <div style="position:absolute;right:-9px;top:-9px;width:18px;height:18px;border-radius:50%;background:var(--cream)"></div>
+        </div>
+        <div style="padding:8px 18px 14px">
+          <div class="test-row"><span class="tick">✓</span>C.B.C.<span>Normal range set</span></div>
+          <div class="test-row"><span class="tick">✓</span>HbA1c<span>Normal range set</span></div>
+          <div class="test-row"><span class="tick">✓</span>HsCRP<span>Normal range set</span></div>
+          <div class="test-row"><span class="tick">✓</span>Liver Profile (LFT)<span>Normal range set</span></div>
+          <div class="more">Show all 35 tests ⌄</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin:14px 16px 0">
+        <div class="card" style="flex:1;margin:0;text-align:center;padding:10px 4px;font-size:10.5px;font-weight:700;color:#3B5A77">🏠<br>Free home collection</div>
+        <div class="card" style="flex:1;margin:0;text-align:center;padding:10px 4px;font-size:10.5px;font-weight:700;color:#3B5A77">🧪<br>NABL certified</div>
+        <div class="card" style="flex:1;margin:0;text-align:center;padding:10px 4px;font-size:10.5px;font-weight:700;color:#3B5A77">⏱<br>Report in 6 hrs</div>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+    <div class="bar">
+      <div class="p">₹3200<small>52% off · ₹6700</small></div>
+      <div class="cta">Add to Cart</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── FRAME F: avatar-bubble sheet ─────────── -->
+<div class="stage">
+  <h2>F · Sheet — avatar bubbles (compact)</h2>
+  <p>Half-height sheet: members are tappable avatar bubbles in a row (✓ overlays the selected). Tier savings update in the CTA. Fastest for families already saved; scales horizontally.</p>
+  <div class="phone">
+    <div class="scroll" style="filter:blur(1px)">
+      <div class="top"><div class="circ">←</div><div class="circ">🛒<div class="badge">1</div></div></div>
+      <div class="hero">
+        <div class="ribbon">52% OFF</div>
+        <div class="pkg-ico">🧪</div>
+        <h1>Cardiac Profile</h1>
+        <div class="meta">35 tests · 35 parameters</div>
+        <div class="price-row"><span class="price">₹3200</span><span class="mrp">₹6700</span></div>
+      </div>
+      <div style="margin:14px 16px 0"><div class="card fast">🚫🍽 <div>12–14 hrs fasting required</div></div></div>
+    </div>
+    <div class="dim"></div>
+    <div class="sheet" style="padding-bottom:22px">
+      <div class="grab"></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin:2px 2px 12px">
+        <b style="font-size:15.5px;color:var(--ink)">Who is this test for?</b>
+        <span style="font-size:12px;color:var(--sub);font-weight:650">Cardiac Profile</span>
+      </div>
+      <div style="display:flex;gap:14px;padding:4px 2px 2px;overflow-x:auto">
+        <div style="text-align:center">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:24px;
+            border:3px solid var(--green);position:relative">👤<div style="position:absolute;bottom:-3px;right:-3px;width:20px;height:20px;border-radius:50%;
+            background:var(--green);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:800">✓</div></div>
+          <div style="font-size:11px;font-weight:750;color:var(--ink);margin-top:5px">Me</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:56px;height:56px;border-radius:50%;background:#F8DCD4;display:flex;align-items:center;justify-content:center;font-size:24px;
+            border:3px solid var(--green);position:relative">👩<div style="position:absolute;bottom:-3px;right:-3px;width:20px;height:20px;border-radius:50%;
+            background:var(--green);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:800">✓</div></div>
+          <div style="font-size:11px;font-weight:750;color:var(--ink);margin-top:5px">Priya</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:56px;height:56px;border-radius:50%;background:#FFE9C7;display:flex;align-items:center;justify-content:center;font-size:24px;border:3px solid transparent">👴</div>
+          <div style="font-size:11px;font-weight:650;color:var(--sub);margin-top:5px">Papa</div>
+        </div>
+        <div style="text-align:center">
+          <div style="width:56px;height:56px;border-radius:50%;background:#fff;border:2px dashed #C9BFA9;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--blue)">＋</div>
+          <div style="font-size:11px;font-weight:650;color:var(--blue);margin-top:5px">Add</div>
+        </div>
+      </div>
+      <div class="nudge" style="margin-top:14px">👨‍👩‍👧 2 members · 15% family discount applied — saving ₹960</div>
+      <div class="sh-cta">Add to Cart · 2 members · ₹5440</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── FRAME G: one-tap add + expand ─────────── -->
+<div class="stage">
+  <h2>G · Sheet — one-tap add, expand for family</h2>
+  <p>Zero-friction default: tapping Add to Cart instantly adds for "Me" and shows a mini confirmation sheet — with an inline upsell to add family at the discounted per-head price. One tap for the common case.</p>
+  <div class="phone">
+    <div class="scroll">
+      <div class="top"><div class="circ">←</div><div class="circ">🛒<div class="badge">2</div></div></div>
+      <div class="hero">
+        <div class="ribbon">52% OFF</div>
+        <div class="pkg-ico">🧪</div>
+        <h1>Cardiac Profile</h1>
+        <div class="meta">35 tests · 35 parameters</div>
+        <div class="price-row"><span class="price">₹3200</span><span class="mrp">₹6700</span><span class="save">SAVE ₹3500</span></div>
+        <div class="chips"><span class="chip">✔ Certified labs</span><span class="chip">⏱ Report in 6 hrs</span></div>
+      </div>
+      <div style="margin:14px 16px 0"><div class="card fast">🚫🍽 <div>12–14 hrs fasting required</div></div></div>
+      <div class="sect">What's included
+        <svg class="sq" viewBox="0 0 120 10"><polyline points="0,7 28,7 36,2 44,8 52,7 120,7" fill="none" stroke="#3E7FBE" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </div>
+      <div class="card" style="padding:4px 16px">
+        <div class="test-row"><span class="tick">✓</span>C.B.C.<span>1 param</span></div>
+        <div class="test-row"><span class="tick">✓</span>HbA1c<span>1 param</span></div>
+      </div>
+    </div>
+    <div class="sheet" style="background:#fff;border-radius:22px 22px 0 0">
+      <div class="grab"></div>
+      <div style="display:flex;align-items:center;gap:11px;margin:2px 2px 10px">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--green-bg);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800">✓</div>
+        <div><b style="font-size:14.5px;color:var(--ink)">Added for Harshal (Me)</b>
+          <small style="display:block;font-size:11px;color:var(--sub)">Cardiac Profile · ₹3200 · in your cart</small></div>
+        <span style="margin-left:auto;font-size:12px;color:var(--sub);font-weight:700">Undo</span>
+      </div>
+      <div style="border:1.5px solid #BFE8CC;background:var(--green-bg);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:20px">👨‍👩‍👧</span>
+        <div style="flex:1"><b style="font-size:12.5px;color:#1F7A42">Book for family too?</b>
+          <small style="display:block;font-size:11px;color:#3B7A55">2nd member pays just ₹2720 (15% off each)</small></div>
+        <div style="background:var(--green);color:#fff;border-radius:100px;font-size:11.5px;font-weight:800;padding:8px 13px">+ Add member</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <div style="flex:1;border:1.8px solid var(--blue);color:var(--blue);border-radius:100px;text-align:center;padding:12px 0;font-size:13px;font-weight:800">Continue browsing</div>
+        <div style="flex:1;background:linear-gradient(100deg,var(--blue),var(--blue-d));color:#fff;border-radius:100px;text-align:center;padding:12px 0;font-size:13px;font-weight:800">Go to Cart →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

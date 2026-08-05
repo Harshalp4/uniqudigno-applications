@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Blood Tests landing — 4 design options</title>
+<style>
+  :root{
+    --blue:#428AC7; --blue-dark:#2F6FA6; --green:#36B665; --green-dark:#2A9C54;
+    --cream:#FAF3EA; --ink:#1F2937; --muted:#6B7280; --orange:#FF8A3D; --line:#E7EBF0;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:#12161C; color:#E5E7EB; padding:34px 22px 60px}
+  h1{font-size:22px; font-weight:700; margin-bottom:6px}
+  .sub{color:#9CA3AF; font-size:13.5px; margin-bottom:30px; max-width:900px; line-height:1.5}
+  .row{display:flex; gap:30px; flex-wrap:wrap; justify-content:center}
+  .opt{width:330px; margin-bottom:8px}
+  .opt h2{font-size:15px; margin:0 0 2px; color:#fff}
+  .opt .tag{font-size:11.5px; color:#93C5FD; margin-bottom:10px}
+  .notes{margin-top:10px; font-size:12px; color:#B7BEC9; line-height:1.5}
+  .notes b{color:#fff}
+  .phone{width:330px; height:700px; background:#000; border-radius:42px; padding:9px;
+         box-shadow:0 22px 55px rgba(0,0,0,.55)}
+  .screen{width:100%; height:100%; border-radius:34px; overflow-y:auto; overflow-x:hidden;
+          position:relative; scrollbar-width:none}
+  .screen::-webkit-scrollbar{display:none}
+  /* shared bits */
+  .sheen{position:absolute; top:0; bottom:0; width:46%; transform:skewX(-18deg);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent); animation:sheen 2.8s infinite}
+  @keyframes sheen{0%{left:-60%} 55%{left:120%} 100%{left:120%}}
+  @keyframes bob{0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)}}
+  @keyframes ring{0%{transform:scale(.9); opacity:.8} 100%{transform:scale(1.25); opacity:0}}
+  @keyframes flame{0%,100%{transform:scale(1)} 50%{transform:scale(1.18)}}
+  .rail{display:flex; gap:10px; overflow-x:auto; padding:0 14px 14px; scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  .book{color:#fff; text-align:center; padding:10px; font-size:12.5px; font-weight:800; position:relative; overflow:hidden}
+  .addbtn{width:28px; height:28px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+      font-size:15px; font-weight:800}
+  /* ============ A: Clean Marketplace ============ */
+  .a .screen{background:#F6F8FA}
+  .a .bar{position:sticky; top:0; z-index:5; background:#F6F8FA; padding:30px 14px 8px; display:flex; gap:8px; align-items:center}
+  .a .bar b{flex:1; text-align:center; color:var(--ink); font-size:15.5px}
+  .a .loc{padding:0 14px 8px; font-size:12px; color:var(--muted)}
+  .a .search{margin:0 14px 12px; background:#fff; border:1px solid var(--line); border-radius:13px; padding:10px 13px; font-size:12.5px; color:#9CA3AF}
+  .a h3{font-size:14.5px; font-weight:800; color:var(--ink); padding:2px 14px 9px}
+  .a .con{min-width:80px; background:#fff; border:1px solid var(--line); border-radius:15px; padding:12px 6px 9px; text-align:center}
+  .a .con .ic{font-size:24px; display:block; margin-bottom:6px; animation:bob 3.4s ease-in-out infinite}
+  .a .con .lb{font-size:10.5px; font-weight:600; color:var(--ink)}
+  .a .banner{margin:2px 14px 16px; border-radius:16px; padding:14px; color:#fff; position:relative; overflow:hidden;
+      background:linear-gradient(115deg,var(--blue),var(--blue-dark))}
+  .a .banner p{font-size:12.5px; font-weight:700; line-height:1.4; width:74%}
+  .a .banner p span{color:#FFD9A0}
+  .a .call{display:inline-flex; gap:6px; margin-top:9px; background:var(--green); border-radius:99px; padding:7px 14px;
+      font-size:11.5px; font-weight:800; position:relative}
+  .a .call:before{content:''; position:absolute; inset:-4px; border-radius:99px; border:2px solid rgba(255,255,255,.5); animation:ring 2s infinite}
+  .a .strip{margin:0 14px 10px; background:#FFF3E4; border-radius:11px; padding:8px 11px; font-size:11px; font-weight:700; color:#B45D12}
+  .a .strip .fl{display:inline-block; animation:flame 1.6s infinite}
+  .a .pk{min-width:196px; background:#fff; border:1px solid var(--line); border-radius:16px; overflow:hidden; display:flex; flex-direction:column}
+  .a .pk .body{padding:11px; flex:1}
+  .a .pk .nm{font-size:12.5px; font-weight:800; color:var(--ink)}
+  .a .pk .meta{font-size:10.5px; color:var(--orange); font-weight:700; margin-top:6px}
+  .a .pk .offer{background:#EAF4FB; padding:7px 11px; font-size:9.5px; font-weight:800; color:var(--muted)}
+  .a .pk .offer b{display:block; font-size:14.5px; color:var(--ink)}
+  .a .pk .offer s{color:#9CA3AF}
+  .a .pk .book{background:linear-gradient(100deg,var(--blue),var(--blue-dark))}
+  .a .tests{margin:0 14px 16px; background:#fff; border:1px solid var(--line); border-radius:16px; padding:2px 12px}
+  .a .trow{display:flex; align-items:center; padding:11px 0; border-bottom:1.5px dashed #E4E9EF}
+  .a .trow:last-child{border-bottom:none}
+  .a .trow .nm{font-size:12.5px; font-weight:700; color:var(--blue)}
+  .a .trow .pr{font-size:11.5px; font-weight:800; color:var(--ink); margin-top:2px}
+  .a .trow .tn{flex:1}
+  .a .addbtn{border:1.6px solid var(--blue); color:var(--blue)}
+  /* ============ B: Warm Brand ============ */
+  .b .screen{background:var(--cream)}
+  .b .bar{position:sticky; top:0; z-index:5; background:var(--cream); padding:30px 14px 8px; display:flex; gap:8px; align-items:center}
+  .b .bar b{flex:1; text-align:center; color:var(--ink); font-size:15.5px}
+  .b .loc{padding:0 14px 8px; font-size:12px; color:var(--muted)}
+  .b .search{margin:0 14px 12px; background:#fff; border-radius:15px; padding:11px 13px; font-size:12.5px; color:#9CA3AF;
+      box-shadow:0 5px 14px rgba(0,0,0,.07)}
+  .b h3{font-size:14.5px; font-weight:800; color:var(--ink); padding:2px 14px 3px}
+  .b .ecg{height:16px; margin:0 14px 8px; position:relative; overflow:hidden}
+  .b .ecg svg{width:100%; height:100%}
+  .b .ecg polyline{fill:none; stroke:var(--blue); stroke-width:1.6; opacity:.5;
+      stroke-dasharray:220; stroke-dashoffset:220; animation:draw 3s linear infinite}
+  @keyframes draw{60%{stroke-dashoffset:0; opacity:.5} 75%{opacity:0} 100%{stroke-dashoffset:220; opacity:0}}
+  .b .con{min-width:80px; background:#fff; border-radius:18px; padding:12px 6px 9px; text-align:center;
+      box-shadow:0 5px 14px rgba(0,0,0,.06)}
+  .b .con .ring2{width:42px; height:42px; margin:0 auto 6px; border-radius:50%; background:#EAF4FB;
+      display:flex; align-items:center; justify-content:center; font-size:21px; animation:bob 3.4s infinite}
+  .b .con .lb{font-size:10.5px; font-weight:700; color:var(--ink)}
+  .b .banner{margin:4px 14px 16px; border-radius:20px; padding:15px; position:relative; overflow:hidden; color:#fff;
+      background:linear-gradient(120deg,var(--green),var(--green-dark))}
+  .b .banner p{font-size:12.5px; font-weight:700; line-height:1.4; width:76%}
+  .b .call{display:inline-flex; gap:6px; margin-top:9px; background:#fff; color:var(--green-dark); border-radius:99px;
+      padding:7px 14px; font-size:11.5px; font-weight:800; position:relative}
+  .b .call:before{content:''; position:absolute; inset:-4px; border-radius:99px; border:2px solid rgba(255,255,255,.6); animation:ring 2s infinite}
+  .b .pk{min-width:200px; background:#fff; border-radius:20px; overflow:hidden; display:flex; flex-direction:column;
+      box-shadow:0 8px 20px rgba(0,0,0,.07); position:relative}
+  .b .pk .ribbon{position:absolute; top:10px; right:-26px; transform:rotate(45deg); width:96px; text-align:center;
+      background:linear-gradient(90deg,#FF9A3D,#FF6B35); color:#fff; font-size:8.5px; font-weight:800; padding:3px 0}
+  .b .pk .body{padding:12px; flex:1}
+  .b .pk .nm{font-size:13px; font-weight:800; color:var(--ink); padding-right:22px}
+  .b .pk .meta{font-size:10.5px; color:var(--orange); font-weight:700; margin-top:6px}
+  .b .pk .pr{margin-top:8px; font-size:15px; font-weight:800; color:var(--blue)}
+  .b .pk .pr s{font-size:11px; color:#9CA3AF; margin-left:5px}
+  .b .pk .book{background:linear-gradient(100deg,var(--blue),var(--blue-dark)); border-radius:0 0 20px 20px}
+  .b .tests{margin:0 14px 16px; background:#fff; border-radius:20px; padding:2px 12px; box-shadow:0 6px 16px rgba(0,0,0,.06)}
+  .b .trow{display:flex; align-items:center; padding:11px 0; border-bottom:1.5px dashed #EFE7DA}
+  .b .trow:last-child{border-bottom:none}
+  .b .trow .nm{font-size:12.5px; font-weight:700; color:var(--ink)}
+  .b .trow .pr{font-size:11.5px; font-weight:800; color:var(--blue); margin-top:2px}
+  .b .trow .tn{flex:1}
+  .b .addbtn{background:var(--blue); color:#fff; border-radius:50%}
+  /* ============ C: Hero Immersive ============ */
+  .c .screen{background:#fff}
+  .c .hero{background:linear-gradient(150deg,#2F6FA6,#428AC7 60%,#5FA8DC); padding:34px 14px 46px; color:#fff; position:relative; overflow:hidden}
+  .c .hero .bar{display:flex; gap:8px; align-items:center; margin-bottom:12px}
+  .c .hero .bar b{flex:1; text-align:center; font-size:15.5px}
+  .c .hero h2{font-size:21px; font-weight:800}
+  .c .hero .sub2{font-size:11.5px; opacity:.85; margin-top:3px}
+  .c .hero .chips{display:flex; gap:6px; margin-top:10px; flex-wrap:wrap}
+  .c .hero .chip{background:rgba(255,255,255,.18); border-radius:99px; padding:4px 10px; font-size:10px; font-weight:700}
+  .c .hero .flask{position:absolute; right:-8px; bottom:-16px; font-size:84px; opacity:.18; animation:bob 4s infinite}
+  .c .hero .search{margin-top:12px; background:#fff; border-radius:14px; padding:11px 13px; font-size:12.5px; color:#9CA3AF}
+  .c .sheet{background:#fff; border-radius:24px 24px 0 0; margin-top:-22px; position:relative; padding-top:6px}
+  .c h3{font-size:14.5px; font-weight:800; color:var(--ink); padding:10px 14px 9px}
+  .c .con{min-width:66px; text-align:center}
+  .c .con .ring2{width:52px; height:52px; margin:0 auto 6px; border-radius:50%;
+      background:#EAF4FB; border:1.6px solid #D5E7F6; display:flex; align-items:center; justify-content:center;
+      font-size:24px; animation:bob 3.4s infinite}
+  .c .con .lb{font-size:10.5px; font-weight:600; color:var(--ink)}
+  .c .banner{margin:4px 14px 14px; border-radius:16px; padding:13px 14px; display:flex; align-items:center; gap:10px;
+      background:#EAF8EF; border:1px solid #CDEBD8}
+  .c .banner p{flex:1; font-size:12px; font-weight:700; color:#1F7A43; line-height:1.35}
+  .c .callfab{width:42px; height:42px; border-radius:50%; background:var(--green); color:#fff; display:flex;
+      align-items:center; justify-content:center; font-size:18px; position:relative}
+  .c .callfab:before{content:''; position:absolute; inset:-5px; border-radius:50%; border:2px solid rgba(54,182,101,.5); animation:ring 2s infinite}
+  .c .pk{min-width:230px; border-radius:18px; overflow:hidden; color:#fff; display:flex; flex-direction:column;
+      background:linear-gradient(135deg,#2F6FA6,#428AC7)}
+  .c .pk.alt{background:linear-gradient(135deg,#B4487F,#D66BA0)}
+  .c .pk.alt2{background:linear-gradient(135deg,#3B8A5E,#5AA97C)}
+  .c .pk .body{padding:13px; flex:1}
+  .c .pk .nm{font-size:13.5px; font-weight:800}
+  .c .pk .meta{font-size:10.5px; opacity:.9; margin-top:5px}
+  .c .pk .pr{margin-top:9px; font-size:17px; font-weight:800}
+  .c .pk .pr s{font-size:11px; opacity:.75; margin-left:6px}
+  .c .pk .book{background:rgba(255,255,255,.16); backdrop-filter:blur(4px)}
+  .c .tests{margin:0 14px 16px}
+  .c .trow{display:flex; align-items:center; padding:11px 12px; background:#F6F8FA; border-radius:13px; margin-bottom:8px}
+  .c .trow .nm{font-size:12.5px; font-weight:700; color:var(--ink)}
+  .c .trow .pr{font-size:11.5px; font-weight:800; color:var(--blue); margin-top:2px}
+  .c .trow .tn{flex:1}
+  .c .addbtn{background:#fff; border:1.6px solid var(--blue); color:var(--blue)}
+  .c .cartbar{position:sticky; bottom:0; margin:8px 14px 12px; background:var(--ink); color:#fff; border-radius:16px;
+      padding:12px 16px; display:flex; justify-content:space-between; font-size:12.5px; font-weight:800; position:relative; overflow:hidden}
+  /* ============ D: Compact Utility ============ */
+  .d .screen{background:#fff}
+  .d .bar{position:sticky; top:0; z-index:5; background:#fff; padding:30px 14px 8px; display:flex; gap:8px; align-items:center; border-bottom:1px solid var(--line)}
+  .d .bar b{flex:1; text-align:center; color:var(--ink); font-size:15.5px}
+  .d .search{margin:10px 14px; background:#F3F5F8; border-radius:12px; padding:10px 13px; font-size:12.5px; color:#9CA3AF}
+  .d .chips{display:flex; gap:6px; overflow-x:auto; padding:0 14px 12px; scrollbar-width:none}
+  .d .chip{white-space:nowrap; border:1px solid var(--line); border-radius:99px; padding:6px 12px; font-size:11px; font-weight:700; color:var(--muted)}
+  .d .chip.on{background:var(--blue); border-color:var(--blue); color:#fff}
+  .d h3{font-size:13.5px; font-weight:800; color:var(--ink); padding:4px 14px 8px}
+  .d .trow{display:flex; align-items:center; padding:11px 14px; border-bottom:1px solid #F0F2F5}
+  .d .trow .nm{font-size:13px; font-weight:700; color:var(--ink)}
+  .d .trow .sub3{font-size:10.5px; color:var(--muted); margin-top:2px}
+  .d .trow .pr{font-size:12.5px; font-weight:800; color:var(--ink); margin-right:10px}
+  .d .trow .tn{flex:1}
+  .d .addbtn{background:var(--blue); color:#fff}
+  .d .pk{min-width:170px; background:#F6F8FA; border-radius:14px; padding:11px}
+  .d .pk .nm{font-size:12px; font-weight:800; color:var(--ink)}
+  .d .pk .meta{font-size:10px; color:var(--muted); margin-top:4px}
+  .d .pk .pr{font-size:13.5px; font-weight:800; color:var(--blue); margin-top:6px}
+  .d .pk .pr s{font-size:10px; color:#9CA3AF; margin-left:4px}
+  .d .pk .mini{margin-top:8px; background:var(--blue); color:#fff; text-align:center; border-radius:9px;
+      padding:7px; font-size:11px; font-weight:800; position:relative; overflow:hidden}
+</style>
+</head>
+<body>
+  <h1>Blood Tests landing — 4 design directions</h1>
+  <p class="sub">Same content in all four (concerns → advisor call → real packages → popular tests), different look &amp; feel.
+     Each phone <b>scrolls</b> — drag inside. Real prices from your catalogue throughout.</p>
+  <div class="row">
+
+    <!-- ============ A ============ -->
+    <div class="opt a">
+      <h2>A — Clean Marketplace</h2>
+      <div class="tag">Reference-faithful · light grey · white cards</div>
+      <div class="phone"><div class="screen">
+        <div class="bar"><span>←</span><b>Blood Tests</b><span>🛒</span></div>
+        <div class="loc">📍 Mumbai, MH ▾</div>
+        <div class="search">🔍 Search for 'LFT'</div>
+        <h3>Browse by Health Concern</h3>
+        <div class="rail">
+          <div class="con"><span class="ic">💊</span><span class="lb">Vitamins</span></div>
+          <div class="con"><span class="ic">🦋</span><span class="lb">Thyroid</span></div>
+          <div class="con"><span class="ic">❤️</span><span class="lb">Heart</span></div>
+          <div class="con"><span class="ic">🩸</span><span class="lb">Diabetes</span></div>
+          <div class="con"><span class="ic">🤧</span><span class="lb">Allergy</span></div>
+        </div>
+        <div class="banner">
+          <p>Talk to our <span>health advisors</span> for attractive discounts on your bookings</p>
+          <div class="call">📞 Call Now</div>
+        </div>
+        <h3>Full Body Checkup Packages</h3>
+        <div class="strip"><span class="fl">🔥</span> Save up to 76% on health packages</div>
+        <div class="rail">
+          <div class="pk"><div class="body"><div class="nm">Full Health Checkup</div><div class="meta">🧪 89 Tests · 72% OFF</div></div>
+            <div class="offer">EXCLUSIVE OFFER<b>₹1999 <s>₹7110</s></b></div><div class="book">BOOK NOW<div class="sheen"></div></div></div>
+          <div class="pk"><div class="body"><div class="nm">Women Profile</div><div class="meta">🧪 90 Tests · 62% OFF</div></div>
+            <div class="offer">EXCLUSIVE OFFER<b>₹2499 <s>₹6500</s></b></div><div class="book">BOOK NOW<div class="sheen"></div></div></div>
+          <div class="pk"><div class="body"><div class="nm">Diabetes Profile</div><div class="meta">🧪 35 Tests · 36% OFF</div></div>
+            <div class="offer">EXCLUSIVE OFFER<b>₹1450 <s>₹2250</s></b></div><div class="book">BOOK NOW<div class="sheen"></div></div></div>
+        </div>
+        <h3>Popular Blood Tests</h3>
+        <div class="tests">
+          <div class="trow"><div class="tn"><div class="nm">C.B.C.</div><div class="pr">₹300</div></div><div class="addbtn">+</div></div>
+          <div class="trow"><div class="tn"><div class="nm">T3 T4 TSH</div><div class="pr">₹500</div></div><div class="addbtn">+</div></div>
+          <div class="trow"><div class="tn"><div class="nm">HbA1c</div><div class="pr">₹550</div></div><div class="addbtn">+</div></div>
+          <div class="trow"><div class="tn"><div class="nm">Vitamin D3</div><div class="pr">₹1200</div></div><div class="addbtn">+</div></div>
+        </div>
+      </div></div>
+      <div class="notes"><b>Feel:</b> familiar e-commerce; closest to the Healthians reference.</div>
+    </div>
+
+    <!-- ============ B ============ -->
+    <div class="opt b">
+      <h2>B — Warm Brand</h2>
+      <div class="tag">Cream canvas · ECG accents · matches login/profile style</div>
+      <div class="phone"><div class="screen">
+        <div class="bar"><span>←</span><b>Blood Tests</b><span>🛒</span></div>
+        <div class="loc">📍 Mumbai, MH ▾</div>
+        <div class="search">🔍 Search for 'LFT'</div>
+        <h3>Browse by Health Concern</h3>
+        <div class="ecg"><svg viewBox="0 0 300 16" preserveAspectRatio="none"><polyline points="0,8 90,8 100,3 110,13 120,8 300,8"/></svg></div>
+        <div class="rail">
+          <div class="con"><div class="ring2">💊</div><span class="lb">Vitamins</span></div>
+          <div class="con"><div class="ring2">🦋</div><span class="lb">Thyroid</span></div>
+          <div class="con"><div class="ring2">❤️</div><span class="lb">Heart</span></div>
+          <div class="con"><div class="ring2">🩸</div><span class="lb">Diabetes</span></div>
+          <div class="con"><div class="ring2">🤧</div><span class="lb">Allergy</span></div>
+        </div>
+        <div class="banner">
+          <p>Talk to our health advisors for attractive discounts on your bookings</p>
+          <div class="call">📞 Call Now</div>
+        </div>
+        <h3>Full Body Checkup Packages</h3>
+        <div class="ecg"><svg viewBox="0 0 300 16" preserveAspectRatio="none"><polyline points="0,8 90,8 100,3 110,13 120,8 300,8"/></svg></div>
+        <div class="rail">
+          <div class="pk"><div class="ribbon">72% OFF</div><div class="body"><div class="nm">Full Health Checkup</div>
+            <div class="meta">🧪 89 Tests</div><div class="pr">₹1999 <s>₹7110</s></div></div>
+            <div class="book">BOOK NOW →<div class="sheen"></div></div></div>
+          <div class="pk"><div class="ribbon">62% OFF</div><div class="body"><div class="nm">Women Profile</div>
+            <div class="meta">🧪 90 Tests</div><div class="pr">₹2499 <s>₹6500</s></div></div>
+            <div class="book">BOOK NOW →<div class="sheen"></div></div></div>
+          <div class="pk"><div class="ribbon">36% OFF</div><div class="body"><div class="nm">Diabetes Profile</div>
+            <div class="meta">🧪 35 Tests</div><div class="pr">₹1450 <s>₹2250</s></div></div>
+            <div class="book">BOOK NOW →<div class="sheen"></div></div></div>
+        </div>
+        <h3>Popular Blood Tests</h3>
+        <div class="ecg"><svg viewBox="0 0 300 16" preserveAspectRatio="none"><polyline points="0,8 90,8 100,3 110,13 120,8 300,8"/></svg></div>
+        <div class="tests">
+          <div class="trow"><div class="tn"><div class="nm">C.B.C.</div><div class="pr">₹300</div></div><div class="addbtn">+</div></div>
+          <div class="trow"><div class="tn"><div class="nm">T3 T4 TSH</div><div class="pr">₹500</div></div><div class="addbtn">+</div></div>
+          <div class="trow"><div class="tn"><div class="nm">HbA1c</div><div class="pr">₹550</div></div><div class="addbtn">+</div></div>
+          <div class="trow"><div class="tn"><div class="nm">Vitamin D3</div><div class="pr">₹1200</div></div><div class="addbtn">+</div></div>
+        </div>
+      </div></div>
+      <div class="notes"><b>Feel:</b> continues the cream + heartbeat identity of the new login &amp; signup; most "ours".</div>
+    </div>
+
+    <!-- ============ C ============ -->
+    <div class="opt c">
+      <h2>C — Hero Immersive</h2>
+      <div class="tag">Gradient hero · colored package cards · sticky cart bar</div>
+      <div class="phone"><div class="screen">
+        <div class="hero">
+          <div class="bar"><span>←</span><b>Blood Tests</b><span>🛒</span></div>
+          <h2>Book lab tests<br>from home</h2>
+          <div class="sub2">NABL accredited · Reports in 6 hours</div>
+          <div class="chips"><span class="chip">✓ Certified labs</span><span class="chip">🏠 Free home collection</span></div>
+          <div class="search">🔍 Search for 'LFT'</div>
+          <div class="flask">🧪</div>
+        </div>
+        <div class="sheet">
+          <h3>Browse by Health Concern</h3>
+          <div class="rail">
+            <div class="con"><div class="ring2">💊</div><span class="lb">Vitamins</span></div>
+            <div class="con"><div class="ring2">🦋</div><span class="lb">Thyroid</span></div>
+            <div class="con"><div class="ring2">❤️</div><span class="lb">Heart</span></div>
+            <div class="con"><div class="ring2">🩸</div><span class="lb">Diabetes</span></div>
+            <div class="con"><div class="ring2">🤧</div><span class="lb">Allergy</span></div>
+          </div>
+          <div class="banner">
+            <p>Unsure which test you need? Our health advisors can help.</p>
+            <div class="callfab">📞</div>
+          </div>
+          <h3>Full Body Checkup Packages</h3>
+          <div class="rail">
+            <div class="pk"><div class="body"><div class="nm">Full Health Checkup</div><div class="meta">89 Tests · fasting 12h</div>
+              <div class="pr">₹1999 <s>₹7110</s></div></div><div class="book">BOOK NOW<div class="sheen"></div></div></div>
+            <div class="pk alt"><div class="body"><div class="nm">Women Profile</div><div class="meta">90 Tests · with CA-125</div>
+              <div class="pr">₹2499 <s>₹6500</s></div></div><div class="book">BOOK NOW<div class="sheen"></div></div></div>
+            <div class="pk alt2"><div class="body"><div class="nm">Diabetes Profile</div><div class="meta">35 Tests</div>
+              <div class="pr">₹1450 <s>₹2250</s></div></div><div class="book">BOOK NOW<div class="sheen"></div></div></div>
+          </div>
+          <h3>Popular Blood Tests</h3>
+          <div class="tests">
+            <div class="trow"><div class="tn"><div class="nm">C.B.C.</div><div class="pr">₹300</div></div><div class="addbtn">+</div></div>
+            <div class="trow"><div class="tn"><div class="nm">T3 T4 TSH</div><div class="pr">₹500</div></div><div class="addbtn">+</div></div>
+            <div class="trow"><div class="tn"><div class="nm">HbA1c</div><div class="pr">₹550</div></div><div class="addbtn">+</div></div>
+          </div>
+          <div class="cartbar"><span>2 tests in cart</span><span>View cart →<div class="sheen"></div></span></div>
+        </div>
+      </div></div>
+      <div class="notes"><b>Feel:</b> bold first impression, hero sells the service; sticky cart keeps momentum.</div>
+    </div>
+
+    <!-- ============ D ============ -->
+    <div class="opt d">
+      <h2>D — Compact Utility</h2>
+      <div class="tag">Dense list-first · filter chips · fastest to book</div>
+      <div class="phone"><div class="screen">
+        <div class="bar"><span>←</span><b>Blood Tests</b><span>🛒</span></div>
+        <div class="search">🔍 Search 100+ tests…</div>
+        <div class="chips">
+          <span class="chip on">Popular</span><span class="chip">Fever</span><span class="chip">Thyroid</span>
+          <span class="chip">Diabetes</span><span class="chip">Vitamins</span><span class="chip">Heart</span>
+        </div>
+        <h3>Tests</h3>
+        <div class="trow"><div class="tn"><div class="nm">C.B.C.</div><div class="sub3">EDTA · report in 6 hrs</div></div><div class="pr">₹300</div><div class="addbtn">+</div></div>
+        <div class="trow"><div class="tn"><div class="nm">T3 T4 TSH</div><div class="sub3">Thyroid profile</div></div><div class="pr">₹500</div><div class="addbtn">+</div></div>
+        <div class="trow"><div class="tn"><div class="nm">HbA1c</div><div class="sub3">3-month sugar average</div></div><div class="pr">₹550</div><div class="addbtn">+</div></div>
+        <div class="trow"><div class="tn"><div class="nm">Vitamin D3</div><div class="sub3">SST · report in 6 hrs</div></div><div class="pr">₹1200</div><div class="addbtn">+</div></div>
+        <div class="trow"><div class="tn"><div class="nm">Liver Profile (LFT)</div><div class="sub3">SST · report in 6 hrs</div></div><div class="pr">₹1000</div><div class="addbtn">+</div></div>
+        <h3>Better value in a package</h3>
+        <div class="rail">
+          <div class="pk"><div class="nm">Full Health Checkup</div><div class="meta">89 Tests</div>
+            <div class="pr">₹1999 <s>₹7110</s></div><div class="mini">BOOK<div class="sheen"></div></div></div>
+          <div class="pk"><div class="nm">Diabetes Profile</div><div class="meta">35 Tests</div>
+            <div class="pr">₹1450 <s>₹2250</s></div><div class="mini">BOOK<div class="sheen"></div></div></div>
+          <div class="pk"><div class="nm">Women Profile</div><div class="meta">90 Tests</div>
+            <div class="pr">₹2499 <s>₹6500</s></div><div class="mini">BOOK<div class="sheen"></div></div></div>
+        </div>
+        <h3>Need help choosing?</h3>
+        <div style="margin:0 14px 16px; display:flex; gap:8px">
+          <div style="flex:1; background:#EAF8EF; border-radius:12px; padding:11px; font-size:11.5px; font-weight:700; color:#1F7A43">📞 Call an advisor</div>
+          <div style="flex:1; background:#EAF4FB; border-radius:12px; padding:11px; font-size:11.5px; font-weight:700; color:#2F6FA6">💬 WhatsApp us</div>
+        </div>
+      </div></div>
+      <div class="notes"><b>Feel:</b> utility-first for repeat customers who know what they want; least merchandising.</div>
+    </div>
+
+  </div>
+</body>
+</html>
