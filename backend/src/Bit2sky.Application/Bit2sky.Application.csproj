@@ -13,7 +13,12 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
-    <PackageReference Include="HtmlSanitizer" Version="9.0.892" />
+    <!-- 9.0.892 pinned AngleSharp 0.17.1, which carries CVE-2026-54570 (mXSS via
+         annotation-xml integration-point bypass) — a parser bypass in the very
+         library SanitizeRichHtml relies on. 9.1.982 moves to AngleSharp 1.7.0,
+         past the 1.5.0 fix. Also unbreaks CI, whose `dotnet build -warnaserror`
+         promotes the NU1902 advisory to an error. -->
+    <PackageReference Include="HtmlSanitizer" Version="9.1.982" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
   </ItemGroup>
 

@@ -11,12 +11,19 @@ using Bit2sky.Shared.Options;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ── Managed-datastore URLs → driver connection strings ──────────────────────
+// Render/Heroku-style hosts hand out postgresql:// and redis:// URLs, which
+// neither Npgsql nor StackExchange.Redis can parse. No-op for keyword-style
+// values, so local and Azure configs are unaffected.
+Bit2sky.API.Configuration.ConnectionStringNormalizer.NormalizeInto(builder.Configuration);
 
 // ── Configuration: Azure Key Vault (all secrets) ────────────────────────────
 var keyVaultUri = builder.Configuration["Azure:KeyVault:Uri"];
@@ -35,13 +42,19 @@ builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddScoped<IBookingEventsPublisher, Bit2sky.API.Realtime.SignalRBookingEventsPublisher>();
 
 // ── CORS (explicit origins, no wildcard) ────────────────────────────────────
+// Origins come from Cors:AllowedOrigins so each environment sets its own; they
+// were previously hardcoded to bit2sky.app domains that no longer apply. The
+// mobile apps don't use CORS at all — this exists for the admin web portal.
 const string CorsPolicy = "Bit2skyCors";
+var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+                  ?? Array.Empty<string>();
 builder.Services.AddCors(o => o.AddPolicy(CorsPolicy, p =>
-    p.WithOrigins(
-        "https://admin.Bit2sky.app", "https://Bit2sky.app",
-        // Local admin-portal development (ng serve).
-        "http://localhost:4200", "http://localhost:4300")
-     .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+{
+    // AllowCredentials with zero origins throws at startup; a browser-less
+    // deployment (mobile only) is a legitimate configuration.
+    if (corsOrigins.Length == 0) return;
+    p.WithOrigins(corsOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+}));
 
 // ── Auth: JWT RS256 (public key from Key Vault) ─────────────────────────────
 var jwt = builder.Configuration.GetSection(JwtOptions.Section).Get<JwtOptions>() ?? new JwtOptions();
@@ -82,12 +95,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 
-// ── Caching (L2 Redis) ──────────────────────────────────────────────────────
-builder.Services.AddStackExchangeRedisCache(o =>
-{
-    o.Configuration = builder.Configuration.GetConnectionString("Redis");
-    o.InstanceName = "bit2sky:";
-});
+// ── Caching: Redis (L2) when configured, else in-memory ─────────────────────
+// A Redis connection string switches on the distributed L2 cache. When it's
+// empty (e.g. a single free-tier instance with no Redis), fall back to an
+// in-process IDistributedCache so the app runs without a Redis dependency.
+var redisConn = builder.Configuration.GetConnectionString("Redis");
+if (!string.IsNullOrWhiteSpace(redisConn))
+    builder.Services.AddStackExchangeRedisCache(o =>
+    {
+        o.Configuration = redisConn;
+        o.InstanceName = "bit2sky:";
+    });
+else
+    builder.Services.AddDistributedMemoryCache();
 
 // ── Built-in rate limiter (Redis-distributed layer applied per-endpoint) ────
 builder.Services.AddRateLimiter(o =>
@@ -141,16 +161,37 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// ── Migrate + seed: `dotnet run -- seed` (no-op on normal startup) ───────────
-if (args.Contains("seed", StringComparer.OrdinalIgnoreCase))
+// ── Migrate / seed: `dotnet Bit2sky.API.dll migrate|seed` (no-op on startup) ─
+// `migrate` applies schema only and is what the deploy pipeline runs on every
+// release. `seed` additionally writes reference/demo data and must NOT run
+// against production on each deploy — hence the two separate verbs.
+var runMigrate = args.Contains("migrate", StringComparer.OrdinalIgnoreCase);
+var runSeed = args.Contains("seed", StringComparer.OrdinalIgnoreCase);
+if (runMigrate || runSeed)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<Bit2sky.Infrastructure.Data.AppDbContext>();
-    var hasher = scope.ServiceProvider.GetRequiredService<Bit2sky.Application.Abstractions.IHashService>();
     await db.Database.MigrateAsync();
-    await Bit2sky.Infrastructure.Data.DataSeeder.SeedAsync(db, hasher);
-    Log.Information("Seed complete.");
+    Log.Information("Migrations applied.");
+
+    if (runSeed)
+    {
+        var hasher = scope.ServiceProvider.GetRequiredService<Bit2sky.Application.Abstractions.IHashService>();
+        await Bit2sky.Infrastructure.Data.DataSeeder.SeedAsync(db, hasher);
+        Log.Information("Seed complete.");
+    }
     return;
+}
+
+// Apply migrations on startup when the host has no pre-deploy hook to run the
+// `migrate` verb (e.g. Render free tier, which doesn't support preDeployCommand).
+// Off by default; set AutoMigrate=true. Paid deploys keep using the verb.
+if (app.Configuration.GetValue("AutoMigrate", false))
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<Bit2sky.Infrastructure.Data.AppDbContext>();
+    await db.Database.MigrateAsync();
+    Log.Information("Migrations applied on startup (AutoMigrate).");
 }
 
 // ── Swagger: dev + staging only ─────────────────────────────────────────────
@@ -165,6 +206,20 @@ app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseMiddleware<AppSourceMiddleware>();
+
+// Render (and any TLS-terminating proxy) forwards the request over plain HTTP
+// with the original scheme in X-Forwarded-Proto. Without honouring that,
+// UseHttpsRedirection sees "http", 307s to https, the proxy forwards as http
+// again, and the request loops until the browser gives up. This must run before
+// UseHttpsRedirection. KnownNetworks/Proxies are cleared because the proxy hop
+// is inside the platform's network and its address isn't known ahead of time.
+var forwarded = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor,
+};
+forwarded.KnownIPNetworks.Clear();
+forwarded.KnownProxies.Clear();
+app.UseForwardedHeaders(forwarded);
 
 app.UseHttpsRedirection();
 app.UseCors(CorsPolicy);

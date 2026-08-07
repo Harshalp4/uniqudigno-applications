@@ -1,0 +1,101 @@
+# Render Blueprint — Unique Diagnostic Centre API (FREE TIER)
+#
+# Free-tier variant: no paid Postgres, no Redis service. Trade-offs:
+#   - Web service spins down after ~15 min idle → ~50s cold start on next hit.
+#   - Free Postgres is deleted ~30 days after creation (back up / upgrade before
+#     any real data matters).
+#   - No Redis: the API falls back to an in-process cache (fine for one instance;
+#     set ConnectionStrings__Redis to switch the distributed L2 cache back on).
+#   - Free tier has no preDeployCommand, so migrations run on startup via
+#     AutoMigrate=true (see Program.cs).
+#
+# Singapore is the closest Render region to India (no India region; ~50-80ms extra).
+# Secrets are `sync: false` — Render prompts for them on first deploy. See
+# backend/DEPLOY_RENDER.md "Secrets to supply".
+
+databases:
+  - name: uniqudigno-postgres
+    databaseName: bit2sky
+    user: bit2sky
+    plan: free            # ⚠ deleted ~30 days after creation
+    region: singapore
+    postgresMajorVersion: "17"
+
+services:
+  - name: uniqudigno-api
+    type: web
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: PORT
+        value: "8080"
+
+      # Render publishes a postgresql:// URL; ConnectionStringNormalizer converts it.
+      - key: ConnectionStrings__Postgres
+        fromDatabase:
+          name: uniqudigno-postgres
+          property: connectionString
+
+      # No Redis on free tier → empty string routes the cache to in-memory.
+      - key: ConnectionStrings__Redis
+        value: ""
+
+      # Free tier has no pre-deploy hook, so apply EF migrations on startup.
+      - key: AutoMigrate
+        value: "true"
+
+      # Web tier only — no Hangfire worker.
+      - key: Jobs__Enabled
+        value: "false"
+
+      # Azure Key Vault unused on Render; all secrets come from env vars below.
+      - key: Azure__KeyVault__Uri
+        value: ""
+
+      # ── Secrets: set in the Render dashboard, never committed ──────────────
+      # RS256 keypair for JWTs. MUST be newly generated (see DEPLOY_RENDER.md).
+      - key: Jwt__PrivateKeyPem
+        sync: false
+      - key: Jwt__PublicKeyPem
+        sync: false
+      - key: Jwt__Issuer
+        value: uniqudigno-auth
+      - key: Jwt__Audience
+        value: uniqudigno-api
+      - key: Jwt__KeyId
+        value: uniqudigno-rs256-1
+
+      # Base64 32-byte AES-256 key for PHI encryption at rest. Generate once,
+      # back it up — changing it makes existing encrypted records unreadable.
+      - key: PhiEncryption__Key
+        sync: false
+
+      # Object storage for reports (Azure Storage connection string).
+      - key: ConnectionStrings__AzureBlob
+        sync: false
+
+      - key: Razorpay__KeyId
+        sync: false
+      - key: Razorpay__KeySecret
+        sync: false
+      - key: Razorpay__WebhookSecret
+        sync: false
+
+      - key: Email__ResendApiKey
+        sync: false
+      - key: Email__FromAddress
+        sync: false
+
+      - key: Anthropic__ApiKey
+        sync: false
+
+      # Admin web portal origin (the Vercel URL). Add __1, __2 for more.
+      - key: Cors__AllowedOrigins__0
+        sync: false
