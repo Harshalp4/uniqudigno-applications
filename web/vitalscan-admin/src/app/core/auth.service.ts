@@ -81,6 +81,28 @@ export class AuthService {
     this.enrollPending.set(false);
   }
 
+  /**
+   * On app boot, silently restore a session from the refresh token kept in
+   * sessionStorage (survives a page refresh; cleared on tab close). Without it —
+   * or if the token is stale/revoked — we stay logged out. Runs via
+   * provideAppInitializer so guards see the restored permissions before routing.
+   */
+  async restore(): Promise<void> {
+    const refresh = sessionStorage.getItem('admin_refresh');
+    if (!refresh) return;
+    try {
+      const res = await firstValueFrom(
+        this.http.post<Envelope<any>>(`${API_BASE_URL}/auth/token/refresh`, {
+          refreshToken: refresh,
+          deviceInfo: 'admin-web',
+        }),
+      );
+      await this.applyTokens(res.data ?? res);
+    } catch {
+      this.logout();
+    }
+  }
+
   private async applyTokens(data: any): Promise<void> {
     this._accessToken = (data.accessToken ?? data.access_token) ?? null;
     const refresh = data.refreshToken ?? data.refresh_token;
