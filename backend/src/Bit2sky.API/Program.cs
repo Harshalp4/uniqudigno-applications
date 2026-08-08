@@ -281,7 +281,9 @@ RecurringJob.AddOrUpdate<Bit2sky.Infrastructure.BackgroundJobs.SecurityAuditJob>
 
 // JWKS endpoint (Section 4A / Section 7).
 app.MapGet("/.well-known/jwks.json", (IJwtService j) => Results.Content(j.GetJwksJson(), "application/json"));
-app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));
+// GET and HEAD — uptime pingers (e.g. UptimeRobot) default to HEAD, which a
+// GET-only route answers with 405 and flags as "down".
+app.MapMethods("/health", new[] { "GET", "HEAD" }, () => Results.Ok(new { status = "healthy" }));
 
 app.Run();
 
