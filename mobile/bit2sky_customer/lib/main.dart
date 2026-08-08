@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/notifications/push_service.dart';
 import 'core/storage/encrypted_cache.dart';
 import 'core/storage/secure_storage.dart';
 import 'core/theme/app_theme.dart';
@@ -11,6 +12,9 @@ import 'router/app_router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final cache = await EncryptedCache.open(SecureStorageService());
+  // Sets up FCM + the background handler before the UI. No-op when Firebase
+  // isn't configured, so this never blocks or crashes startup.
+  await PushService.instance.init();
   runApp(
     ProviderScope(
       overrides: [encryptedCacheProvider.overrideWithValue(cache)],

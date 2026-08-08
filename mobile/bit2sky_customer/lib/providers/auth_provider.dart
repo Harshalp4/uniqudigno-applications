@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/network/dio_client.dart';
+import '../core/notifications/push_service.dart';
 import '../core/storage/secure_storage.dart';
 import 'app_providers.dart';
 
@@ -77,17 +79,21 @@ class AuthNotifier extends Notifier<AuthState> {
   SecureStorageService get _storage => ref.read(secureStorageProvider);
   String get _deviceInfo => '${Platform.operatingSystem}-bit2sky-customer';
 
+  /// Uploads the FCM token so this user receives push. Fire-and-forget — push
+  /// registration must never block or fail an otherwise successful login.
+  void _registerPush() => unawaited(PushService.instance.registerDevice(_dio));
+
   /// Decides the start destination: authenticated only when the session is
   /// actually recoverable (a refresh token exists) — a lone access token is a
   /// zombie session that would 401 on every call.
   Future<void> bootstrap() async {
     final token = await _storage.accessToken;
     final refresh = await _storage.refreshToken;
+    final authed = token != null && refresh != null;
     state = state.copyWith(
-      status: (token == null || refresh == null)
-          ? AuthStatus.unauthenticated
-          : AuthStatus.authenticated,
+      status: authed ? AuthStatus.authenticated : AuthStatus.unauthenticated,
     );
+    if (authed) _registerPush();
   }
 
   Future<bool> sendOtp(String mobile) async {
@@ -130,6 +136,7 @@ class AuthNotifier extends Notifier<AuthState> {
         status: AuthStatus.authenticated,
         role: (data['role'] ?? 'customer').toString(),
       );
+      _registerPush();
       return true;
     } catch (e) {
       state = state.copyWith(busy: false, error: DioClient.errorMessage(e));
@@ -207,6 +214,7 @@ class AuthNotifier extends Notifier<AuthState> {
       status: AuthStatus.authenticated,
       role: (data['role'] ?? 'customer').toString(),
     );
+    _registerPush();
   }
 
   Future<void> logout() async {

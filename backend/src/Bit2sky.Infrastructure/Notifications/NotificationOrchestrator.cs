@@ -37,13 +37,17 @@ public class NotificationOrchestrator : INotificationOrchestrator
         });
         await _db.SaveChangesAsync(ct);
 
+        var name = template?.TemplateName ?? templateKey;
+
+        // FCM targets device tokens, not a phone number — dispatch it regardless
+        // of whether the user has a mobile (email/Google sign-ups often don't).
+        if (_channels.TryGetValue(NotificationChannel.Fcm, out var fcm))
+            await fcm.SendAsync(userId.ToString(), name, variables, ct);
+
         var mobile = await _db.Set<User>().Where(u => u.Id == userId).Select(u => u.Mobile).FirstOrDefaultAsync(ct);
         if (string.IsNullOrWhiteSpace(mobile)) return;
 
-        var name = template?.TemplateName ?? templateKey;
         if (_channels.TryGetValue(NotificationChannel.WhatsApp, out var whatsapp))
             await whatsapp.SendAsync(mobile, name, variables, ct);
-        if (_channels.TryGetValue(NotificationChannel.Fcm, out var fcm))
-            await fcm.SendAsync(userId.ToString(), name, variables, ct);
     }
 }

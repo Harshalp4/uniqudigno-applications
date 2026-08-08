@@ -9,6 +9,8 @@
     <!-- geolocator: address capture for at-home sample collection. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- FCM push: runtime notification permission on Android 13+ (API 33). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <!-- Location is a convenience for address entry, not a requirement: without
          this the Play Store hides the listing from devices lacking GPS. -->
