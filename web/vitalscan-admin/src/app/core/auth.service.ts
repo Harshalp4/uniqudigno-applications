@@ -92,9 +92,12 @@ export class AuthService {
     if (!refresh) return;
     try {
       const res = await firstValueFrom(
+        // deviceInfo MUST be "admin-portal" — refresh tokens are device-bound
+        // (RefreshAsync rejects a mismatched DeviceId), and AdminAuthService issues
+        // them under the literal "admin-portal". Any other string → 401 → logout.
         this.http.post<Envelope<any>>(`${API_BASE_URL}/auth/token/refresh`, {
           refreshToken: refresh,
-          deviceInfo: 'admin-web',
+          deviceInfo: 'admin-portal',
         }),
       );
       await this.applyTokens(res.data ?? res);
