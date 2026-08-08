@@ -24,8 +24,14 @@ public static class DependencyInjection
             o.UseNpgsql(config.GetConnectionString("Postgres")));
         services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
 
-        // Redis multiplexer (lazy, degrades open if unreachable).
-        var redisConn = config.GetConnectionString("Redis") ?? "localhost:6379";
+        // Redis multiplexer (lazy, degrades open if unreachable). An EMPTY connection
+        // string (free tier, no Redis) must be treated like null — otherwise
+        // ConfigurationOptions.Parse("") yields no endpoints and Connect() throws
+        // "No endpoints specified" at construction, 500-ing every request that needs
+        // the rate limiter. Fall back to an unreachable default so the multiplexer
+        // builds, IsConnected stays false, and the rate limiter degrades open.
+        var redisConn = config.GetConnectionString("Redis");
+        if (string.IsNullOrWhiteSpace(redisConn)) redisConn = "localhost:6379";
         services.AddSingleton<IConnectionMultiplexer>(_ =>
         {
             var opts = ConfigurationOptions.Parse(redisConn);
