@@ -6,10 +6,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../providers/auth_provider.dart';
 
 /// Google web client id (audience the server validates against). Not a secret.
-/// Using PRESSO's project for now — the app package/SHA-1 (Android) and an iOS
-/// OAuth client id must be registered in that Google Cloud project to work.
+/// Firebase project `uniquediagnostic-48052`. The Android OAuth client only
+/// resolves once the app SHA-1 is registered in that project and the resulting
+/// google-services.json (with a non-empty oauth_client) is bundled.
 const googleServerClientId =
-    '1041835508819-qrbgrlv5cikih6uiieb598o974urufkl.apps.googleusercontent.com';
+    '381464039988-8nku4nsibvti1c6j8eiav8h95q45oe9m.apps.googleusercontent.com';
 
 /// iOS OAuth client id — required for Google Sign-In on iPhone/iPad, together
 /// with its REVERSED form as a URL scheme in ios/Runner/Info.plist.

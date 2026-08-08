@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "381464039988",
+    "project_id": "uniquediagnostic-48052",
+    "storage_bucket": "uniquediagnostic-48052.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381464039988:android:dc140c6d2c1c6f4bb8f061",
+        "android_client_info": {
+          "package_name": "com.uniquediagnostic.customer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXQGiKwfYSr18NS7a4lgKeNHxBbPyNaDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
