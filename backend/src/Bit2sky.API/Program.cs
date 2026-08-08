@@ -57,10 +57,32 @@ builder.Services.AddCors(o => o.AddPolicy(CorsPolicy, p =>
 }));
 
 // ── Auth: JWT RS256 (public key from Key Vault) ─────────────────────────────
+// Env-var editors frequently mangle multi-line PEMs — newlines collapse to spaces
+// or become literal "\n". Rebuild a well-formed PEM from the BEGIN/END markers +
+// base64 body so a key pasted in any of those shapes still imports.
+static string? NormalizePem(string? pem)
+{
+    if (string.IsNullOrWhiteSpace(pem)) return pem;
+    var s = pem.Trim().Replace("\\r\\n", "\n").Replace("\\n", "\n")
+               .Replace("\r\n", "\n").Replace('\r', '\n');
+    var m = System.Text.RegularExpressions.Regex.Match(s,
+        "-----BEGIN ([A-Z ]+)-----(.*?)-----END \\1-----",
+        System.Text.RegularExpressions.RegexOptions.Singleline);
+    if (!m.Success) return s; // not a PEM (e.g. a file path) — let import fail loudly
+    var label = m.Groups[1].Value.Trim();
+    var body = System.Text.RegularExpressions.Regex.Replace(m.Groups[2].Value, "\\s+", "");
+    var sb = new System.Text.StringBuilder().Append("-----BEGIN ").Append(label).Append("-----\n");
+    for (var i = 0; i < body.Length; i += 64)
+        sb.Append(body, i, System.Math.Min(64, body.Length - i)).Append('\n');
+    return sb.Append("-----END ").Append(label).Append("-----\n").ToString();
+}
+
 var jwt = builder.Configuration.GetSection(JwtOptions.Section).Get<JwtOptions>() ?? new JwtOptions();
 var rsa = RSA.Create(2048);
-if (!string.IsNullOrWhiteSpace(jwt.PublicKeyPem)) rsa.ImportFromPem(jwt.PublicKeyPem);
-else if (!string.IsNullOrWhiteSpace(jwt.PrivateKeyPem)) rsa.ImportFromPem(jwt.PrivateKeyPem);
+var publicPem = NormalizePem(jwt.PublicKeyPem);
+var privatePem = NormalizePem(jwt.PrivateKeyPem);
+if (!string.IsNullOrWhiteSpace(publicPem)) rsa.ImportFromPem(publicPem);
+else if (!string.IsNullOrWhiteSpace(privatePem)) rsa.ImportFromPem(privatePem);
 var validationKey = new RsaSecurityKey(rsa) { KeyId = jwt.KeyId };
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
