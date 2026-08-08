@@ -1,0 +1,41 @@
+// Vendored from flutter_jailbreak_detection 1.10.0 (pub.dev), which is
+// unmaintained and was last built against AGP 7.3.1. Upstream fails a modern
+// release build: no `namespace`, the removed `compileSdkVersion` spelling, a
+// `package` attribute in the library manifest, and its own pinned AGP/Kotlin
+// buildscript. All fixed below.
+
+plugins {
+    id 'com.android.library'
+}
+
+// Mirrors how the maintained plugins guard this: AGP 9+ compiles Kotlin itself.
+def agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.split('\\.')[0].toInteger()
+if (agpMajor < 9) {
+    apply plugin: 'kotlin-android'
+}
+
+group 'appmire.be.flutterjailbreakdetection'
+version '1.0-SNAPSHOT'
+
+android {
+    namespace 'appmire.be.flutterjailbreakdetection'
+    compileSdk 36
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        // Upstream declared 17; AGP 9 requires 21 or higher.
+        minSdk 21
+    }
+}
+
+dependencies {
+    implementation 'com.github.scottyab:rootbeer:0.1.0'
+}

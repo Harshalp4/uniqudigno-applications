@@ -19,7 +19,12 @@ pluginManagement {
 
 plugins {
     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
-    id("com.android.application") version "9.0.1" apply false
+    // AGP 8, not 9. Flutter 3.44.8's Gradle plugin still casts the Android
+    // extension to the old-DSL AbstractAppExtension, so it cannot apply under
+    // AGP 9's new DSL — and AGP 9's built-in Kotlin requires that new DSL. The
+    // two are mutually exclusive until Flutter ships new-DSL support; AGP 8.13
+    // is the newest release that works here and it supports compileSdk 36.
+    id("com.android.application") version "8.13.0" apply false
     id("org.jetbrains.kotlin.android") version "2.3.20" apply false
 }
 

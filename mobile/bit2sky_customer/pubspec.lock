@@ -281,10 +281,9 @@ packages:
   flutter_jailbreak_detection:
     dependency: "direct main"
     description:
-      name: flutter_jailbreak_detection
-      sha256: "67ff11ea41965152d24db7104da1f9b343f94ada64c2a9e309ec4d753a12d281"
-      url: "https://pub.dev"
-    source: hosted
+      path: "third_party/flutter_jailbreak_detection"
+      relative: true
+    source: path
     version: "1.10.0"
   flutter_launcher_icons:
     dependency: "direct dev"
@@ -1012,10 +1011,10 @@ packages:
     dependency: "direct main"
     description:
       name: screen_protector
-      sha256: "0b526fd945c2e9e405288a124bdca3012589d31c30f19bc15247e8826d6ff094"
+      sha256: "66f2ffbfbe7acc26db49de893e0c49078c67b546c27a57958d9bd9901f77c38e"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.2"
+    version: "1.5.3"
   shelf:
     dependency: transitive
     description:

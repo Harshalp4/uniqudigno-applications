@@ -45,7 +45,10 @@ dependencies:
   local_auth: ^3.0.1
   screen_protector: ^1.5.2
   crypto: ^3.0.7
-  flutter_jailbreak_detection: ^1.10.0
+  # Vendored: upstream 1.10.0 is unmaintained and cannot configure under AGP 9.
+  # See third_party/flutter_jailbreak_detection/android/build.gradle.
+  flutter_jailbreak_detection:
+    path: third_party/flutter_jailbreak_detection
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   url_launcher: ^6.3.2
