@@ -21,10 +21,15 @@ import { AiPromptsComponent } from './features/ai-prompts/ai-prompts.component';
 import { NotificationsComponent } from './features/notifications/notifications.component';
 import { SupportComponent } from './features/support/support.component';
 import { UnauthorizedComponent } from './features/shared/unauthorized.component';
+import { PrivacyComponent } from './features/legal/privacy.component';
+import { AccountDeletionComponent } from './features/legal/account-deletion.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   { path: 'login', component: LoginComponent },
+  // Public legal pages (no auth) — the URLs Play Console requires for the app.
+  { path: 'privacy', component: PrivacyComponent },
+  { path: 'account-deletion', component: AccountDeletionComponent },
   {
     path: '',
     component: ShellComponent,
