@@ -129,7 +129,12 @@ public class AuthService : IAuthService
         });
         await _db.SaveChangesAsync(ct);
 
-        await _email.SendOtpAsync(email, otp, ct);
+        // The reviewer address never receives mail — it logs in with the fixed
+        // reviewer code (see VerifyEmailOtpAsync), so skip the send for it.
+        var reviewerEmail = _config["Auth:ReviewerEmail"];
+        var isReviewer = !string.IsNullOrWhiteSpace(reviewerEmail)
+            && string.Equals(email, reviewerEmail, StringComparison.OrdinalIgnoreCase);
+        if (!isReviewer) await _email.SendOtpAsync(email, otp, ct);
         // Dev affordance when no mail provider is wired: echo the OTP so it can
         // be entered without an inbox. Never enable in production.
         var echo = string.Equals(_config["Auth:EchoEmailOtp"], "true", StringComparison.OrdinalIgnoreCase);
@@ -148,7 +153,18 @@ public class AuthService : IAuthService
 
         if (request.ExpiresAt < DateTimeOffset.UtcNow) throw new UnauthorizedAppException();
 
-        if (!_hash.Verify(otp, request.OtpHash))
+        // Store-review bypass: a fixed reviewer email + code that verifies without
+        // a real inbox, so Google's tester can get past the login wall. Active only
+        // when BOTH Auth:ReviewerEmail and Auth:ReviewerOtp are configured (env);
+        // remove/rotate them once the app is approved.
+        var reviewerEmail = _config["Auth:ReviewerEmail"];
+        var reviewerOtp = _config["Auth:ReviewerOtp"];
+        var isReviewer = !string.IsNullOrWhiteSpace(reviewerEmail)
+            && !string.IsNullOrWhiteSpace(reviewerOtp)
+            && string.Equals(request.Email, reviewerEmail, StringComparison.OrdinalIgnoreCase)
+            && otp == reviewerOtp;
+
+        if (!isReviewer && !_hash.Verify(otp, request.OtpHash))
         {
             request.AttemptCount++;
             await _db.SaveChangesAsync(ct);
