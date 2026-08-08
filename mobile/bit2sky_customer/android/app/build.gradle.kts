@@ -71,6 +71,16 @@ android {
             )
         }
     }
+
+    packaging {
+        jniLibs {
+            // rootbeer ships libtoolChecker.so aligned to 4 KB, which fails Play's
+            // 16 KB page-size requirement. The jailbreak plugin only calls
+            // RootBeer.isRooted() (all-Java checks) and never the native check, so
+            // this library is packaged but never loaded — drop it from the bundle.
+            excludes += "**/libtoolChecker.so"
+        }
+    }
 }
 
 kotlin {
