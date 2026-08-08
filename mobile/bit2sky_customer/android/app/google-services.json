@@ -12,7 +12,20 @@
           "package_name": "com.uniquediagnostic.customer"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "381464039988-ppc4jidnb1fn4cddsojtsiv5kvo36ta2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uniquediagnostic.customer",
+            "certificate_hash": "489e91e8097dd18e4e8400e5f4fc034f69b16ec4"
+          }
+        },
+        {
+          "client_id": "381464039988-8nku4nsibvti1c6j8eiav8h95q45oe9m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDXQGiKwfYSr18NS7a4lgKeNHxBbPyNaDo"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381464039988-8nku4nsibvti1c6j8eiav8h95q45oe9m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
