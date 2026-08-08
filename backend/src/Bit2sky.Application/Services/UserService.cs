@@ -153,8 +153,36 @@ public class UserService : IUserService
     public async Task SoftDeleteAsync(Guid userId, CancellationToken ct = default)
     {
         var user = await _db.Set<User>().FirstOrDefaultAsync(u => u.Id == userId, ct) ?? throw new NotFoundAppException();
+
+        // Anonymize account PHI and disable the account. Mobile is cleared too so
+        // the deleted account can't be found (or re-logged-into) by phone; nulling
+        // email/mobile lets the person register fresh later.
         user.IsDeleted = true;
-        user.Name = null; user.Email = null; user.DateOfBirth = null; // PHI anonymized
+        user.IsActive = false;
+        user.Name = null;
+        user.Email = null;
+        user.Mobile = null;
+        user.DateOfBirth = null;
+        user.Gender = null;
+        user.AvatarUrl = null;
+
+        // Revoke every live session so the deleted account can't keep calling the API.
+        var tokens = await _db.Set<RefreshToken>()
+            .Where(t => t.UserId == userId && t.RevokedAt == null).ToListAsync(ct);
+        foreach (var t in tokens) t.RevokedAt = DateTimeOffset.UtcNow;
+
+        // Drop device push tokens so no further notifications reach them.
+        var devices = await _db.Set<Device>().Where(d => d.UserId == userId).ToListAsync(ct);
+        if (devices.Count > 0) _db.Set<Device>().RemoveRange(devices);
+
+        // Soft-delete owned PHI: saved addresses and family members.
+        var addresses = await _db.Set<Address>()
+            .Where(a => a.UserId == userId && !a.IsDeleted).ToListAsync(ct);
+        foreach (var a in addresses) a.IsDeleted = true;
+        var family = await _db.Set<FamilyMember>()
+            .Where(f => f.UserId == userId && !f.IsDeleted).ToListAsync(ct);
+        foreach (var f in family) f.IsDeleted = true;
+
         await _db.SaveChangesAsync(ct);
     }
 

@@ -222,6 +222,21 @@ class AuthNotifier extends Notifier<AuthState> {
     await ref.read(encryptedCacheProvider)?.clear(); // clear offline PHI cache
     state = const AuthState(status: AuthStatus.unauthenticated);
   }
+
+  /// Permanently deletes the account and its data (DELETE /users/me), then logs
+  /// out locally. The server anonymizes the profile, revokes sessions, and drops
+  /// device tokens. Returns true on success.
+  Future<bool> deleteAccount() async {
+    state = state.copyWith(busy: true, error: null);
+    try {
+      await _dio.raw.delete('/users/me');
+    } catch (e) {
+      state = state.copyWith(busy: false, error: DioClient.errorMessage(e));
+      return false;
+    }
+    await logout();
+    return true;
+  }
 }
 
 final authProvider =

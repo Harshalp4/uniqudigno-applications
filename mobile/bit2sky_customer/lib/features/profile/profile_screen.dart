@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
@@ -189,7 +190,7 @@ class ProfileScreen extends ConsumerWidget {
             icon: Icons.privacy_tip_outlined,
             title: 'Privacy Policy',
             palette: palette,
-            onTap: () => _soon(context, 'Privacy Policy'),
+            onTap: () => _openUrl(context, _privacyUrl),
           ),
           if (isAuthed)
             _IconRow(
@@ -198,6 +199,14 @@ class ProfileScreen extends ConsumerWidget {
               palette: palette,
               destructive: true,
               onTap: () => _confirmLogout(context, ref),
+            ),
+          if (isAuthed)
+            _IconRow(
+              icon: Icons.delete_forever_outlined,
+              title: 'Delete account',
+              palette: palette,
+              destructive: true,
+              onTap: () => _confirmDeleteAccount(context, ref),
             ),
         ]),
 
@@ -216,6 +225,18 @@ class ProfileScreen extends ConsumerWidget {
 
   // Keep in sync with pubspec.yaml version.
   static const _appVersion = '1.0.0';
+
+  static const _privacyUrl = 'https://vitalscan-admin.vercel.app/privacy';
+
+  Future<void> _openUrl(BuildContext context, String url) async {
+    final ok = await launchUrl(Uri.parse(url),
+        mode: LaunchMode.externalApplication);
+    if (!ok && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open the link.')),
+      );
+    }
+  }
 
   Future<void> _copyReferral(BuildContext context, WidgetRef ref) async {
     final code = ref.read(meProvider).asData?.value?.referralCode;
@@ -261,6 +282,52 @@ class ProfileScreen extends ConsumerWidget {
       await ref.read(authProvider.notifier).logout();
       invalidateSessionProviders(ref);
       if (context.mounted) context.go('/login');
+    }
+  }
+
+  Future<void> _confirmDeleteAccount(
+      BuildContext context, WidgetRef ref) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete account?'),
+        content: const Text(
+            'This permanently deletes your Unique Diagnostic Centre account and '
+            'personal data — your profile, saved addresses, and family members. '
+            'Diagnostic and transaction records we are legally required to keep '
+            'are retained per our privacy policy. This cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text(
+              'Delete account',
+              style: TextStyle(color: AppColors.errorRed),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return;
+
+    final deleted = await ref.read(authProvider.notifier).deleteAccount();
+    if (!context.mounted) return;
+    if (deleted) {
+      invalidateSessionProviders(ref);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Your account has been deleted.')),
+      );
+      context.go('/login');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(ref.read(authProvider).error ??
+              'Could not delete your account. Please try again.'),
+        ),
+      );
     }
   }
 }
