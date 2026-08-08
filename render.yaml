@@ -13,13 +13,10 @@
 # Secrets are `sync: false` — Render prompts for them on first deploy. See
 # backend/DEPLOY_RENDER.md "Secrets to supply".
 
-databases:
-  - name: uniqudigno-postgres
-    databaseName: bit2sky
-    user: bit2sky
-    plan: free            # ⚠ deleted ~30 days after creation
-    region: singapore
-    postgresMajorVersion: "17"
+# Postgres is EXTERNAL (Neon free tier), not a Render database — Render allows
+# only one free Postgres per account, and it's already used elsewhere. Neon's
+# free Postgres is persistent (no 30-day deletion) and reachable from Render.
+# Paste its postgresql:// URL into ConnectionStrings__Postgres below.
 
 services:
   - name: uniqudigno-api
@@ -37,11 +34,10 @@ services:
       - key: PORT
         value: "8080"
 
-      # Render publishes a postgresql:// URL; ConnectionStringNormalizer converts it.
+      # External Neon Postgres — paste its postgresql:// connection string in the
+      # Render dashboard. ConnectionStringNormalizer converts the URL at startup.
       - key: ConnectionStrings__Postgres
-        fromDatabase:
-          name: uniqudigno-postgres
-          property: connectionString
+        sync: false
 
       # No Redis on free tier → empty string routes the cache to in-memory.
       - key: ConnectionStrings__Redis
