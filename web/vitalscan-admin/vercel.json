@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/vitalscan-admin/browser",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
