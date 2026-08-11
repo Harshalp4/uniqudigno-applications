@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using Bit2sky.Application.Abstractions;
 using Bit2sky.Application.DTOs;
 using Bit2sky.Domain.Entities;
@@ -202,31 +203,66 @@ public class AuthService : IAuthService
     }
 
     // Validates a Google ID token via Google's public tokeninfo endpoint and
-    // returns the verified email. No extra NuGet dependency required.
+    // returns the verified email. Robust to email_verified arriving as a bool or
+    // a string, and accepts any OAuth client id from our Google project (the
+    // audience may be the web client or an Android client). Logs the rejection
+    // reason so failures are diagnosable from the host logs.
     private async Task<string?> ValidateGoogleTokenAsync(string idToken, CancellationToken ct)
     {
         try
         {
             var http = _httpFactory.CreateClient();
-            var info = await http.GetFromJsonAsync<GoogleTokenInfo>(
+            var resp = await http.GetAsync(
                 $"https://oauth2.googleapis.com/tokeninfo?id_token={Uri.EscapeDataString(idToken)}", ct);
-            if (info is null || string.IsNullOrEmpty(info.Email)) return null;
-            if (!string.Equals(info.EmailVerified, "true", StringComparison.OrdinalIgnoreCase)) return null;
-            if (info.Iss is not ("accounts.google.com" or "https://accounts.google.com")) return null;
-            // Pin the audience to our OAuth client id when one is configured.
-            var expectedAud = _config["Auth:GoogleClientId"];
-            if (!string.IsNullOrEmpty(expectedAud) && info.Aud != expectedAud) return null;
-            return info.Email;
-        }
-        catch { return null; }
-    }
+            if (!resp.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"[GoogleAuth] tokeninfo returned HTTP {(int)resp.StatusCode}");
+                return null;
+            }
 
-    private sealed class GoogleTokenInfo
-    {
-        [System.Text.Json.Serialization.JsonPropertyName("email")] public string? Email { get; set; }
-        [System.Text.Json.Serialization.JsonPropertyName("email_verified")] public string? EmailVerified { get; set; }
-        [System.Text.Json.Serialization.JsonPropertyName("iss")] public string? Iss { get; set; }
-        [System.Text.Json.Serialization.JsonPropertyName("aud")] public string? Aud { get; set; }
+            using var doc = JsonDocument.Parse(await resp.Content.ReadAsStringAsync(ct));
+            var root = doc.RootElement;
+
+            var email = root.TryGetProperty("email", out var emailEl) ? emailEl.GetString() : null;
+            if (string.IsNullOrEmpty(email)) { Console.WriteLine("[GoogleAuth] token has no email"); return null; }
+
+            // email_verified may arrive as boolean true or the string "true".
+            var verified = root.TryGetProperty("email_verified", out var evEl)
+                && (evEl.ValueKind == JsonValueKind.True
+                    || (evEl.ValueKind == JsonValueKind.String
+                        && string.Equals(evEl.GetString(), "true", StringComparison.OrdinalIgnoreCase)));
+            if (!verified) { Console.WriteLine("[GoogleAuth] email not verified"); return null; }
+
+            var iss = root.TryGetProperty("iss", out var issEl) ? issEl.GetString() : null;
+            if (iss is not ("accounts.google.com" or "https://accounts.google.com"))
+            {
+                Console.WriteLine($"[GoogleAuth] unexpected iss: {iss}");
+                return null;
+            }
+
+            // Accept any client id from our Google project. The configured value is
+            // the web client; its numeric prefix (e.g. "381464039988-") identifies
+            // the project, so an Android-client audience from the same project passes.
+            var aud = root.TryGetProperty("aud", out var audEl) ? audEl.GetString() : null;
+            var expectedAud = _config["Auth:GoogleClientId"];
+            if (!string.IsNullOrEmpty(expectedAud) && !string.IsNullOrEmpty(aud))
+            {
+                var dash = expectedAud.IndexOf('-');
+                var prefix = dash > 0 ? expectedAud[..(dash + 1)] : expectedAud;
+                if (aud != expectedAud && !aud.StartsWith(prefix, StringComparison.Ordinal))
+                {
+                    Console.WriteLine($"[GoogleAuth] aud not in project: got {aud}, expected {expectedAud}");
+                    return null;
+                }
+            }
+
+            return email;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[GoogleAuth] validation error: {ex.Message}");
+            return null;
+        }
     }
 
     public async Task<TokenPair> TechnicianLoginAsync(string employeeId, string password, string ip, CancellationToken ct = default)
